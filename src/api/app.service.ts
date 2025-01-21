@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { EnvService } from 'src/config/config.service';
 import { Logger, LogLevel } from '@nestjs/common';
+import { config } from 'src/config/config.service';
 
 export default class Application {
   private static readonly logger = new Logger(Application.name);
@@ -28,10 +28,9 @@ export default class Application {
     const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
     SwaggerModule.setup(apiPrefix, app, swaggerDocument);
 
-    const envService = app.get(EnvService);
-    const port = envService.get('PORT') || 4200;
+    const port = config.app.port || 4200;
 
-    const environment = process.env.NODE_ENV || 'development';
+    const environment = config.app.env || 'development';
     const logLevels: LogLevel[] =
       environment === 'production'
         ? ['error']
