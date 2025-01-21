@@ -17,17 +17,13 @@ import { Public } from 'src/common/decorator/jwt-public.decorator';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Public()
   @Post('create')
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
   @Public()
-  @Get('hi')
-  hello() {
-    return 'salom';
-  }
-
   @Post('login')
   login(@Body() loginDto: LoginUserDto) {
     return this.usersService.login(loginDto);

@@ -26,7 +26,9 @@ export default class Application {
       .build();
 
     const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
-    SwaggerModule.setup(apiPrefix, app, swaggerDocument);
+
+    const swaggerEndpoint = `${apiPrefix}/docs`;
+    SwaggerModule.setup(swaggerEndpoint, app, swaggerDocument);
 
     const port = config.app.port || 4200;
 

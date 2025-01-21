@@ -3,7 +3,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { User } from 'src/core/entities/user.entity';
-import { BcryptModule } from 'src/infrastructure/bcrypt/bcrypt.module';
 import { GuardService } from 'src/common/guard/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { GuardModule } from 'src/common/guard/jwt.module';
@@ -29,7 +28,6 @@ import { GuardModule } from 'src/common/guard/jwt.module';
       inject: [ConfigService],
     }),
     GuardModule,
-    BcryptModule,
     UsersModule,
   ],
   providers: [
