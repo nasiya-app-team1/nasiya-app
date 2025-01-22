@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EnvService } from 'src/config/config.service';
+import { CustomerModule } from './customer/customer.module';
 import { PhoneNumbersModule } from './phone-numbers/phone-numbers.module';
 
 @Module({
@@ -24,6 +25,7 @@ import { PhoneNumbersModule } from './phone-numbers/phone-numbers.module';
       }),
       inject: [ConfigService],
     }),
+    CustomerModule,
     PhoneNumbersModule,
   ],
   providers: [EnvService],
