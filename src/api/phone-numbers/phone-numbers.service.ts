@@ -1,15 +1,15 @@
-import { Repository } from 'typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePhoneNumberDto } from './dto/create-phone-number.dto';
 import { UpdatePhoneNumberDto } from './dto/update-phone-number.dto';
 import { PhoneNumber } from 'src/core/entities/phoneNumber.entity';
+import { phoneNumberRepositoroy } from 'src/core/repositories/phoneNumber.repository';
 
 @Injectable()
 export class PhoneNumbersService {
   constructor(
     @InjectRepository(PhoneNumber)
-    private phoneNumberRepository: Repository<PhoneNumber>,
+    private phoneNumberRepository: phoneNumberRepositoroy,
   ) {}
 
   async create(

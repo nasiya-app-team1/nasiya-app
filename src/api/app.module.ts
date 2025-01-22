@@ -8,6 +8,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { GuardModule } from 'src/common/guard/jwt.module';
 import { CustomerModule } from './customer/customer.module';
 import { PhoneNumbersModule } from './phone-numbers/phone-numbers.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { PhoneNumbersModule } from './phone-numbers/phone-numbers.module';
     UsersModule,
     CustomerModule,
     PhoneNumbersModule,
+    MessagesModule,
   ],
   providers: [
     ConfigService,
