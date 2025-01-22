@@ -17,6 +17,6 @@ export class CustomerEntity {
   @Column({ type: 'varchar', name: 'note', nullable: true })
   note: string;
 
-  @Column({ type: 'boolean', name: 'is_liked' })
+  @Column({ type: 'boolean', name: 'is_liked', default: false })
   is_liked: boolean;
 }
