@@ -1,30 +1,31 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EnvService } from 'src/config/config.service';
+import { GuardService } from 'src/common/guard/jwt-auth.guard';
+import { APP_GUARD } from '@nestjs/core';
+import { GuardModule } from 'src/common/guard/jwt.module';
+import { config } from 'src/config/config.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('DATABASE_HOST'),
-        port: configService.get<number>('DATABASE_PORT'),
-        username: configService.get<string>('DATABASE_USER'),
-        password: configService.get<string>('DATABASE_PASSWORD'),
-        database: configService.get<string>('DATABASE_NAME'),
-        entities: [],
-        autoLoadEntities: true,
-        synchronize: true,
-      }),
-      inject: [ConfigService],
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      url: config.DB_URL,
+      entities: ['dist/core/entity/*.entity{.ts,.js}'],
+      synchronize: true,
+      autoLoadEntities: true,
     }),
+    GuardModule,
   ],
-  providers: [EnvService],
-  exports: [EnvService],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: GuardService,
+    },
+  ],
+  exports: [],
 })
 export class AppModule {}
