@@ -1,4 +1,9 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Message {
@@ -6,8 +11,8 @@ export class Message {
   id: string;
 
   @Column({ type: 'varchar', name: 'text' })
-    text: string;
+  text: string;
 
-   @CreateDateColumn({ name: 'created_at',default:new Date() })
-    created_at: Date;
+  @CreateDateColumn({ name: 'created_at', default: new Date() })
+  created_at: Date;
 }
