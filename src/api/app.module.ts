@@ -5,6 +5,8 @@ import { GuardService } from 'src/common/guard/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { GuardModule } from 'src/common/guard/jwt.module';
 import { config } from 'src/config/config.service';
+import { DebtorModule } from './debtor/debtor.module';
+import { DebtsModule } from './debts/debts.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { config } from 'src/config/config.service';
       autoLoadEntities: true,
     }),
     GuardModule,
+    DebtorModule,
+    DebtsModule,
   ],
   providers: [
     {
