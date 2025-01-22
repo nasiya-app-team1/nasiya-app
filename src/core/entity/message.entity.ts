@@ -1,22 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Message {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-    @Column({ type: 'varchar', name: 'name' })
-    name: string;
+  @Column({ type: 'varchar', name: 'text' })
+    text: string;
 
-    @Column({ type: 'varchar', name: 'address' })
-    address: string;
-
-    @Column({ type: 'float', name: 'balance' })
-    balance: number;
-
-    @Column({ type: 'varchar', name: 'note', nullable: true })
-    note: string;
-
-    @Column({ type: 'boolean', name: 'is_liked' })
-    is_liked: boolean;
+   @CreateDateColumn({ name: 'created_at',default:new Date() })
+    created_at: Date;
 }
