@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EnvService } from 'src/config/config.service';
-
+import { StoresModule } from './stores/stores.module';
 
 @Module({
   imports: [
@@ -24,6 +24,7 @@ import { EnvService } from 'src/config/config.service';
       }),
       inject: [ConfigService],
     }),
+    StoresModule,
   ],
   providers: [EnvService],
   exports: [EnvService],
