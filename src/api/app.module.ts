@@ -6,6 +6,9 @@ import { User } from 'src/core/entities/user.entity';
 import { GuardService } from 'src/common/guard/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { GuardModule } from 'src/common/guard/jwt.module';
+import { EnvService } from 'src/config/config.service';
+import { CustomerModule } from './customer/customer.module';
+import { PhoneNumbersModule } from './phone-numbers/phone-numbers.module';
 
 @Module({
   imports: [
@@ -29,6 +32,8 @@ import { GuardModule } from 'src/common/guard/jwt.module';
     }),
     GuardModule,
     UsersModule,
+    CustomerModule,
+    PhoneNumbersModule,
   ],
   providers: [
     ConfigService,
