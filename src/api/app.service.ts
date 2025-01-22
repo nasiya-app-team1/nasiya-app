@@ -30,9 +30,9 @@ export default class Application {
     const swaggerEndpoint = `${apiPrefix}/docs`;
     SwaggerModule.setup(swaggerEndpoint, app, swaggerDocument);
 
-    const port = config.app.port || 4200;
+    const port = config.APP_PORT || 4200;
 
-    const environment = config.app.env || 'development';
+    const environment = config.NODE_ENV || 'development';
     const logLevels: LogLevel[] =
       environment === 'production'
         ? ['error']

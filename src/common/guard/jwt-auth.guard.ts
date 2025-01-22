@@ -32,7 +32,7 @@ export class GuardService implements CanActivate {
     }
     try {
       const payload = await this.jwtService.verifyAsync(token, {
-        secret: config.jwt.access.secret,
+        secret: config.JWT_ACCESS_SECRET,
       });
       request.user = payload;
     } catch {

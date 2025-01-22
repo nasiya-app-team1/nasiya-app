@@ -9,18 +9,18 @@ import { config } from 'src/config/config.service';
     JwtModule.registerAsync({
       global: true,
       useFactory: () => ({
-        secret: config.jwt.access.secret,
+        secret: config.JWT_ACCESS_SECRET,
         signOptions: {
-          expiresIn: config.jwt.access.time,
+          expiresIn: config.JWT_ACCESS_TIME,
         },
       }),
     }),
     JwtModule.registerAsync({
       global: true,
       useFactory: () => ({
-        secret: config.jwt.refresh.secret,
+        secret: config.JWT_REFRESH_SECRET,
         signOptions: {
-          expiresIn: config.jwt.refresh.time,
+          expiresIn: config.JWT_REFRESH_TIME,
         },
       }),
     }),

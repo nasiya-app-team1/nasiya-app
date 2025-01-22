@@ -1,56 +1,45 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
-// import { Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 
-// export type ConfigType = {
-//   API_PORT: number;
-//   NODE_ENV: string;
-//   DB_URL: string;
-//   ACCESS_TOKEN_KEY: string;
-//   ACCESS_TOKEN_TIME: string;
-//   REFRESH_TOKEN_KEY: string;
-//   REFRESH_TOKEN_TIME: string;
-//   FILE_PATH: string;
-// };
+export type ConfigType = {
+  APP_PORT: number;
+  DB_URL: string;
+  NODE_ENV: string;
+  JWT_ACCESS_SECRET: string;
+  JWT_ACCESS_TIME: string;
+  JWT_REFRESH_SECRET: string;
+  JWT_REFRESH_TIME: string;
+};
 
-// const requiredVariables = [
-//   'API_PORT',
-//   'NODE_ENV',
-//   'DEV_DB_URL',
-//   'PROD_DB_URL',
-//   'ACCESS_TOKEN_KEY',
-//   'ACCESS_TOKEN_TIME',
-//   'REFRESH_TOKEN_KEY',
-//   'REFRESH_TOKEN_TIME',
-//   'FILE_PATH',
-// ];
+const requiredVariables = [
+  'APP_PORT',
+  'DB_URL',
+  'NODE_ENV',
+  'JWT_ACCESS_SECRET',
+  'JWT_ACCESS_TIME',
+  'JWT_REFRESH_SECRET',
+  'JWT_REFRESH_TIME',
+];
 
-// const missingVariables = requiredVariables.filter((variable) => {
-//   const value = process.env[variable];
-//   return !value || value.trim() === '';
-// });
+const missingVariables = requiredVariables.filter((variable) => {
+  const value = process.env[variable];
+  return !value || value.trim() === '';
+});
 
-// if (missingVariables.length > 0) {
-//   Logger.error(
-//     `Missing or empty required environment variables: ${missingVariables.join(', ')}`,
-//   );
-//   process.exit(1);
-// }
+if (missingVariables.length > 0) {
+  Logger.error(
+    `Missing or empty required environment variables: ${missingVariables.join(', ')}`,
+  );
+  process.exit(1);
+}
 
-export const config = {
-  app: {
-    port: process.env.PORT,
-    env: process.env.NODE_ENV,
-  },
-  jwt: {
-    public_key: process.env.PUBLIC_KEY,
-    access: {
-      secret: process.env.ACCESS_SECRET,
-      time: process.env.ACCESS_TIME,
-    },
-    refresh: {
-      secret: process.env.REFRESH_SECRET,
-      time: process.env.REFRESH_TIME,
-    },
-  },
+export const config: ConfigType = {
+  APP_PORT: +process.env.PORT,
+  DB_URL: process.env.DB_URL,
+  NODE_ENV: process.env.NODE_ENV,
+  JWT_ACCESS_SECRET: process.env.ACCESS_SECRET,
+  JWT_ACCESS_TIME: process.env.ACCESS_TIME,
+  JWT_REFRESH_SECRET: process.env.REFRESH_SECRET,
+  JWT_REFRESH_TIME: process.env.REFRESH_TIME,
 };

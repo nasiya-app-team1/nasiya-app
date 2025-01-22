@@ -8,21 +8,21 @@ export class TokenService {
 
   createAccessToken(payload: any): string {
     return this.jwtService.sign(payload, {
-      secret: config.jwt.access.secret,
-      expiresIn: config.jwt.access.time,
+      secret: config.JWT_ACCESS_SECRET,
+      expiresIn: config.JWT_ACCESS_TIME,
     });
   }
 
   createRefreshToken(payload: any): string {
     return this.jwtService.sign(payload, {
-      secret: config.jwt.refresh.secret,
-      expiresIn: config.jwt.refresh.time,
+      secret: config.JWT_REFRESH_SECRET,
+      expiresIn: config.JWT_REFRESH_TIME,
     });
   }
   async verifyAccessToken(token: string): Promise<any> {
     try {
       const payload = await this.jwtService.verifyAsync(token, {
-        secret: config.jwt.access.secret,
+        secret: config.JWT_ACCESS_SECRET,
       });
       return payload;
     } catch (error) {
@@ -34,7 +34,7 @@ export class TokenService {
   async verifyRefreshToken(token: string): Promise<any> {
     try {
       const payload = await this.jwtService.verifyAsync(token, {
-        secret: config.jwt.refresh.secret,
+        secret: config.JWT_REFRESH_SECRET,
       });
       return payload;
     } catch (error) {
