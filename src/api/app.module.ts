@@ -1,6 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './users/users.module';
+import { User } from 'src/core/entities/user.entity';
+import { GuardService } from 'src/common/guard/jwt-auth.guard';
+import { APP_GUARD } from '@nestjs/core';
+import { GuardModule } from 'src/common/guard/jwt.module';
 import { EnvService } from 'src/config/config.service';
 import { CustomerModule } from './customer/customer.module';
 import { PhoneNumbersModule } from './phone-numbers/phone-numbers.module';
@@ -19,16 +24,24 @@ import { PhoneNumbersModule } from './phone-numbers/phone-numbers.module';
         username: configService.get<string>('DATABASE_USER'),
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_NAME'),
-        entities: [],
+        entities: [User],
         autoLoadEntities: true,
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
+    GuardModule,
+    UsersModule,
     CustomerModule,
     PhoneNumbersModule,
   ],
-  providers: [EnvService],
-  exports: [EnvService],
+  providers: [
+    ConfigService,
+    {
+      provide: APP_GUARD,
+      useClass: GuardService,
+    },
+  ],
+  exports: [ConfigService],
 })
 export class AppModule {}
