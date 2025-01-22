@@ -6,6 +6,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { GuardModule } from 'src/common/guard/jwt.module';
 import { config } from 'src/config/config.service';
 import { AdminModule } from './admin/admin.module';
+import { DebtorImagesModule } from './debtor-images/debtor-images.module';
+import { DebtsImagesModule } from './debts-images/debts-images.module';
+import { PhoneNumbersModule } from './phone-numbers/phone-numbers.module';
 
 @Module({
   imports: [
@@ -21,6 +24,9 @@ import { AdminModule } from './admin/admin.module';
     }),
     GuardModule,
     AdminModule,
+    DebtorImagesModule,
+    DebtsImagesModule,
+    PhoneNumbersModule,
   ],
   providers: [
     {
