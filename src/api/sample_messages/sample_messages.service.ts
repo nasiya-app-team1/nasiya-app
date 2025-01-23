@@ -10,11 +10,13 @@ export class SampleMessagesService {
   constructor(
     @InjectRepository(SampleMessage)
     private sampleMessageRepository: Repository<SampleMessage>,
-  ){}
+  ) {}
   async create(createSampleMessageDto: CreateSampleMessageDto) {
-    const sample=await this.sampleMessageRepository.create(createSampleMessageDto)
-    await this.sampleMessageRepository.save(sample)
-    return "Sample Message Yaratildi"
+    const sample = await this.sampleMessageRepository.create(
+      createSampleMessageDto,
+    );
+    await this.sampleMessageRepository.save(sample);
+    return 'Sample Message Yaratildi';
   }
 
   async findAll() {
@@ -24,7 +26,9 @@ export class SampleMessagesService {
   }
 
   async findOne(id: string) {
-    const result = await this.sampleMessageRepository.findOne({ where: { id } });
+    const result = await this.sampleMessageRepository.findOne({
+      where: { id },
+    });
     if (result) {
       return result;
     }
@@ -32,7 +36,9 @@ export class SampleMessagesService {
   }
 
   async update(id: string, UpdateSampleMessageDto: UpdateSampleMessageDto) {
-    const result = await this.sampleMessageRepository.findOne({ where: { id } });
+    const result = await this.sampleMessageRepository.findOne({
+      where: { id },
+    });
     if (result) {
       await this.sampleMessageRepository.update(id, UpdateSampleMessageDto);
       return 'Sample Message yangilandi';
@@ -41,7 +47,9 @@ export class SampleMessagesService {
   }
 
   async remove(id: string) {
-    const result = await this.sampleMessageRepository.findOne({ where: { id } });
+    const result = await this.sampleMessageRepository.findOne({
+      where: { id },
+    });
     if (result) {
       await this.sampleMessageRepository.delete(id);
       return "Sample Message o'chirildi";

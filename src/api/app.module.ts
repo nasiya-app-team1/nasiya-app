@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { EnvService } from 'src/config/config.service';
 import { StoresModule } from './stores/stores.module';
 import { SampleMessagesModule } from './sample_messages/sample_messages.module';
+import { PaymentModule } from 'src/api/payment/payment.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { SampleMessagesModule } from './sample_messages/sample_messages.module';
       inject: [ConfigService],
     }),
     StoresModule,
-    SampleMessagesModule
+    SampleMessagesModule,
+    PaymentModule,
   ],
   providers: [EnvService],
   exports: [EnvService],

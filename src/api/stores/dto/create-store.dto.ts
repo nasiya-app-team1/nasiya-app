@@ -7,8 +7,6 @@ import {
 } from 'class-validator';
 
 export class CreateStoreDto {
-
-
   @IsString()
   @Length(1, 25)
   login: string;
