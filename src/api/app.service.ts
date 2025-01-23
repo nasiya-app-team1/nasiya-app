@@ -31,7 +31,6 @@ export default class Application {
     SwaggerModule.setup(swaggerEndpoint, app, swaggerDocument);
 
     const port = config.APP_PORT || 4200;
-
     const environment = config.NODE_ENV || 'development';
     const logLevels: LogLevel[] =
       environment === 'production'
