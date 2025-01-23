@@ -7,6 +7,8 @@ import { GuardModule } from 'src/common/guard/jwt.module';
 import { config } from 'src/config/config.service';
 import { AdminModule } from './admin/admin.module';
 import { MessagesModule } from './messages/messages.module';
+import { DebtorModule } from './debtor/debtor.module';
+import { DebtsModule } from './debts/debts.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { MessagesModule } from './messages/messages.module';
     GuardModule,
     AdminModule,
     MessagesModule,
+    DebtorModule,
+    DebtsModule,
   ],
   providers: [
     {
