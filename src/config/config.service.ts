@@ -38,8 +38,8 @@ export const config: ConfigType = {
   APP_PORT: +process.env.APP_PORT,
   DB_URL: process.env.DB_URL,
   NODE_ENV: process.env.NODE_ENV,
-  JWT_ACCESS_SECRET: process.env.ACCESS_SECRET,
-  JWT_ACCESS_TIME: process.env.ACCESS_TIME,
-  JWT_REFRESH_SECRET: process.env.REFRESH_SECRET,
-  JWT_REFRESH_TIME: process.env.REFRESH_TIME,
+  JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET,
+  JWT_ACCESS_TIME: process.env.JWT_ACCESS_TIME,
+  JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET,
+  JWT_REFRESH_TIME: process.env.JWT_REFRESH_TIME,
 };
