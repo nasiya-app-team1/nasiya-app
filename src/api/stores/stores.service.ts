@@ -24,7 +24,7 @@ export class StoresService {
 
   async findAll() {
     const result = await this.storeRepository.find();
-    if (result.length) return length;
+    if (result.length) return result;
     return `Storelar topilmadi`;
   }
 
@@ -42,7 +42,7 @@ export class StoresService {
       await this.storeRepository.update(id, updateStoreDto);
       return 'Store yangilandi';
     }
-    return `O'chiriladigan Store topilmadi`;
+    return `Yangilanadigan Store topilmadi`;
   }
 
   async remove(id: string) {

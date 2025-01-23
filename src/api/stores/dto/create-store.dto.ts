@@ -1,25 +1,23 @@
 import {
   IsString,
   IsBoolean,
-  IsUUID,
   IsOptional,
   Length,
-  IsDecimal,
+  IsNumber,
 } from 'class-validator';
 
 export class CreateStoreDto {
-  @IsUUID()
-  id: string;
+
 
   @IsString()
-  @Length(1, 100)
+  @Length(1, 25)
   login: string;
 
   @IsString()
-  @Length(1, 50)
+  @Length(1, 25)
   password: string;
 
-  @IsDecimal()
+  @IsNumber()
   wallet: number;
 
   @IsString()

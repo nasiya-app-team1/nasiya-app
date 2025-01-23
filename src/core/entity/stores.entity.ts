@@ -1,17 +1,17 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn} from 'typeorm';
 
 @Entity()
 export class Stores {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', length: 100, unique: true })
+  @Column({ type: 'varchar', length: 25, unique: true })
   login: string;
 
-  @Column({ type: 'varchar', length: 50 })
+  @Column({ type: 'varchar', length: 25 })
   password: string;
 
-  @Column({ type: 'decimal' })
+  @Column({ type: 'int' })
   wallet: number;
 
   @Column({ type: 'varchar', length: 255 })

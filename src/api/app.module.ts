@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EnvService } from 'src/config/config.service';
 import { StoresModule } from './stores/stores.module';
+import { SampleMessagesModule } from './sample_messages/sample_messages.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { StoresModule } from './stores/stores.module';
       inject: [ConfigService],
     }),
     StoresModule,
+    SampleMessagesModule
   ],
   providers: [EnvService],
   exports: [EnvService],
