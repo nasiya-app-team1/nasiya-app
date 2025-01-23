@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger, LogLevel, ValidationPipe } from '@nestjs/common';
 import { config } from 'src/config/config.service';
+import { UUIDInterceptor } from 'src/infrastructure/pipe/isuuid.pipe';
 
 export default class Application {
   private static readonly logger = new Logger(Application.name);
@@ -39,7 +40,13 @@ export default class Application {
         : ['log', 'error', 'warn', 'debug', 'verbose'];
 
     app.useLogger(logLevels);
-    app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalInterceptors(new UUIDInterceptor());
+    app.useGlobalPipes(
+      new ValidationPipe({
+        transform: true,
+        whitelist: true,
+      }),
+    );
     await app.listen(port, () => {
       Application.logger.log(
         `Server is running on http://localhost:${port}/${apiPrefix}`,
