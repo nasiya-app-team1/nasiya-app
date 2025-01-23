@@ -6,6 +6,7 @@ import {
   IsStrongPassword,
   MinLength,
 } from 'class-validator';
+import { RoleAdmin } from 'src/common/enum';
 
 export class CreateAdminDto {
   @ApiProperty({
@@ -42,4 +43,12 @@ export class CreateAdminDto {
   })
   @IsOptional()
   email?: string;
+
+  @ApiPropertyOptional({
+    type: String,
+    description: 'Role of admin',
+    example: 'admin',
+  })
+  @IsOptional()
+  role?: RoleAdmin;
 }
