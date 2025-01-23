@@ -1,26 +1,51 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Payment } from 'src/core/entities/payment.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class PaymentService {
-  create(createPaymentDto: CreatePaymentDto) {
-    return 'This action adds a new payment';
+  constructor(
+    @InjectRepository(Payment)
+    private paymentRepository: Repository<Payment>,
+  ){}
+  async create(CreatePaymentDto:CreatePaymentDto) {
+    const payment=await this.paymentRepository.create(CreatePaymentDto)
+    await this.paymentRepository.save(payment)
+    return "Payment Muvaffaqiyatli Yaratildi"
   }
 
-  findAll() {
-    return `This action returns all payment`;
+  async findAll() {
+    const result = await this.paymentRepository.find();
+    if (result.length) return result;
+    return `Paymentlar topilmadi`;
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} payment`;
+  async findOne(id: string) {
+    const result = await this.paymentRepository.findOne({ where: { id } });
+    if (result) {
+      return result;
+    }
+    return 'Payment topilmadi';
   }
 
-  update(id: string, updatePaymentDto: UpdatePaymentDto) {
-    return `This action updates a #${id} payment`;
+  async update(id: string, UpdatePaymentDto: UpdatePaymentDto) {
+    const result = await this.paymentRepository.findOne({ where: { id } });
+    if (result) {
+      await this.paymentRepository.update(id, UpdatePaymentDto);
+      return 'Payment yangilandi';
+    }
+    return `Yangilanadigan Payment topilmadi`;
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} payment`;
+  async remove(id: string) {
+    const result = await this.paymentRepository.findOne({ where: { id } });
+    if (result) {
+      await this.paymentRepository.delete(id);
+      return "Payment o'chirildi";
+    }
+    return `O'chiriladigan Payment topilmadi`;
   }
 }
