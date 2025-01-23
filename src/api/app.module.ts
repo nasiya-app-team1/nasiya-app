@@ -5,6 +5,7 @@ import { GuardService } from 'src/common/guard/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { GuardModule } from 'src/common/guard/jwt.module';
 import { config } from 'src/config/config.service';
+import { AdminModule } from './admin/admin.module';
 import { MessagesModule } from './messages/messages.module';
 
 @Module({
@@ -20,6 +21,7 @@ import { MessagesModule } from './messages/messages.module';
       autoLoadEntities: true,
     }),
     GuardModule,
+    AdminModule,
     MessagesModule,
   ],
   providers: [
