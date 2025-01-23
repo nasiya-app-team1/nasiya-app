@@ -1,22 +1,40 @@
-import { IsNotEmpty, IsString, IsOptional, isString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
+import { MessageStatus } from 'src/common/index.common';
 
 export class CreateMessageDto {
-  // @IsNotEmpty()
-  @IsString()
+  @ApiProperty({
+    description: 'store id',
+    example: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
+  })
+  @IsNotEmpty()
   store_id: string;
 
-  // @IsNotEmpty()
-  @IsString()
+  @ApiProperty({
+    description: 'Debtor id',
+    example: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
+  })
+  @IsNotEmpty()
   debtor_id: string;
 
-  // @IsNotEmpty
-  @IsString()
+  @ApiProperty({
+    description: 'Message for note',
+    example: 'is is just simple message for swagger',
+  })
+  @IsNotEmpty()
   message: string;
 
-  @IsString()
-  status: string;
+  @ApiProperty({
+    description: 'status of message',
+    example: 'pending',
+  })
+  @IsNotEmpty()
+  status: MessageStatus;
 
-  // @IsOptional()
-  @IsString()
-  sample_message_id?: string;
+  @ApiProperty({
+    description: 'Simple message id',
+    example: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
+  })
+  @IsNotEmpty()
+  sample_message_id: string;
 }

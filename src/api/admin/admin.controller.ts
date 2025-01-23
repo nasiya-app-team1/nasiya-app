@@ -8,14 +8,13 @@ import {
   Delete,
   Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { LoginAdminDto } from './dto/login-admin.dto';
-import { Response } from 'express';
-import { Public } from 'src/common/decorator/jwt-public.decorator';
-import { RoleAdmin } from 'src/common/enum';
 import { RefreshDto } from './dto/refresh_token-admin.dto';
+import { Public, RoleAdmin } from 'src/common/index.common';
 
 @Controller('admin')
 export class AdminController {

@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { APP_GUARD } from '@nestjs/core';
+import { GuardService, GuardModule } from 'src/common/index.common';
+import { config } from 'src/config/index.config';
 import { StoresModule } from './stores/stores.module';
 import { SampleMessagesModule } from './sample_messages/sample_messages.module';
-import { PaymentModule } from 'src/api/payment/payment.module';
-// import { GuardService } from 'src/common/guard/jwt-auth.guard';
-// import { APP_GUARD } from '@nestjs/core';
-import { GuardModule } from 'src/common/guard/jwt.module';
-import { config } from 'src/config/config.service';
+import { PaymentModule } from './payment/payment.module';
 import { AdminModule } from './admin/admin.module';
 import { MessagesModule } from './messages/messages.module';
 import { DebtorModule } from './debtor/debtor.module';
@@ -31,7 +30,7 @@ import { LikesModule } from './likes/likes.module';
     }),
     StoresModule,
     SampleMessagesModule,
-    // PaymentModule,
+    PaymentModule,
     GuardModule,
     AdminModule,
     MessagesModule,
@@ -43,10 +42,10 @@ import { LikesModule } from './likes/likes.module';
     PhoneNumbersModule,
   ],
   providers: [
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: GuardService,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: GuardService,
+    },
   ],
   exports: [],
 })

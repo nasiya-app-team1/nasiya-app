@@ -1,6 +1,6 @@
-import { BaseEntity } from 'src/common/database/baseEntity';
-import { RoleAdmin } from 'src/common/enum';
 import { Column, Entity } from 'typeorm';
+import { BaseEntity } from 'src/common/database/baseEntity';
+import { RoleAdmin } from 'src/common/enum/admin.enum';
 
 @Entity('admins')
 export class Admin extends BaseEntity {

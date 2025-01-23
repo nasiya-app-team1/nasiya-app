@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { DebtsImagesService } from './debts-images.service';
 import { DebtsImagesController } from './debts-images.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DebtsImage } from 'src/core/entities/debts-image.entity';
+import { DebtImageEntity } from 'src/core/entities/debt-image.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([DebtsImage])],
+  imports: [TypeOrmModule.forFeature([DebtImageEntity])],
   controllers: [DebtsImagesController],
   providers: [DebtsImagesService],
 })

@@ -6,7 +6,7 @@ import {
   IsStrongPassword,
   MinLength,
 } from 'class-validator';
-import { RoleAdmin } from 'src/common/enum';
+import { RoleAdmin } from 'src/common/index.common';
 
 export class CreateAdminDto {
   @ApiProperty({
