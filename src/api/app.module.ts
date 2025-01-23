@@ -34,12 +34,12 @@ import { DebtsModule } from './debts/debts.module';
     DebtorModule,
     DebtsModule,
   ],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: GuardService,
-    },
-  ],
+  // providers: [
+  //   {
+  //     provide: APP_GUARD,
+  //     useClass: GuardService,
+  //   },
+  // ],
   exports: [],
 })
 export class AppModule {}

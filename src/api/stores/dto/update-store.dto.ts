@@ -7,4 +7,7 @@ export class UpdateStoreDto extends PartialType(CreateStoreDto) {
   wallet?: number;
   image?: string;
   is_active?: boolean;
+  email?: string;
+  pass_code?: string;
+  phone_number?: string;
 }

@@ -4,22 +4,29 @@ import { UpdateStoreDto } from './dto/update-store.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Stores } from 'src/core/entities/stores.entity';
 import { Repository } from 'typeorm';
+import { BcryptService } from 'src/infrastructure/bcrypt/bcrypt.service';
 
 @Injectable()
 export class StoresService {
   constructor(
     @InjectRepository(Stores)
     private storeRepository: Repository<Stores>,
+    private readonly bcrypservice:BcryptService
   ) {}
   async create(createStoreDto: CreateStoreDto) {
-    const { login } = createStoreDto;
-    const result = await this.storeRepository.findOne({ where: { login } });
-    if (result) {
-      return 'Ushbu Store allaqachon mavjud';
-    }
-    const store = await this.storeRepository.create(createStoreDto);
-    await this.storeRepository.save(store);
-    return 'Store Muvaffaqiyatli yaratildi';
+
+      const {password}=createStoreDto
+      const hashpassword=await this.bcrypservice.encrypt(password)
+      const { login,email } = createStoreDto;
+      const result = await this.storeRepository.findOne({ where: { login,email } });
+      if (result) {
+        return 'Ushbu Store allaqachon mavjud';
+      }
+      createStoreDto.password=hashpassword
+      const store = await this.storeRepository.create(createStoreDto);
+      await this.storeRepository.save(store);
+      return 'Store Muvaffaqiyatli yaratildi';
+
   }
 
   async findAll() {
@@ -38,6 +45,11 @@ export class StoresService {
 
   async update(id: string, updateStoreDto: UpdateStoreDto) {
     const result = await this.storeRepository.findOne({ where: { id } });
+    const {password}=updateStoreDto
+    if(password){
+      const hashpassword=await this.bcrypservice.encrypt(password)
+      updateStoreDto.password=hashpassword
+    }
     if (result) {
       await this.storeRepository.update(id, updateStoreDto);
       return 'Store yangilandi';

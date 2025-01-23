@@ -4,9 +4,17 @@ import {
   IsOptional,
   Length,
   IsNumber,
+  IsEmail,
+  IsPhoneNumber,
+  MinLength,
+  MaxLength,
 } from 'class-validator';
 
 export class CreateStoreDto {
+  @IsEmail()
+  @IsString()
+  email:string
+  
   @IsString()
   @Length(1, 25)
   login: string;
@@ -14,6 +22,14 @@ export class CreateStoreDto {
   @IsString()
   @Length(1, 25)
   password: string;
+
+  
+  @IsPhoneNumber('UZ')
+  phone_number:string
+
+  @IsString()
+  @MaxLength(4)
+  pass_code:string
 
   @IsNumber()
   wallet: number;
