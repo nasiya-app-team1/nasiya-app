@@ -4,7 +4,7 @@ import { IFindOptions } from './interface';
 import { RepositoryPager } from '../pagination/RepositoryParget';
 
 export class BaseService<CreateDto, Entity> {
-  constructor(private readonly repository: Repository<any>) {}
+  constructor(protected readonly repository: Repository<any>) {}
 
   get getRepository() {
     return this.repository;
