@@ -12,6 +12,9 @@ import { AdminModule } from './admin/admin.module';
 import { MessagesModule } from './messages/messages.module';
 import { DebtorModule } from './debtor/debtor.module';
 import { DebtsModule } from './debts/debts.module';
+import { DebtorImagesModule } from './debtor-images/debtor-images.module';
+import { DebtsImagesModule } from './debts-images/debts-images.module';
+import { PhoneNumbersModule } from './phone-numbers/phone-numbers.module';
 
 @Module({
   imports: [
@@ -33,6 +36,9 @@ import { DebtsModule } from './debts/debts.module';
     MessagesModule,
     DebtorModule,
     DebtsModule,
+    DebtorImagesModule,
+    DebtsImagesModule,
+    PhoneNumbersModule,
   ],
   providers: [
     {
