@@ -1,9 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity } from 'src/common/database/baseEntity';
+import { Entity, Column } from 'typeorm';
 
 @Entity()
-export class Payment {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+export class Payment extends BaseEntity {
   @Column({ type: 'number' })
   sum: number;
   @Column({ type: 'date', default: new Date() })

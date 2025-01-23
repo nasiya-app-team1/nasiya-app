@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateSampleMessageDto } from './dto/create-sample_message.dto';
 import { UpdateSampleMessageDto } from './dto/update-sample_message.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SampleMessage } from 'src/core/entity/sample_message.entity';
+import { SampleMessage } from 'src/core/entities/sample_message.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()

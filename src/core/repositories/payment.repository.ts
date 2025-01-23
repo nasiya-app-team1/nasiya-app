@@ -1,3 +1,3 @@
 import { Repository } from 'typeorm';
-import { Payment } from '../entity/payment.entity';
+import { Payment } from '../entities/payment.entity';
 export type PaymentRepository = Repository<Payment>;

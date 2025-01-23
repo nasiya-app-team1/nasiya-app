@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Stores } from 'src/core/entity/stores.entity';
+import { Stores } from 'src/core/entities/stores.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -24,7 +24,7 @@ export class StoresService {
 
   async findAll() {
     const result = await this.storeRepository.find();
-    if (result.length) return result;
+    if (result) return result;
     return `Storelar topilmadi`;
   }
 
