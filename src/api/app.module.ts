@@ -12,6 +12,7 @@ import { AdminModule } from './admin/admin.module';
 import { MessagesModule } from './messages/messages.module';
 import { DebtorModule } from './debtor/debtor.module';
 import { DebtsModule } from './debts/debts.module';
+import { LikesModule } from './likes/likes.module';
 
 @Module({
   imports: [
@@ -27,19 +28,20 @@ import { DebtsModule } from './debts/debts.module';
     }),
     StoresModule,
     SampleMessagesModule,
-    PaymentModule,
+    // PaymentModule,
     GuardModule,
     AdminModule,
     MessagesModule,
+    LikesModule,
     DebtorModule,
     DebtsModule,
   ],
-  // providers: [
-  //   {
-  //     provide: APP_GUARD,
-  //     useClass: GuardService,
-  //   },
-  // ],
+  providers: [
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: GuardService,
+    // },
+  ],
   exports: [],
 })
 export class AppModule {}
