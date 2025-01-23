@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { StoresModule } from './stores/stores.module';
+import { SampleMessagesModule } from './sample_messages/sample_messages.module';
+import { PaymentModule } from 'src/api/payment/payment.module';
 import { GuardService } from 'src/common/guard/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { GuardModule } from 'src/common/guard/jwt.module';
@@ -22,6 +25,9 @@ import { DebtsModule } from './debts/debts.module';
       synchronize: true,
       autoLoadEntities: true,
     }),
+    StoresModule,
+    SampleMessagesModule,
+    PaymentModule,
     GuardModule,
     AdminModule,
     MessagesModule,

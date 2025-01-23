@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Logger, LogLevel } from '@nestjs/common';
+import { Logger, LogLevel, ValidationPipe } from '@nestjs/common';
 import { config } from 'src/config/config.service';
 
 export default class Application {
@@ -39,7 +39,7 @@ export default class Application {
         : ['log', 'error', 'warn', 'debug', 'verbose'];
 
     app.useLogger(logLevels);
-
+    app.useGlobalPipes(new ValidationPipe());
     await app.listen(port, () => {
       Application.logger.log(
         `Server is running on http://localhost:${port}/${apiPrefix}`,

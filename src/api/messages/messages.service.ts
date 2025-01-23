@@ -1,9 +1,8 @@
 import {
   BadRequestException,
   ConflictException,
-  Inject,
   Injectable,
-  NotFoundException
+  NotFoundException,
 } from '@nestjs/common';
 import { DeepPartial } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -26,7 +25,6 @@ export class MessagesService extends BaseService<
   }
 
   async createMessage(createMessageDto: CreateMessageDto) {
-
     const { content } = createMessageDto;
 
     // Check if a message with the same content already exists
@@ -51,10 +49,7 @@ export class MessagesService extends BaseService<
     };
   }
 
-  async updateMessage(
-    id: string,
-    updateMessageDto: UpdateMessageDto,
-  ) {
+  async updateMessage(id: string, updateMessageDto: UpdateMessageDto) {
     const { content } = updateMessageDto;
 
     // Find the message by ID
@@ -66,7 +61,6 @@ export class MessagesService extends BaseService<
     message.content = content;
     try {
       await this.repository.save(message);
-
     } catch (error) {
       throw new BadRequestException(`Error: ${error.message}`);
     }
@@ -104,7 +98,9 @@ export class MessagesService extends BaseService<
     try {
       messages = await this.repository.find();
     } catch (error) {
-      throw new BadRequestException(`Error fetching messages: ${error.message}`);
+      throw new BadRequestException(
+        `Error fetching messages: ${error.message}`,
+      );
     }
 
     return {
