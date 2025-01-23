@@ -1,4 +1,4 @@
 import { Repository } from 'typeorm';
-import { LikesEntity } from '../entities/likes.entity';
+import { LikeEntity } from '../entities/index.entities';
 
-export type LikeRepository = Repository<LikesEntity>;
+export type LikeRepository = Repository<LikeEntity>;

@@ -1,21 +1,23 @@
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from 'src/common/database/baseEntity';
 import { PaymentType } from 'src/common/enum/payment.enum';
-import { Entity, Column } from 'typeorm';
-const enum type {
-  a = 'a',
-}
+import { DebtEntity } from './debt.entity';
+
 @Entity()
-export class Payment extends BaseEntity {
-  @Column({ type: 'varchar' })
-  sum: number;
+export class PaymentEntity extends BaseEntity {
   @Column({ type: 'date', default: new Date() })
   date: Date;
-  @Column({ type: 'varchar' })
-  type: type;
-  @Column({ type: 'int' })
+
+  @Column({ type: 'decimal' })
   sum: number;
-  @Column({ type: 'date', default: new Date() })
-  date: Date;
-  @Column({ type: 'enum',enum:PaymentType })
-  type: PaymentType
+
+  @Column({ type: 'varchar', name: 'debt_id' })
+  debt_id: string;
+
+  @Column({ type: 'enum', enum: PaymentType })
+  type: PaymentType;
+
+  @ManyToOne(() => DebtEntity, (debt) => debt.paymetns)
+  @JoinColumn({ name: 'debt_id' })
+  debt: DebtEntity;
 }

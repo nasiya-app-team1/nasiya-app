@@ -11,8 +11,7 @@ export class MessagesService extends BaseService<
   CreateMessageDto,
   DeepPartial<MessageEntity>
 > {
-  constructor(@InjectRepository(MessageEntity) repository: MessageRepository,
-  ) {
+  constructor(@InjectRepository(MessageEntity) repository: MessageRepository) {
     super(repository);
   }
 }

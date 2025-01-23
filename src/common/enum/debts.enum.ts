@@ -1,8 +1,8 @@
 export enum DebtsPeriod {
-  one = '1 oy',
-  two = '2 oy',
-  three = '3 oy',
-  six = '6 oy',
-  nine = '9 oy',
-  twelve = '12 oy',
+  OneMonth = '1 oy',
+  TwoMonths = '2 oy',
+  ThreeMonths = '3 oy',
+  SixMonths = '6 oy',
+  NineMonths = '9 oy',
+  TwelveMonths = '12 oy',
 }

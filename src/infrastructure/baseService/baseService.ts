@@ -77,7 +77,7 @@ export class BaseService<CreateDto, Entity> {
     await this.findOneById(id);
     await this.repository.update(id, {
       ...dto,
-      updated_at: Date.now(),
+      updated_at: new Date(Date.now()),
     });
     return {
       status_code: 200,

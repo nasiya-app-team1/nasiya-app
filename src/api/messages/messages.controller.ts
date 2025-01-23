@@ -14,13 +14,13 @@ import { Public } from 'src/common/decorator/jwt-public.decorator';
 
 @Controller('messages')
 export class MessagesController {
-  constructor(private readonly messagesService: MessagesService) { }
+  constructor(private readonly messagesService: MessagesService) {}
 
   @Post()
   async createMessage(@Body() createMessageDto: CreateMessageDto) {
     return await this.messagesService.create(createMessageDto);
   }
-  
+
   @Public()
   @Get()
   async getAllMessages() {
