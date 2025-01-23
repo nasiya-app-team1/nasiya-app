@@ -6,6 +6,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { GuardModule } from 'src/common/guard/jwt.module';
 import { config } from 'src/config/config.service';
 import { AdminModule } from './admin/admin.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AdminModule } from './admin/admin.module';
     }),
     GuardModule,
     AdminModule,
+    MessagesModule,
   ],
   providers: [
     {
