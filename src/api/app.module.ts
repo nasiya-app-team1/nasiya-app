@@ -15,6 +15,7 @@ import { DebtsModule } from './debts/debts.module';
 import { DebtorImagesModule } from './debtor-images/debtor-images.module';
 import { DebtsImagesModule } from './debts-images/debts-images.module';
 import { PhoneNumbersModule } from './phone-numbers/phone-numbers.module';
+import { LikesModule } from './likes/likes.module';
 
 @Module({
   imports: [
@@ -30,10 +31,11 @@ import { PhoneNumbersModule } from './phone-numbers/phone-numbers.module';
     }),
     StoresModule,
     SampleMessagesModule,
-    PaymentModule,
+    // PaymentModule,
     GuardModule,
     AdminModule,
     MessagesModule,
+    LikesModule,
     DebtorModule,
     DebtsModule,
     DebtorImagesModule,
