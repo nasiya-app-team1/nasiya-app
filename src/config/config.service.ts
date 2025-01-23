@@ -35,7 +35,7 @@ if (missingVariables.length > 0) {
 }
 
 export const config: ConfigType = {
-  APP_PORT: +process.env.PORT,
+  APP_PORT: +process.env.APP_PORT,
   DB_URL: process.env.DB_URL,
   NODE_ENV: process.env.NODE_ENV,
   JWT_ACCESS_SECRET: process.env.ACCESS_SECRET,
