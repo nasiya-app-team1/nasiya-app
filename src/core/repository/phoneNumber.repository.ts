@@ -1,4 +1,4 @@
 import { Repository } from 'typeorm';
-import { PhoneNumberEntity } from '../entities/index.entities';
+import { PhoneNumberEntity } from '../entity';
 
 export type PhoneNumberRepository = Repository<PhoneNumberEntity>;

@@ -11,11 +11,8 @@ import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { LoginAdminDto } from './dto/login-admin.dto';
 import { RefreshDto } from './dto/refresh_token-admin.dto';
-import { Admin, AdminRepository } from 'src/core/index.core';
-import {
-  BaseService,
-  BcryptService,
-} from 'src/infrastructure/index.infrastructure';
+import { Admin, AdminRepository } from 'src/core';
+import { BaseService, BcryptService } from 'src/infrastructure';
 import { TokenService, RoleAdmin } from 'src/common/index.common';
 
 @Injectable()
@@ -138,7 +135,6 @@ export class AdminService extends BaseService<
     const data = await this.tokenService.verifyRefreshToken(
       refreshDto.refresh_token,
     );
-    await this.findOneById(data?.id);
     const payload = {
       id: data.id,
       role: data.role,
@@ -178,7 +174,7 @@ export class AdminService extends BaseService<
     }
     await this.getRepository.update(id, {
       ...updateAdminDto,
-      updated_at: Date.now(),
+      updated_at: new Date(Date.now()),
     });
     return {
       status_code: 200,

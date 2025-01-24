@@ -2,8 +2,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger, LogLevel, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { config } from 'src/config/index.config';
-import { UUIDInterceptor } from 'src/infrastructure/index.infrastructure';
+import { config } from 'src/config';
+import { UUIDInterceptor } from 'src/infrastructure';
 
 export default class Application {
   private static readonly logger = new Logger(Application.name);

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { StoreEntity } from 'src/core/entities/stores.entity';
+import { StoreEntity } from 'src/core/entity/stores.entity';
 import { Repository } from 'typeorm';
 import { BcryptService } from 'src/infrastructure/bcrypt/bcrypt.service';
 

@@ -1,4 +1,4 @@
 import { Repository } from 'typeorm';
-import { DebtorImageEntity } from '../entities/index.entities';
+import { DebtorImageEntity } from '../entity';
 
 export type DebtorImageRepository = Repository<DebtorImageEntity>;

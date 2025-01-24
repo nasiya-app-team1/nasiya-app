@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminService } from './admin.service';
 import { AdminController } from './admin.controller';
-import { BcryptService } from 'src/infrastructure/index.infrastructure';
-import { Admin } from 'src/core/index.core';
+import { BcryptService } from 'src/infrastructure';
+import { Admin } from 'src/core';
 import { GuardModule } from 'src/common/index.common';
 
 @Module({

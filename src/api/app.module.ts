@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD } from '@nestjs/core';
 import { GuardService, GuardModule } from 'src/common/index.common';
-import { config } from 'src/config/index.config';
+import { config } from 'src/config';
 import { StoresModule } from './stores/stores.module';
 import { SampleMessagesModule } from './sample_messages/sample_messages.module';
 import { PaymentModule } from './payment/payment.module';
