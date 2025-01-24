@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsDateString, IsEnum } from 'class-validator';
+import { IsNumber, IsDateString, IsEnum, IsUUID, IsString } from 'class-validator';
 import { PaymentType } from 'src/common/enum/payment.enum';
 
 export class CreatePaymentDto {
@@ -16,6 +16,14 @@ export class CreatePaymentDto {
   })
   @IsDateString()
   date: string;
+
+  @ApiProperty({
+    description: 'Debtor id it is related to debt',
+    example: '21f0f523-6ef8-473b-be9a-2477962fcaeb',
+  })
+  @IsUUID()
+  @IsString()
+  debt_id:string
 
   @ApiProperty({
     description: 'Type of payment',
