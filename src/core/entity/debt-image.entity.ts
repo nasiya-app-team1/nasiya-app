@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from 'src/common/database/baseEntity';
 import { DebtEntity } from './debt.entity';
 
@@ -11,5 +11,6 @@ export class DebtImageEntity extends BaseEntity {
   debts_id: string;
 
   @ManyToOne(() => DebtEntity, (debt) => debt.debtImages)
+  @JoinColumn({ name: 'debts_id' })
   debt: DebtEntity[];
 }

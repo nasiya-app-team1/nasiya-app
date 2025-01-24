@@ -1,4 +1,4 @@
 import { Repository } from 'typeorm';
-import { SampleMessageEntity } from '../entities/index.entities';
+import { SampleMessageEntity } from '../entity';
 
 export type SampleMessageRepository = Repository<SampleMessageEntity>;

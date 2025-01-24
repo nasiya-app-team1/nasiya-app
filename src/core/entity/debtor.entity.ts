@@ -7,7 +7,7 @@ import { LikeEntity } from './likes.entity';
 import { DebtorImageEntity } from './debtor-image.entity';
 import { PhoneNumberEntity } from './phone-number.entity';
 
-@Entity('debtors')
+@Entity()
 export class DebtorEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 40, nullable: true })
   full_name: string;

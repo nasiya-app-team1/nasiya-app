@@ -1,4 +1,4 @@
 import { Repository } from 'typeorm';
-import { Admin } from '../entities/index.entities';
+import { Admin } from '../entity';
 
 export type AdminRepository = Repository<Admin>;
