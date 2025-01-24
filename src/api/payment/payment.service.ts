@@ -2,19 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Payment } from 'src/core/entities/payment.entity';
+import { PaymentEntity } from 'src/core/entity/payment.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class PaymentService {
   constructor(
-    @InjectRepository(Payment)
-    private paymentRepository: Repository<Payment>,
-  ){}
-  async create(CreatePaymentDto:CreatePaymentDto) {
-    const payment=await this.paymentRepository.create(CreatePaymentDto)
-    await this.paymentRepository.save(payment)
-    return "Payment Muvaffaqiyatli Yaratildi"
+    @InjectRepository(PaymentEntity)
+    private paymentRepository: Repository<PaymentEntity>,
+  ) {}
+  async create(CreatePaymentDto: CreatePaymentDto) {
+    const payment = await this.paymentRepository.create(CreatePaymentDto);
+    await this.paymentRepository.save(payment);
+    return 'PaymentEntity Muvaffaqiyatli Yaratildi';
   }
 
   async findAll() {
@@ -28,24 +28,24 @@ export class PaymentService {
     if (result) {
       return result;
     }
-    return 'Payment topilmadi';
+    return 'PaymentEntity topilmadi';
   }
 
   async update(id: string, UpdatePaymentDto: UpdatePaymentDto) {
     const result = await this.paymentRepository.findOne({ where: { id } });
     if (result) {
       await this.paymentRepository.update(id, UpdatePaymentDto);
-      return 'Payment yangilandi';
+      return 'PaymentEntity yangilandi';
     }
-    return `Yangilanadigan Payment topilmadi`;
+    return `Yangilanadigan PaymentEntity topilmadi`;
   }
 
   async remove(id: string) {
     const result = await this.paymentRepository.findOne({ where: { id } });
     if (result) {
       await this.paymentRepository.delete(id);
-      return "Payment o'chirildi";
+      return "PaymentEntity o'chirildi";
     }
-    return `O'chiriladigan Payment topilmadi`;
+    return `O'chiriladigan PaymentEntity topilmadi`;
   }
 }

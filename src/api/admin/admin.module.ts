@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminService } from './admin.service';
 import { AdminController } from './admin.controller';
-import { BcryptService } from 'src/infrastructure/bcrypt/bcrypt.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Admin } from 'src/core/entities/admin.entity';
-import { GuardModule } from 'src/common/guard/jwt.module';
+import { BcryptService } from 'src/infrastructure';
+import { Admin } from 'src/core';
+import { GuardModule } from 'src/common/index.common';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Admin]), GuardModule],

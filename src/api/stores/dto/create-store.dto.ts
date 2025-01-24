@@ -1,44 +1,72 @@
 import {
   IsString,
   IsBoolean,
-  IsOptional,
   Length,
   IsNumber,
   IsEmail,
   IsPhoneNumber,
-  MinLength,
   MaxLength,
+  IsStrongPassword,
 } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateStoreDto {
+  @ApiProperty({
+    description: 'Email address of the store',
+    example: 'store@example.com',
+  })
   @IsEmail()
   @IsString()
-  email:string
-  
+  email: string;
+
+  @ApiProperty({
+    description: 'Login name of the store',
+    example: 'store_login',
+  })
   @IsString()
   @Length(1, 25)
   login: string;
 
-  @IsString()
-  @Length(1, 25)
+  @ApiProperty({
+    description: 'Password of the store',
+    example: 'P@ssw0rd',
+  })
+  @IsStrongPassword()
   password: string;
 
-  
+  @ApiProperty({
+    description: 'Phone number of the store',
+    example: '+998901234567',
+  })
   @IsPhoneNumber('UZ')
-  phone_number:string
+  phone_number: string;
 
+  @ApiProperty({
+    description: 'Pass code of the store',
+    example: '1234',
+  })
   @IsString()
   @MaxLength(4)
-  pass_code:string
+  pass_code: string;
 
+  @ApiProperty({
+    description: 'Wallet balance of the store',
+    example: 1000,
+  })
   @IsNumber()
   wallet: number;
 
+  @ApiProperty({
+    description: 'Image URL of the store',
+    example: 'https://example.com/image.png',
+  })
   @IsString()
-  @Length(0, 255)
   image: string;
 
+  @ApiProperty({
+    description: 'Activation status of the store',
+    example: true,
+  })
   @IsBoolean()
-  @IsOptional() // Optional if not always provided
   is_active: boolean;
 }

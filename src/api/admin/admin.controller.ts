@@ -8,12 +8,13 @@ import {
   Delete,
   Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { LoginAdminDto } from './dto/login-admin.dto';
-import { Response } from 'express';
-import { Public } from 'src/common/decorator/jwt-public.decorator';
+import { RefreshDto } from './dto/refresh_token-admin.dto';
+import { Public, RoleAdmin } from 'src/common/index.common';
 
 @Controller('admin')
 export class AdminController {
@@ -22,13 +23,13 @@ export class AdminController {
   @Public()
   @Post('super-admin')
   createSuperAdmin(@Body() createAdminDto: CreateAdminDto) {
-    return this.adminService.createSuperAdmin(createAdminDto);
+    return this.adminService.createAdmin(createAdminDto, RoleAdmin.SUPERADMIN);
   }
 
   @Public()
   @Post('admin')
   create(@Body() createAdminDto: CreateAdminDto) {
-    return this.adminService.createAdmin(createAdminDto);
+    return this.adminService.createAdmin(createAdminDto, RoleAdmin.ADMIN);
   }
 
   @Public()
@@ -41,13 +42,16 @@ export class AdminController {
   }
 
   @Post('refresh-token')
-  updateToken(refresh_token: string) {
-    return this.adminService.refreshToken(refresh_token);
+  updateToken(@Body() refreshDto: RefreshDto) {
+    return this.adminService.refreshToken(refreshDto);
   }
 
   @Post('logout')
-  logout(refresh_token: string, @Res({ passthrough: true }) res: Response) {
-    return this.adminService.logout(refresh_token, res);
+  logout(
+    @Body() refreshDto: RefreshDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return this.adminService.logout(refreshDto, res);
   }
 
   @Get(':id')

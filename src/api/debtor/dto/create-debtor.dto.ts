@@ -10,8 +10,11 @@ export class CreateDebtorDto {
   })
   address: string;
 
-  //store refrenses
-  // store_id: string;
+  @ApiProperty({
+    description: 'Id of store',
+    example: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
+  })
+  store_id: string;
 
   @ApiProperty({ description: 'Note of the customer', example: 'Test' })
   description: string;
