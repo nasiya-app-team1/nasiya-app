@@ -13,7 +13,7 @@ import { UpdateDebtorDto } from './dto/update-debtor.dto';
 import { DebtorService } from './debtor.service';
 import { Public } from 'src/common/decorator/jwt-public.decorator';
 
-@ApiTags('Debtors') // Groups endpoints under 'Debtors' in Swagger
+@ApiTags('Debtors')
 @Public()
 @Controller('debtor')
 export class DebtorController {

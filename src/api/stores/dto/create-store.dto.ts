@@ -24,7 +24,7 @@ export class CreateStoreDto {
     example: 'store_login',
   })
   @IsString()
-  @Length(1, 25)
+  @Length(4, 50)
   login: string;
 
   @ApiProperty({
