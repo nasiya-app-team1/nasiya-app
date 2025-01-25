@@ -12,6 +12,12 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateStoreDto {
   @ApiProperty({
+    description:'Full_name of the Store Owner',
+    example:'Alex'
+  })
+  full_name:string
+  
+  @ApiProperty({
     description: 'Email address of the store',
     example: 'store@example.com',
   })
