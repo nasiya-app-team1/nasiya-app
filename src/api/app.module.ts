@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { APP_GUARD } from '@nestjs/core';
-import { GuardService, GuardModule } from 'src/common/index.common';
+// import { APP_GUARD } from '@nestjs/core';
+// import { GuardService, GuardModule } from 'src/common/index.common';
+import { GuardModule } from 'src/common/guard';
 import { config } from 'src/config';
 import { StoresModule } from './stores/stores.module';
 import { SampleMessagesModule } from './sample_messages/sample_messages.module';
@@ -15,6 +16,7 @@ import { DebtorImagesModule } from './debtor-images/debtor-images.module';
 import { DebtsImagesModule } from './debts-images/debts-images.module';
 import { PhoneNumbersModule } from './phone-numbers/phone-numbers.module';
 import { LikesModule } from './likes/likes.module';
+import { FileModule } from './file-service/file-service.module';
 
 @Module({
   imports: [
@@ -40,6 +42,7 @@ import { LikesModule } from './likes/likes.module';
     DebtorImagesModule,
     DebtsImagesModule,
     PhoneNumbersModule,
+    FileModule,
   ],
   providers: [
     // {
