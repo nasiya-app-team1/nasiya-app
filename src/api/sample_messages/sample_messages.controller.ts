@@ -7,11 +7,11 @@ import {
   Delete,
   Patch,
 } from '@nestjs/common';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SampleMessagesService } from './sample_messages.service';
 import { CreateSampleMessageDto } from './dto/create-sample_message.dto';
 import { UpdateSampleMessageDto } from './dto/update-sample_message.dto';
 import { Public } from 'src/common/decorator';
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Sample-messages') // Groups endpoints under 'Debtors' in Swagger
 @Public()

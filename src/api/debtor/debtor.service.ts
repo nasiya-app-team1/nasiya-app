@@ -1,18 +1,23 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DebtorRepository } from 'src/core/repository/debtor.repository';
+import { DeepPartial } from 'typeorm';
+import { DebtorRepository, DebtorEntity } from 'src/core';
 import { CreateDebtorDto } from './dto/create-debtor.dto';
 import { BaseService } from 'src/infrastructure/baseService/baseService';
-import { DeepPartial } from 'typeorm';
-import { DebtorEntity } from 'src/core/entity/debtor.entity';
 import { UpdateDebtorDto } from './dto/update-debtor.dto';
+import { DebtorImagesService } from '../debtor-images/debtor-images.service';
+import { PhoneNumbersService } from '../phone-numbers/phone-numbers.service';
 
 @Injectable()
 export class DebtorService extends BaseService<
   CreateDebtorDto,
   DeepPartial<DebtorEntity>
 > {
-  constructor(@InjectRepository(DebtorEntity) repository: DebtorRepository) {
+  constructor(
+    @InjectRepository(DebtorEntity) repository: DebtorRepository,
+    private readonly debtorImageService: DebtorImagesService,
+    private readonly phoneNumberService: PhoneNumbersService,
+  ) {
     super(repository);
   }
 

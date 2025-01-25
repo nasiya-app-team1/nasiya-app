@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsPhoneNumber } from 'src/common/decorator';
 
 export class CreateDebtorDto {
   @ApiProperty({ description: 'Name of the customer', example: 'Test' })
@@ -10,13 +9,6 @@ export class CreateDebtorDto {
     example: 'Tashkent, Uz',
   })
   address: string;
-
-  @ApiProperty({
-    description: 'Phone number of the customer',
-    example: '+998901234567',
-  })
-  @IsPhoneNumber()
-  phone_number: string;
 
   @ApiProperty({
     description: 'Id of store',

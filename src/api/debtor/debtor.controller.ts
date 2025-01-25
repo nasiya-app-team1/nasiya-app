@@ -19,10 +19,10 @@ import { Public } from 'src/common/decorator/jwt-public.decorator';
 export class DebtorController {
   constructor(private readonly debtorService: DebtorService) {}
 
-  @Post('create')
   @ApiOperation({ summary: 'Create a new debtor' })
   @ApiResponse({ status: 201, description: 'Debtor created successfully.' })
   @ApiResponse({ status: 400, description: 'Invalid input.' })
+  @Post('create')
   async create(@Body() createDebtorDto: CreateDebtorDto) {
     return this.debtorService.createDebtor(createDebtorDto);
   }

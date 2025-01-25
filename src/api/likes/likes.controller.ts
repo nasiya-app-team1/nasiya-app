@@ -8,8 +8,8 @@ import {
   Body,
   HttpStatus,
 } from '@nestjs/common';
-import { LikesService } from './likes.service';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { LikesService } from './likes.service';
 import { CreateLikeDto, UpdateLikeDto } from './dto';
 
 @Controller('likes')

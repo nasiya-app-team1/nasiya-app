@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DeepPartial } from 'typeorm';
 import { CreateDebtorImageDto } from './dto/create-debtor-image.dto';
 import { BaseService } from 'src/infrastructure/baseService/baseService';
-import { DeepPartial } from 'typeorm';
 import { DebtorImageEntity } from 'src/core/entity/debtor-image.entity';
-import { InjectRepository } from '@nestjs/typeorm';
 import { DebtorImageRepository } from 'src/core/repository/debtorimage.repository';
 import { FileService } from '../file-service/file-service.service';
 import { FileFolder } from 'src/common/enum';
@@ -20,10 +20,7 @@ export class DebtorImagesService extends BaseService<
     super(repository);
   }
 
-  async createImage(
-    createDto: CreateDebtorImageDto,
-    file: Express.Multer.File,
-  ) {
+  async createImage(dto: CreateDebtorImageDto, file: Express.Multer.File) {
     const queryRunner =
       this.getRepository.manager.connection.createQueryRunner();
     await queryRunner.connect();
@@ -35,7 +32,7 @@ export class DebtorImagesService extends BaseService<
 
       const imageData = {
         image: fileName,
-        ...createDto,
+        ...dto,
       };
 
       const image = await queryRunner.manager.save(
@@ -48,7 +45,7 @@ export class DebtorImagesService extends BaseService<
       return {
         status_code: 201,
         message: 'success',
-        data: { image },
+        data: image,
       };
     } catch (error) {
       await queryRunner.rollbackTransaction();

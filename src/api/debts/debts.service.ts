@@ -1,18 +1,21 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { DeepPartial } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateDebtDto } from './dto/create-debt.dto';
 import { BaseService } from 'src/infrastructure/baseService/baseService';
-import { DeepPartial } from 'typeorm';
-import { DebtorEntity } from 'src/core/entity/debtor.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DebtorRepository } from 'src/core/repository/debtor.repository';
 import { UpdateDebtDto } from './dto/update-debt.dto';
+import { DebtsImagesService } from '../debts-images/debts-images.service';
+import { DebtEntity, DebtsRepository } from 'src/core';
 
 @Injectable()
 export class DebtsService extends BaseService<
   CreateDebtDto,
-  DeepPartial<DebtorEntity>
+  DeepPartial<DebtEntity>
 > {
-  constructor(@InjectRepository(DebtorEntity) repository: DebtorRepository) {
+  constructor(
+    @InjectRepository(DebtEntity) repository: DebtsRepository,
+    private readonly debtsImagesService: DebtsImagesService,
+  ) {
     super(repository);
   }
   async createDebt(dto: CreateDebtDto) {

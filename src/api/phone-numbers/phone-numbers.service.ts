@@ -4,12 +4,12 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { DeepPartial } from 'typeorm';
 import { CreatePhoneNumberDto } from './dto/create-phone-number.dto';
 import { UpdatePhoneNumberDto } from './dto/update-phone-number.dto';
 import { PhoneNumberEntity } from 'src/core/entity/phone-number.entity';
 import { PhoneNumberRepository } from 'src/core/repository/phoneNumber.repository';
 import { BaseService } from 'src/infrastructure/baseService/baseService';
-import { DeepPartial } from 'typeorm';
 
 @Injectable()
 export class PhoneNumbersService extends BaseService<
