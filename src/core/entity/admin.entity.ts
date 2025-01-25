@@ -3,7 +3,7 @@ import { BaseEntity } from 'src/common/database/baseEntity';
 import { RoleAdmin } from 'src/common/enum/admin.enum';
 
 @Entity('admins')
-export class Admin extends BaseEntity {
+export class AdminEntity extends BaseEntity {
   @Column({ type: 'varchar', name: 'username', unique: true })
   username: string;
 
@@ -21,6 +21,11 @@ export class Admin extends BaseEntity {
   @Column({ type: 'varchar', name: 'email', nullable: true, unique: true })
   email: string;
 
-  @Column({ type: 'enum', enum: RoleAdmin, default: RoleAdmin.ADMIN })
-  role: string;
+  @Column({
+    type: 'enum',
+    enum: RoleAdmin,
+    name: 'role',
+    default: RoleAdmin.ADMIN,
+  })
+  role: RoleAdmin;
 }

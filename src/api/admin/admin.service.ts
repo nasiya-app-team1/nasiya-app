@@ -11,17 +11,17 @@ import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { LoginAdminDto } from './dto/login-admin.dto';
 import { RefreshDto } from './dto/refresh_token-admin.dto';
-import { Admin, AdminRepository } from 'src/core';
+import { AdminEntity, AdminRepository } from 'src/core';
 import { BaseService, BcryptService } from 'src/infrastructure';
 import { TokenService, RoleAdmin } from 'src/common/index.common';
 
 @Injectable()
 export class AdminService extends BaseService<
   CreateAdminDto,
-  DeepPartial<Admin>
+  DeepPartial<AdminEntity>
 > {
   constructor(
-    @InjectRepository(Admin) repository: AdminRepository,
+    @InjectRepository(AdminEntity) repository: AdminRepository,
     private readonly hashService: BcryptService,
     private readonly tokenService: TokenService,
   ) {

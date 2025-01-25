@@ -2,15 +2,17 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from 'src/common/database/baseEntity';
 import { DebtEntity } from './debt.entity';
 
-@Entity()
+@Entity('debt_images')
 export class DebtImageEntity extends BaseEntity {
   @Column({ type: 'varchar', name: 'image' })
   image: string;
 
-  @Column({ type: 'varchar' })
-  debts_id: string;
+  @Column({ type: 'uuid', name: 'debt_id' })
+  debtId: string;
 
-  @ManyToOne(() => DebtEntity, (debt) => debt.debtImages)
-  @JoinColumn({ name: 'debts_id' })
-  debt: DebtEntity[];
+  @ManyToOne(() => DebtEntity, (debt) => debt.debtImages, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'debt_id' })
+  debt: DebtEntity;
 }

@@ -7,36 +7,44 @@ import { LikeEntity } from './likes.entity';
 import { DebtorImageEntity } from './debtor-image.entity';
 import { PhoneNumberEntity } from './phone-number.entity';
 
-@Entity()
+@Entity('debtors')
 export class DebtorEntity extends BaseEntity {
-  @Column({ type: 'varchar', length: 40, nullable: true })
+  @Column({ type: 'varchar', name: 'full_name', length: 40, nullable: true })
   full_name: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', name: 'address', nullable: true })
   address: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'text', name: 'description', nullable: true })
   description: string;
 
-  @Column({ type: 'varchar', name: 'store_id' })
+  @Column({ type: 'uuid', name: 'store_id' })
   store_id: string;
 
-  @OneToMany(() => DebtEntity, (debt) => debt.debtor)
+  @OneToMany(() => DebtEntity, (debt) => debt.debtor, { cascade: true })
   debts: DebtEntity[];
 
-  @OneToMany(() => LikeEntity, (like) => like.debtor)
+  @OneToMany(() => LikeEntity, (like) => like.debtor, { cascade: true })
   likes: LikeEntity[];
 
-  @OneToMany(() => MessageEntity, (message) => message.debtor)
+  @OneToMany(() => MessageEntity, (message) => message.debtor, {
+    cascade: true,
+  })
   messages: MessageEntity[];
 
-  @OneToMany(() => DebtorImageEntity, (debtorImage) => debtorImage.debtor)
+  @OneToMany(() => DebtorImageEntity, (debtorImage) => debtorImage.debtor, {
+    cascade: true,
+  })
   debtorImages: DebtorImageEntity[];
 
-  @OneToMany(() => PhoneNumberEntity, (phoneNumber) => phoneNumber.debtor)
+  @OneToMany(() => PhoneNumberEntity, (phoneNumber) => phoneNumber.debtor, {
+    cascade: true,
+  })
   phoneNumbers: PhoneNumberEntity[];
 
-  @ManyToOne(() => StoreEntity, (store) => store.debtors)
+  @ManyToOne(() => StoreEntity, (store) => store.debtors, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'store_id' })
   store: StoreEntity;
 }

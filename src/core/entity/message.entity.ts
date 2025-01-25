@@ -5,13 +5,13 @@ import { StoreEntity } from './stores.entity';
 import { DebtorEntity } from './debtor.entity';
 import { MessageStatus } from 'src/common/enum/message.enum';
 
-@Entity('message')
+@Entity('messages')
 export class MessageEntity extends BaseEntity {
   @Column({ type: 'uuid', name: 'store_id' })
-  store_id: string;
+  storeId: string;
 
   @Column({ type: 'uuid', name: 'debtor_id' })
-  debtor_id: string;
+  debtorId: string;
 
   @Column({ type: 'text', name: 'message' })
   message: string;
@@ -25,20 +25,25 @@ export class MessageEntity extends BaseEntity {
   status: MessageStatus;
 
   @Column({ type: 'uuid', name: 'sample_message_id' })
-  sample_message_id: string;
+  sampleMessageId: string;
 
-  @ManyToOne(() => StoreEntity, (store) => store.messages)
+  @ManyToOne(() => StoreEntity, (store) => store.messages, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'store_id' })
   store: StoreEntity;
 
   @ManyToOne(
     () => SampleMessageEntity,
     (sampleMessage) => sampleMessage.messages,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({ name: 'sample_message_id' })
   sampleMessage: SampleMessageEntity;
 
-  @ManyToOne(() => DebtorEntity, (debtor) => debtor.messages)
+  @ManyToOne(() => DebtorEntity, (debtor) => debtor.messages, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'debtor_id' })
   debtor: DebtorEntity;
 }
