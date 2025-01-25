@@ -42,10 +42,10 @@ import { LikesModule } from './likes/likes.module';
     PhoneNumbersModule,
   ],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: GuardService,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: GuardService,
+    // },
   ],
   exports: [],
 })
