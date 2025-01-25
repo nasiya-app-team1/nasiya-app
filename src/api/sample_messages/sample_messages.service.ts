@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateSampleMessageDto } from './dto/create-sample_message.dto';
 import { UpdateSampleMessageDto } from './dto/update-sample_message.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -22,8 +22,8 @@ export class SampleMessagesService {
   async findAll() {
     const result = await this.sampleMessageRepository.find();
     if (result.length) return result;
-    return `Sample Messagelar topilmadi`;
-  }
+    throw new HttpException('Sample Messagelar topilmadi', 404) 
+   }
 
   async findOne(id: string) {
     const result = await this.sampleMessageRepository.findOne({
@@ -32,8 +32,7 @@ export class SampleMessagesService {
     if (result) {
       return result;
     }
-    return 'Sample MessageEntity topilmadi';
-  }
+    throw new HttpException('Sample Message topilmadi', 404)  }
 
   async update(id: string, UpdateSampleMessageDto: UpdateSampleMessageDto) {
     const result = await this.sampleMessageRepository.findOne({
@@ -43,8 +42,7 @@ export class SampleMessagesService {
       await this.sampleMessageRepository.update(id, UpdateSampleMessageDto);
       return 'Sample MessageEntity yangilandi';
     }
-    return `Yangilanadigan Sample MessageEntity topilmadi`;
-  }
+    throw new HttpException('Yangilanadigan Sample Message topilmadi', 404)  }
 
   async remove(id: string) {
     const result = await this.sampleMessageRepository.findOne({
@@ -54,6 +52,5 @@ export class SampleMessagesService {
       await this.sampleMessageRepository.delete(id);
       return "Sample MessageEntity o'chirildi";
     }
-    return `O'chiriladigan Sample MessageEntity topilmadi`;
-  }
+    throw new HttpException("O'chiriladigan Sample Message topilmadi", 404)  }
 }

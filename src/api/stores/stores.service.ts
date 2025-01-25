@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -21,7 +21,7 @@ export class StoresService {
       where: { login, email },
     });
     if (result) {
-      return 'Ushbu StoreEntity allaqachon mavjud';
+      throw new HttpException('Ushbu Store Allaqachon Mavjud', 404);
     }
     createStoreDto.password = hashpassword;
     const store = await this.storeRepository.create(createStoreDto);
@@ -32,7 +32,7 @@ export class StoresService {
   async findAll() {
     const result = await this.storeRepository.find();
     if (result) return result;
-    return `Storelar topilmadi`;
+    throw new HttpException('Storelar topilmadi', 404);
   }
 
   async findOne(id: string) {
@@ -40,8 +40,7 @@ export class StoresService {
     if (result) {
       return result;
     }
-    return 'StoreEntity topilmadi';
-  }
+    throw new HttpException('Store topilmadi', 404)  }
 
   async update(id: string, updateStoreDto: UpdateStoreDto) {
     const result = await this.storeRepository.findOne({ where: { id } });
@@ -54,8 +53,7 @@ export class StoresService {
       await this.storeRepository.update(id, updateStoreDto);
       return 'StoreEntity yangilandi';
     }
-    return `Yangilanadigan StoreEntity topilmadi`;
-  }
+    throw new HttpException('Yangilanadigan Store topilmadi', 404)  }
 
   async remove(id: string) {
     const result = await this.storeRepository.findOne({ where: { id } });
@@ -63,6 +61,5 @@ export class StoresService {
       await this.storeRepository.delete(id);
       return "StoreEntity o'chirildi";
     }
-    return `O'chiriladigan StoreEntity topilmadi`;
-  }
+    throw new HttpException("O'chiriladigan Store topilmadi", 404)  }
 }
