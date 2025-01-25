@@ -48,7 +48,7 @@ export class BaseService<CreateDto, Entity> {
       where: options.where,
     })) as Entity;
     if (!data) {
-      throw new HttpException('not found', 404);
+      throw new HttpException('Not found', 404);
     }
     return {
       status_code: 200,
@@ -64,7 +64,7 @@ export class BaseService<CreateDto, Entity> {
       where: { id, ...options?.where },
     })) as unknown as Entity;
     if (!data) {
-      throw new HttpException('not found', 404);
+      throw new HttpException('Not found', 404);
     }
     return {
       status_code: 200,
@@ -74,7 +74,6 @@ export class BaseService<CreateDto, Entity> {
   }
 
   async update(id: string, dto: Partial<CreateDto>) {
-    await this.findOneById(id);
     await this.repository.update(id, {
       ...dto,
       updated_at: new Date(Date.now()),
@@ -87,7 +86,6 @@ export class BaseService<CreateDto, Entity> {
   }
 
   async delete(id: string) {
-    await this.findOneById(id);
     (await this.repository.delete(id)) as unknown as Entity;
     return {
       status_code: 200,

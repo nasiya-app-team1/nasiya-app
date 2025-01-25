@@ -13,7 +13,7 @@ import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/common/decorator';
 
-@ApiTags('Payment') // Groups endpoints under 'Payment' in Swagger
+@ApiTags('Payment')
 @Public()
 @Controller('payment')
 export class PaymentController {
@@ -21,10 +21,13 @@ export class PaymentController {
 
   @Post('create')
   @ApiOperation({ summary: 'Create a new Payment' })
-  @ApiResponse({ status: 201, description: 'PaymentEntity Muvaffaqiyatli Yaratildi' })
+  @ApiResponse({
+    status: 201,
+    description: 'PaymentEntity Muvaffaqiyatli Yaratildi',
+  })
   @ApiResponse({ status: 400, description: 'Invalid input.' })
   create(@Body() createPaymentDto: CreatePaymentDto) {
-    return this.paymentService.create(createPaymentDto);
+    return this.paymentService.createPaymetn(createPaymentDto);
   }
 
   @Get('all')
@@ -41,10 +44,10 @@ export class PaymentController {
   @ApiResponse({ status: 200, description: 'Details of the payment.' })
   @ApiResponse({ status: 404, description: 'Payment topilmadi.' })
   findOne(@Param('id') id: string) {
-    return this.paymentService.findOne(id);
+    return this.paymentService.findOnePayment(id);
   }
 
-  @Patch(':id') 
+  @Patch(':id')
   @ApiOperation({ summary: 'Update a Payment by ID' })
   @ApiParam({
     name: 'id',
@@ -53,9 +56,12 @@ export class PaymentController {
   })
   @ApiResponse({ status: 200, description: 'PaymentEntity yangilandi.' })
   @ApiResponse({ status: 400, description: 'Invalid input.' })
-  @ApiResponse({ status: 404, description: 'Yangilanadigan Payment topilmadi.' })
+  @ApiResponse({
+    status: 404,
+    description: 'Yangilanadigan Payment topilmadi.',
+  })
   update(@Param('id') id: string, @Body() updatePaymentDto: UpdatePaymentDto) {
-    return this.paymentService.update(id, updatePaymentDto);
+    return this.paymentService.updatePayment(id, updatePaymentDto);
   }
 
   @Delete(':id')
@@ -68,6 +74,6 @@ export class PaymentController {
   @ApiResponse({ status: 200, description: "PaymentEntity o'chirildi." })
   @ApiResponse({ status: 404, description: "O'chiriladigan Payment topilmadi" })
   remove(@Param('id') id: string) {
-    return this.paymentService.remove(id);
+    return this.paymentService.removePayemnt(id);
   }
 }

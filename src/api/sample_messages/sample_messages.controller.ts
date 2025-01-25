@@ -23,7 +23,9 @@ export class SampleMessagesController {
   @ApiOperation({ summary: 'Create a new sample message' })
   @ApiResponse({ status: 200, description: 'Sample MessageEntity Yaratildi.' })
   create(@Body() createSampleMessageDto: CreateSampleMessageDto) {
-    return this.sampleMessagesService.create(createSampleMessageDto);
+    return this.sampleMessagesService.createSampleMessage(
+      createSampleMessageDto,
+    );
   }
 
   @Get('all')
@@ -36,11 +38,15 @@ export class SampleMessagesController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Retrieve a sample-message by ID' })
-  @ApiParam({ name: 'id', description: 'The ID of the sample-message', type: String })
+  @ApiParam({
+    name: 'id',
+    description: 'The ID of the sample-message',
+    type: String,
+  })
   @ApiResponse({ status: 200, description: 'List of the sample-message.' })
   @ApiResponse({ status: 404, description: 'Sample Message topilmadi.' })
   findOne(@Param('id') id: string) {
-    return this.sampleMessagesService.findOne(id);
+    return this.sampleMessagesService.findSampleMessageById(id);
   }
 
   @Patch(':id')
@@ -52,12 +58,18 @@ export class SampleMessagesController {
   })
   @ApiResponse({ status: 200, description: 'Sample MessageEntity yangilandi' })
   @ApiResponse({ status: 400, description: 'Invalid input.' })
-  @ApiResponse({ status: 404, description: 'Yangilanadigan Sample Message topilmadi.' })
+  @ApiResponse({
+    status: 404,
+    description: 'Yangilanadigan Sample Message topilmadi.',
+  })
   update(
     @Param('id') id: string,
     @Body() updateSampleMessageDto: UpdateSampleMessageDto,
   ) {
-    return this.sampleMessagesService.update(id, updateSampleMessageDto);
+    return this.sampleMessagesService.updateSampleMessage(
+      id,
+      updateSampleMessageDto,
+    );
   }
 
   @Delete(':id')
@@ -67,9 +79,15 @@ export class SampleMessagesController {
     description: 'The ID of the sample-message to delete',
     type: String,
   })
-  @ApiResponse({ status: 200, description: 'Sample-message deleted successfully.' })
-  @ApiResponse({ status: 404, description: "O'chiriladigan Sample Message topilmadi" })
+  @ApiResponse({
+    status: 200,
+    description: 'Sample-message deleted successfully.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: "O'chiriladigan Sample Message topilmadi",
+  })
   remove(@Param('id') id: string) {
-    return this.sampleMessagesService.remove(id);
+    return this.sampleMessagesService.deleteSampleMessage(id);
   }
 }

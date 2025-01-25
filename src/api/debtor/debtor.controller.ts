@@ -24,7 +24,7 @@ export class DebtorController {
   @ApiResponse({ status: 201, description: 'Debtor created successfully.' })
   @ApiResponse({ status: 400, description: 'Invalid input.' })
   async create(@Body() createDebtorDto: CreateDebtorDto) {
-    return this.debtorService.create(createDebtorDto);
+    return this.debtorService.createDebtor(createDebtorDto);
   }
 
   @Get('all')
@@ -40,7 +40,7 @@ export class DebtorController {
   @ApiResponse({ status: 200, description: 'Details of the debtor.' })
   @ApiResponse({ status: 404, description: 'Debtor not found.' })
   async findOne(@Param('id') id: string) {
-    return this.debtorService.findOneById(id);
+    return this.debtorService.findOneDebtor(id);
   }
 
   @Patch(':id')
@@ -57,7 +57,7 @@ export class DebtorController {
     @Param('id') id: string,
     @Body() updateDebtorDto: Partial<UpdateDebtorDto>,
   ) {
-    return this.debtorService.update(id, updateDebtorDto);
+    return this.debtorService.updateDebtor(id, updateDebtorDto);
   }
 
   @Delete(':id')
@@ -70,6 +70,6 @@ export class DebtorController {
   @ApiResponse({ status: 200, description: 'Debtor deleted successfully.' })
   @ApiResponse({ status: 404, description: 'Debtor not found.' })
   async delete(@Param('id') id: string) {
-    return this.debtorService.delete(id);
+    return this.debtorService.deleteDebtor(id);
   }
 }

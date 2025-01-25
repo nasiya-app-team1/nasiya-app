@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { BaseService } from 'src/infrastructure/baseService/baseService';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { StoreEntity } from 'src/core/entity';
@@ -13,110 +14,88 @@ import { LoginStoreDto } from './dto/login-store.dto';
 import { TokenService } from 'src/common/guard';
 
 @Injectable()
-export class StoresService {
+export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
   constructor(
     @InjectRepository(StoreEntity)
-    private storeRepository: Repository<StoreEntity>,
-    private readonly bcrypservice: BcryptService,
+    private readonly storeRepository: Repository<StoreEntity>,
+    private readonly bcryptService: BcryptService,
     private readonly tokenService: TokenService,
-  ) {}
-  async create(createStoreDto: CreateStoreDto) {
-    const { password } = createStoreDto;
-    const hashpassword = await this.bcrypservice.encrypt(password);
-    const { login, email } = createStoreDto;
-    const result = await this.storeRepository.findOne({
-      where: { login, email },
-    });
-    if (result) {
-      throw new ConflictException('Store already exists');
-    }
-    createStoreDto.password = hashpassword;
-    const store = this.storeRepository.create(createStoreDto);
-    await this.storeRepository.save(store);
-    return {
-      status_code: 201,
-      message: 'success',
-      data: { store },
-    };
+  ) {
+    super(storeRepository);
   }
 
-  async login(loginDto: LoginStoreDto) {
-    const store = await this.storeRepository.findOneBy({
-      login: loginDto.login,
+  async createStore(createStoreDto: CreateStoreDto) {
+    const { login, email, password } = createStoreDto;
+
+    const existingStore = await this.getRepository.findOne({
+      where: [{ login }, { email }],
+    });
+    if (existingStore) {
+      throw new ConflictException('Store already exists');
+    }
+
+    createStoreDto.password = await this.bcryptService.encrypt(password);
+
+    return await this.create(createStoreDto);
+  }
+
+  async loginStore(loginDto: LoginStoreDto) {
+    const { login, password } = loginDto;
+
+    const store = await this.getRepository.findOne({
+      where: { login },
     });
     if (!store) {
       throw new BadRequestException('Login or password not valid');
     }
-    const match_password = this.bcrypservice.compare(
-      loginDto.password,
+
+    const isPasswordMatch = await this.bcryptService.compare(
+      password,
       store.password,
     );
-    if (!match_password) {
+    if (!isPasswordMatch) {
       throw new BadRequestException('Login or password not valid');
     }
-    const payload = {
-      id: store.id,
-    };
-    const access_token = this.tokenService.createAccessToken(payload);
-    const refresh_token = this.tokenService.createRefreshToken(payload);
+
+    const payload = { id: store.id };
+    const accessToken = this.tokenService.createAccessToken(payload);
+    const refreshToken = this.tokenService.createRefreshToken(payload);
 
     return {
       status_code: 200,
       message: 'success',
-      data: { access_token, refresh_token },
+      data: { access_token: accessToken, refresh_token: refreshToken },
     };
   }
 
-  async findAll() {
-    const stores = await this.storeRepository.find();
-    return {
-      status_code: 201,
-      message: 'success',
-      data: { stores },
-    };
-  }
-
-  async findOne(id: string) {
-    const store = await this.storeRepository.findOne({ where: { id } });
+  async findStoreById(id: string) {
+    const store = await this.findOneById(id);
     if (!store) {
       throw new BadRequestException('Store not found');
     }
-    return {
-      status_code: 201,
-      message: 'success',
-      data: { store },
-    };
+    return store;
   }
 
-  async update(id: string, updateStoreDto: UpdateStoreDto) {
-    const store = await this.storeRepository.findOne({ where: { id } });
-    if (!store) {
-      throw new BadRequestException('Store not found');
-    }
+  async updateStore(id: string, updateStoreDto: UpdateStoreDto) {
     const { password } = updateStoreDto;
-    if (password) {
-      const hashpassword = await this.bcrypservice.encrypt(password);
-      updateStoreDto.password = hashpassword;
-    }
 
-    const newStore = await this.storeRepository.update(id, updateStoreDto);
-    return {
-      status_code: 201,
-      message: 'success',
-      data: { newStore },
-    };
-  }
-
-  async remove(id: string) {
-    const store = await this.storeRepository.findOne({ where: { id } });
+    const store = await this.getRepository.findOne({ where: { id } });
     if (!store) {
       throw new BadRequestException('Store not found');
     }
-    await this.storeRepository.delete(id);
-    return {
-      status_code: 201,
-      message: 'success',
-      data: {},
-    };
+
+    if (password) {
+      updateStoreDto.password = await this.bcryptService.encrypt(password);
+    }
+
+    return await this.update(id, updateStoreDto);
+  }
+
+  async removeStore(id: string) {
+    const store = await this.getRepository.findOne({ where: { id } });
+    if (!store) {
+      throw new BadRequestException('Store not found');
+    }
+    return await this.delete(id);
   }
 }

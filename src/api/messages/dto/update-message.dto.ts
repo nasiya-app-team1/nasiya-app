@@ -1,9 +1,8 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsOptional } from "class-validator";
-import { MessageStatus } from "src/common/enum";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional } from 'class-validator';
+import { MessageStatus } from 'src/common/enum';
 
-export class UpdateMessageDto  {
-
+export class UpdateMessageDto {
   @ApiProperty({
     description: 'store id',
     example: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',

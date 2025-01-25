@@ -1,51 +1,60 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaymentEntity } from 'src/core/entity/payment.entity';
-import { Repository } from 'typeorm';
+import { DeepPartial } from 'typeorm';
+import { BaseService } from 'src/infrastructure';
+import { PaymentRepository } from 'src/core';
 
 @Injectable()
-export class PaymentService {
-  constructor(
-    @InjectRepository(PaymentEntity)
-    private paymentRepository: Repository<PaymentEntity>,
-  ) {}
-  async create(CreatePaymentDto: CreatePaymentDto) {
-    console.log(CreatePaymentDto)
-    const payment = await this.paymentRepository.create(CreatePaymentDto);
-    await this.paymentRepository.save(payment);
-    return 'PaymentEntity Muvaffaqiyatli Yaratildi';
+export class PaymentService extends BaseService<
+  CreatePaymentDto,
+  DeepPartial<PaymentEntity>
+> {
+  constructor(@InjectRepository(PaymentEntity) repository: PaymentRepository) {
+    super(repository);
   }
 
-  async findAll() {
-    const result = await this.paymentRepository.find();
-    if (result.length) return result;
-    throw new HttpException('Paymentlar topilmadi', 404)  
-  
+  async createPaymetn(createPaymentDto: CreatePaymentDto) {
+    const debt = await this.getRepository.findOneBy({
+      id: createPaymentDto.debt_id,
+    });
+    if (!debt) {
+      throw new BadRequestException('Relation debt not found');
+    }
+    return await this.create(createPaymentDto);
   }
 
-  async findOne(id: string) {
-    const result = await this.paymentRepository.findOne({ where: { id } });
-    if (result) {
-      return result;
+  async findOnePayment(id: string) {
+    const result = await this.getRepository.findOne({ where: { id } });
+    if (!result) {
+      throw new BadRequestException('Payment not found');
     }
-    throw new HttpException('Payment topilmadi', 404)  }
+    return await this.findOneById(id);
+  }
 
-  async update(id: string, UpdatePaymentDto: UpdatePaymentDto) {
-    const result = await this.paymentRepository.findOne({ where: { id } });
-    if (result) {
-      await this.paymentRepository.update(id, UpdatePaymentDto);
-      return 'PaymentEntity yangilandi';
+  async updatePayment(id: string, dto: UpdatePaymentDto) {
+    const [payment, debt] = await Promise.all([
+      this.getRepository.findOneBy({ id }),
+      dto.debt_id
+        ? this.getRepository.findOneBy({ id: dto.debt_id })
+        : Promise.resolve(null),
+    ]);
+    if (!payment) {
+      throw new BadRequestException('Payment not found');
     }
-    throw new HttpException('Yangilanadigan Payment topilmadi', 404)  }
+    if (!debt) {
+      throw new BadRequestException('Relation debt not found');
+    }
+    return await this.update(id, dto);
+  }
 
-  async remove(id: string) {
-    const result = await this.paymentRepository.findOne({ where: { id } });
-    if (result) {
-      await this.paymentRepository.delete(id);
-      return "PaymentEntity o'chirildi";
+  async removePayemnt(id: string) {
+    const payment = await this.getRepository.findOneBy({ id });
+    if (!payment) {
+      throw new BadRequestException('Payment not found');
     }
-    throw new HttpException("O'chiriladigan Payment topilmadi", 404);
+    return await this.delete(id);
   }
 }

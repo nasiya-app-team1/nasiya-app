@@ -1,56 +1,62 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { BaseService } from 'src/infrastructure/baseService/baseService';
+import { SampleMessageEntity } from 'src/core/entity/sample_message.entity';
 import { CreateSampleMessageDto } from './dto/create-sample_message.dto';
 import { UpdateSampleMessageDto } from './dto/update-sample_message.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { SampleMessageEntity } from 'src/core/entity/sample_message.entity';
-import { Repository } from 'typeorm';
 
 @Injectable()
-export class SampleMessagesService {
+export class SampleMessagesService extends BaseService<
+  CreateSampleMessageDto,
+  SampleMessageEntity
+> {
   constructor(
     @InjectRepository(SampleMessageEntity)
-    private sampleMessageRepository: Repository<SampleMessageEntity>,
-  ) {}
-  async create(createSampleMessageDto: CreateSampleMessageDto) {
-    const sample = await this.sampleMessageRepository.create(
-      createSampleMessageDto,
-    );
-    await this.sampleMessageRepository.save(sample);
-    return 'Sample MessageEntity Yaratildi';
+    private readonly sampleMessageRepository: Repository<SampleMessageEntity>,
+  ) {
+    super(sampleMessageRepository);
   }
 
-  async findAll() {
-    const result = await this.sampleMessageRepository.find();
-    if (result.length) return result;
-    throw new HttpException('Sample Messagelar topilmadi', 404) 
-   }
-
-  async findOne(id: string) {
-    const result = await this.sampleMessageRepository.findOne({
-      where: { id },
+  async createSampleMessage(dto: CreateSampleMessageDto) {
+    const existingSample = await this.getRepository.findOne({
+      where: { title: dto.sample },
     });
-    if (result) {
-      return result;
-    }
-    throw new HttpException('Sample Message topilmadi', 404)  }
 
-  async update(id: string, UpdateSampleMessageDto: UpdateSampleMessageDto) {
-    const result = await this.sampleMessageRepository.findOne({
-      where: { id },
-    });
-    if (result) {
-      await this.sampleMessageRepository.update(id, UpdateSampleMessageDto);
-      return 'Sample MessageEntity yangilandi';
+    if (existingSample) {
+      throw new ConflictException(
+        'Sample message with this text already exists',
+      );
     }
-    throw new HttpException('Yangilanadigan Sample Message topilmadi', 404)  }
 
-  async remove(id: string) {
-    const result = await this.sampleMessageRepository.findOne({
-      where: { id },
-    });
-    if (result) {
-      await this.sampleMessageRepository.delete(id);
-      return "Sample MessageEntity o'chirildi";
+    return await this.create(dto);
+  }
+
+  async findSampleMessageById(id: string) {
+    const sampleMessage = await this.getRepository.findOneBy({ id });
+    if (!sampleMessage) {
+      throw new NotFoundException('Sample message not found');
     }
-    throw new HttpException("O'chiriladigan Sample Message topilmadi", 404)  }
+    return await this.findOneById(id);
+  }
+
+  async updateSampleMessage(id: string, dto: UpdateSampleMessageDto) {
+    const sampleMessage = await this.getRepository.findOneBy({ id });
+    if (!sampleMessage) {
+      throw new NotFoundException('Sample message not found');
+    }
+    return await this.update(id, dto);
+  }
+
+  async deleteSampleMessage(id: string) {
+    const sampleMessage = await this.getRepository.findOneBy({ id });
+    if (!sampleMessage) {
+      throw new NotFoundException('Sample message not found');
+    }
+    return await this.delete(id);
+  }
 }

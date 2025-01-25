@@ -14,10 +14,9 @@ import { CreateLikeDto, UpdateLikeDto } from './dto';
 
 @Controller('likes')
 export class LikesController {
-  constructor(private readonly likesService: LikesService) { }
+  constructor(private readonly likesService: LikesService) {}
 
-  // Create a like
-  @ApiOperation({ summary: 'Create a new Like', })
+  @ApiOperation({ summary: 'Create a new Like' })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'Like created successfully.',
@@ -25,43 +24,42 @@ export class LikesController {
       example: {
         status_code: 201,
         message: 'Like created successfully.',
-        data: {}
-      }
-    }
+        data: {},
+      },
+    },
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
     description: 'Invalid input.',
-    schema:{
-      example:{
-        status_code:400,
+    schema: {
+      example: {
+        status_code: 400,
         message: 'Bad Request',
-        data:{}
-      }
-    }
+        data: {},
+      },
+    },
   })
   @Post()
   async createLike(@Body() createLikeDto: CreateLikeDto) {
-    return this.likesService.create(createLikeDto);
+    return this.likesService.createLike(createLikeDto);
   }
 
-  // Get all likes
-  @ApiOperation({summary: 'Retrieve all likes'})
+  @ApiOperation({ summary: 'Retrieve all likes' })
   @ApiResponse({
     status: HttpStatus.OK,
-    description:'List of all likes',
-    schema:{
+    description: 'List of all likes',
+    schema: {
       example: {
-        status_code:200,
-        message:'Like of all likes',
-        data:[
+        status_code: 200,
+        message: 'Like of all likes',
+        data: [
           {
             store_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-            debtor_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14'
-          }
-        ]
-      }
-    }
+            debtor_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
+          },
+        ],
+      },
+    },
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
@@ -108,16 +106,15 @@ export class LikesController {
     schema: {
       example: {
         status_code: 400,
-        message: 'Bad Request'
+        message: 'Bad Request',
       },
     },
   })
   @Get(':id')
   async getLikeById(@Param('id') id: string) {
-    return this.likesService.findOneById(id);
+    return this.likesService.findOneLikeById(id);
   }
 
-  // Update a like
   @ApiOperation({ summary: 'Update a like by ID' })
   @ApiParam({
     name: 'id',
@@ -132,9 +129,9 @@ export class LikesController {
       example: {
         status_code: 200,
         message: 'Like updated successfully.',
-        data: {}
-      }
-    }
+        data: {},
+      },
+    },
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
@@ -152,10 +149,9 @@ export class LikesController {
     @Param('id') id: string,
     @Body() updateLikeDto: UpdateLikeDto,
   ) {
-    return this.likesService.update(id, updateLikeDto);
+    return this.likesService.updateLike(id, updateLikeDto);
   }
 
-  // Delete a like
   @ApiOperation({ summary: 'Delete a like by ID' })
   @ApiParam({
     name: 'id',
@@ -170,9 +166,9 @@ export class LikesController {
       example: {
         status_code: 200,
         message: 'Like deleted successfully.',
-        data: {}
-      }
-    }
+        data: {},
+      },
+    },
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
@@ -187,6 +183,6 @@ export class LikesController {
   })
   @Delete(':id')
   async deleteLike(@Param('id') id: string) {
-    return this.likesService.delete(id);
+    return this.likesService.deleteLikeById(id);
   }
 }

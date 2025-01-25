@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { PhoneNumbersService } from './phone-numbers.service';
-import { PhoneNumbersController } from './phone-numbers.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PhoneNumberEntity } from 'src/core/entity/phone-number.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PhoneNumberEntity])],
-  controllers: [PhoneNumbersController],
+  controllers: [],
   providers: [PhoneNumbersService],
 })
 export class PhoneNumbersModule {}

@@ -31,7 +31,7 @@ export class StoresController {
   })
   @Post()
   create(@Body() createStoreDto: CreateStoreDto) {
-    return this.storesService.create(createStoreDto);
+    return this.storesService.createStore(createStoreDto);
   }
 
   @ApiOperation({
@@ -47,7 +47,7 @@ export class StoresController {
   })
   @Post('login')
   login(@Body() loginDto: LoginStoreDto) {
-    return this.storesService.login(loginDto);
+    return this.storesService.loginStore(loginDto);
   }
 
   @ApiOperation({
@@ -75,7 +75,7 @@ export class StoresController {
   })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.storesService.findOne(id);
+    return this.storesService.findOneById(id);
   }
 
   @ApiOperation({
@@ -91,7 +91,7 @@ export class StoresController {
   })
   @Put(':id')
   update(@Param('id') id: string, @Body() updateStoreDto: UpdateStoreDto) {
-    return this.storesService.update(id, updateStoreDto);
+    return this.storesService.updateStore(id, updateStoreDto);
   }
 
   @ApiOperation({
@@ -107,6 +107,6 @@ export class StoresController {
   })
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.storesService.remove(id);
+    return this.storesService.removeStore(id);
   }
 }

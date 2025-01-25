@@ -27,7 +27,7 @@ export class DebtsController {
   })
   @ApiResponse({ status: 400, description: 'Invalid data.' })
   async create(@Body() createDebtDto: CreateDebtDto) {
-    return this.debtsService.create(createDebtDto);
+    return this.debtsService.createDebt(createDebtDto);
   }
 
   @Public()
@@ -49,7 +49,7 @@ export class DebtsController {
   @ApiResponse({ status: 200, description: 'The debt details.' })
   @ApiResponse({ status: 404, description: 'Debt not found.' })
   async findOne(@Param('id') id: string) {
-    return this.debtsService.findOneById(id);
+    return this.debtsService.findOneDebtById(id);
   }
 
   @Public()
@@ -67,7 +67,7 @@ export class DebtsController {
   @ApiResponse({ status: 400, description: 'Invalid data.' })
   @ApiResponse({ status: 404, description: 'Debt not found.' })
   async update(@Param('id') id: string, @Body() updateDebtDto: UpdateDebtDto) {
-    return this.debtsService.update(id, updateDebtDto);
+    return this.debtsService.updateDebt(id, updateDebtDto);
   }
 
   @Public()
@@ -84,6 +84,6 @@ export class DebtsController {
   })
   @ApiResponse({ status: 404, description: 'Debt not found.' })
   remove(@Param('id') id: string) {
-    return this.debtsService.delete(id);
+    return this.debtsService.deleteDebtById(id);
   }
 }

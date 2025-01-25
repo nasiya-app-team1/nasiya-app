@@ -9,7 +9,7 @@ export class CreatePhoneNumberDto {
   })
   @IsPhoneNumber()
   @IsNotEmpty()
-  phone_nuber: string;
+  phone_number: string;
 
   @ApiProperty({
     description: 'Debtor id',

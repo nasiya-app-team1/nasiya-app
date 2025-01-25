@@ -16,7 +16,7 @@ import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 
 @Controller('messages')
 export class MessagesController {
-  constructor(private readonly messagesService: MessagesService) { }
+  constructor(private readonly messagesService: MessagesService) {}
 
   @ApiOperation({ summary: 'Create a new message' })
   @ApiResponse({
@@ -49,10 +49,10 @@ export class MessagesController {
   })
   @Post()
   async createMessage(@Body() createMessageDto: CreateMessageDto) {
-    return await this.messagesService.create(createMessageDto);
+    return await this.messagesService.createMessage(createMessageDto);
   }
 
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Retrieve all messages',
   })
   @ApiResponse({
@@ -87,9 +87,9 @@ export class MessagesController {
   })
   @Get()
   async getAllMessages() {
-    try{
+    try {
       return await this.messagesService.findAll();
-    }catch(e){
+    } catch (e) {
       throw new BadRequestException(`Error message: ${e.message}`);
     }
   }
@@ -126,13 +126,13 @@ export class MessagesController {
     schema: {
       example: {
         status_code: 400,
-        message: 'Bad Request'
+        message: 'Bad Request',
       },
     },
   })
   @Get(':id')
   async getMessageById(@Param('id') id: string) {
-    return await this.messagesService.findOneById(id);
+    return await this.messagesService.findOneMessage(id);
   }
 
   @ApiOperation({
@@ -160,7 +160,7 @@ export class MessagesController {
         },
       },
     },
-  })  
+  })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
     description: 'Invalid input.',
@@ -182,7 +182,7 @@ export class MessagesController {
 
   @ApiOperation({
     summary: 'Delete a message by ID',
-  })  
+  })
   @ApiParam({
     name: 'id',
     description: 'The ID of the message to delete',
@@ -213,6 +213,6 @@ export class MessagesController {
   })
   @Delete(':id')
   async deleteMessage(@Param('id') id: string) {
-    return await this.messagesService.delete(id);
+    return await this.messagesService.deleteMessage(id);
   }
 }
