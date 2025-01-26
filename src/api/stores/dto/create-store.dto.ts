@@ -7,6 +7,7 @@ import {
   IsPhoneNumber,
   MaxLength,
   IsStrongPassword,
+  MinLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -15,6 +16,9 @@ export class CreateStoreDto {
     description:'Full_name of the Store Owner',
     example:'Alex'
   })
+
+  @IsString()
+  @MinLength(3)
   full_name:string
   
   @ApiProperty({

@@ -35,10 +35,10 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
     }
 
     createStoreDto.password = await this.bcryptService.encrypt(password);
+
     const store=this.storeRepository.create(createStoreDto)
-    await this.storeRepository.save(createStoreDto)
-    // return await this.create(createStoreDto);
-    return "ok";
+
+    return this.create(createStoreDto);
   }
 
   async loginStore(loginDto: LoginStoreDto) {
