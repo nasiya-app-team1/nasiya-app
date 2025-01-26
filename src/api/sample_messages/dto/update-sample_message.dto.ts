@@ -5,4 +5,5 @@ export class UpdateSampleMessageDto extends PartialType(
   CreateSampleMessageDto,
 ) {
   sample?: string;
+  store_id?: string;
 }
