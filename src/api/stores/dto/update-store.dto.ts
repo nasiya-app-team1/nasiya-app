@@ -8,10 +8,22 @@ import {
   IsStrongPassword,
   Length,
   MaxLength,
+  MinLength,
 } from 'class-validator';
 import { IsPhoneNumber } from 'src/common/decorator';
 
 export class UpdateStoreDto extends PartialType(CreateStoreDto) {
+  @ApiProperty({
+    description:'Full_name of the Store Owner',
+    example:'Alex'
+  })
+
+  @IsString()
+  @MinLength(3)
+  full_name?:string
+  
+
+
   @ApiProperty({
     description: 'Email address of the store',
     example: 'store@example.com',
