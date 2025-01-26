@@ -22,30 +22,71 @@ export class PhoneNumbersService extends BaseService<
     super(repository);
   }
 
-  async createNumber(dto: CreatePhoneNumberDto) {
-    const [debtor, existingNumber] = await Promise.all([
-      this.getRepository.findOneBy({ id: dto.debtor_id }),
-      this.getRepository.findOne({ where: { phone_number: dto.phone_number } }),
+  async createNumbers(dto: CreatePhoneNumberDto) {
+    const { debtor_id, phone_numbers } = dto;
+
+    const [debtor, existingNumbers] = await Promise.all([
+      this.getRepository.findOneBy({ id: debtor_id }),
+      this.getRepository.find({
+        where: { phone_number: phone_numbers },
+        select: ['phone_number'],
+      }),
     ]);
 
-    if (existingNumber) {
-      throw new ConflictException('Phone number already exists');
-    }
-
     if (!debtor) {
-      throw new BadRequestException('Related debtor not found');
+      throw new BadRequestException('Debtor with the given ID not found');
     }
 
-    return await this.create(dto);
+    if (existingNumbers.length > 0) {
+      const existingNumbersList = existingNumbers.map(
+        (item) => item.phone_number,
+      );
+      throw new ConflictException(
+        `The following phone numbers already exist: ${existingNumbersList.join(', ')}`,
+      );
+    }
+    const newNumbers = phone_numbers.map((phone) => ({
+      phone_number: phone,
+      debtor_id,
+    }));
+
+    const phoneNumbers = await this.getRepository.save(newNumbers);
+    return {
+      status_code: 201,
+      message: 'Created',
+      data: phoneNumbers,
+    };
   }
 
-  async findOneNumber(id: string) {
-    const phoneNumber = await this.getRepository.findOneBy({ id });
+  async findOneByUserId(id: string) {
+    const phoneNumbers = await this.getRepository.find({
+      where: { debtor_id: id },
+    });
+    if (phoneNumbers.length === 0) {
+      throw new BadRequestException(
+        'Phone numbers not found with this debtor_id',
+      );
+    }
+
+    return {
+      status_code: 201,
+      message: 'sucess',
+      data: phoneNumbers,
+    };
+  }
+  async findOne(id: string) {
+    const phoneNumber = await this.getRepository.find({
+      where: { id },
+    });
     if (!phoneNumber) {
       throw new BadRequestException('Phone number not found');
     }
 
-    return await this.findOneById(id);
+    return {
+      status_code: 200,
+      message: 'sucess',
+      data: phoneNumber,
+    };
   }
 
   async updateNumber(id: string, dto: UpdatePhoneNumberDto) {

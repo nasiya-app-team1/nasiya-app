@@ -15,19 +15,24 @@ import { UpdatePhoneNumberDto } from './dto/update-phone-number.dto';
 export class PhoneNumbersController {
   constructor(private readonly phoneNumbersService: PhoneNumbersService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createPhoneNumberDto: CreatePhoneNumberDto) {
     return this.phoneNumbersService.create(createPhoneNumberDto);
   }
 
-  @Get()
+  @Get('all')
   findAll() {
     return this.phoneNumbersService.findAll();
   }
 
+  @Get('debtor/:id')
+  findUserNumbers(@Param('id') id: string) {
+    return this.phoneNumbersService.findOneByUserId(id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.phoneNumbersService.findOneById(id);
+    return this.phoneNumbersService.findOne(id);
   }
 
   @Patch(':id')
@@ -35,11 +40,11 @@ export class PhoneNumbersController {
     @Param('id') id: string,
     @Body() updatePhoneNumberDto: UpdatePhoneNumberDto,
   ) {
-    return this.phoneNumbersService.update(id, updatePhoneNumberDto);
+    return this.phoneNumbersService.updateNumber(id, updatePhoneNumberDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.phoneNumbersService.delete(id);
+    return this.phoneNumbersService.deleteNumberById(id);
   }
 }

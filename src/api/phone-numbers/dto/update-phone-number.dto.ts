@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsPhoneNumber } from 'class-validator';
+import { IsOptional } from 'class-validator';
+import { IsPhoneNumber } from 'src/common/decorator';
 
 export class UpdatePhoneNumberDto {
   @ApiProperty({

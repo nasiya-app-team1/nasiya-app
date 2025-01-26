@@ -17,7 +17,7 @@ export class BaseService<CreateDto, Entity> {
     created_data = await this.repository.save(created_data);
     return {
       status_code: 201,
-      message: 'sucess',
+      message: 'Created',
       data: created_data,
     };
   }
@@ -28,7 +28,7 @@ export class BaseService<CreateDto, Entity> {
     })) as Entity[];
     return {
       status_code: 200,
-      message: 'success',
+      message: 'Success',
       data: data,
     };
   }
@@ -36,7 +36,7 @@ export class BaseService<CreateDto, Entity> {
   async findAllWithPagination(options?: IFindOptions<Entity>) {
     return await RepositoryPager.findAll(
       this.getRepository,
-      'success',
+      'Success',
       options,
     );
   }
@@ -52,7 +52,7 @@ export class BaseService<CreateDto, Entity> {
     }
     return {
       status_code: 200,
-      message: 'success',
+      message: 'Success',
       data: data,
     };
   }
@@ -68,7 +68,7 @@ export class BaseService<CreateDto, Entity> {
     }
     return {
       status_code: 200,
-      message: 'success',
+      message: 'Success',
       data,
     };
   }
@@ -78,10 +78,11 @@ export class BaseService<CreateDto, Entity> {
       ...dto,
       updated_at: new Date(Date.now()),
     });
+    const newData = await this.repository.findOneBy({ id });
     return {
       status_code: 200,
-      message: 'success',
-      data: {},
+      message: 'Updated',
+      data: newData,
     };
   }
 
@@ -89,8 +90,8 @@ export class BaseService<CreateDto, Entity> {
     (await this.repository.delete(id)) as unknown as Entity;
     return {
       status_code: 200,
-      message: 'success',
-      data: {},
+      message: 'Deleted',
+      data: { id },
     };
   }
 }
