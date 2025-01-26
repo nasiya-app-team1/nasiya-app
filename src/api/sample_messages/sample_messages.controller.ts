@@ -13,7 +13,7 @@ import { CreateSampleMessageDto } from './dto/create-sample_message.dto';
 import { UpdateSampleMessageDto } from './dto/update-sample_message.dto';
 import { Public } from 'src/common/decorator';
 
-@ApiTags('Sample-messages') // Groups endpoints under 'Debtors' in Swagger
+@ApiTags('Sample-messages')
 @Public()
 @Controller('sample-messages')
 export class SampleMessagesController {
@@ -22,8 +22,8 @@ export class SampleMessagesController {
   @Post('create')
   @ApiOperation({ summary: 'Create a new sample message' })
   @ApiResponse({ status: 200, description: 'Sample MessageEntity Yaratildi.' })
-  create(@Body() createSampleMessageDto: CreateSampleMessageDto) {
-    return this.sampleMessagesService.createSampleMessage(
+  async create(@Body() createSampleMessageDto: CreateSampleMessageDto) {
+    return await this.sampleMessagesService.createSampleMessage(
       createSampleMessageDto,
     );
   }
@@ -32,8 +32,8 @@ export class SampleMessagesController {
   @ApiOperation({ summary: 'Retrieve all Sample-messages' })
   @ApiResponse({ status: 200, description: 'List of all Sample-messages.' })
   @ApiResponse({ status: 404, description: 'Sample Messagelar topilmadi.' })
-  findAll() {
-    return this.sampleMessagesService.findAll();
+  async findAll() {
+    return await this.sampleMessagesService.findAll();
   }
 
   @Get(':id')
@@ -45,8 +45,8 @@ export class SampleMessagesController {
   })
   @ApiResponse({ status: 200, description: 'List of the sample-message.' })
   @ApiResponse({ status: 404, description: 'Sample Message topilmadi.' })
-  findOne(@Param('id') id: string) {
-    return this.sampleMessagesService.findSampleMessageById(id);
+  async findOne(@Param('id') id: string) {
+    return await this.sampleMessagesService.findSampleMessageById(id);
   }
 
   @Patch(':id')
@@ -62,11 +62,11 @@ export class SampleMessagesController {
     status: 404,
     description: 'Yangilanadigan Sample Message topilmadi.',
   })
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateSampleMessageDto: UpdateSampleMessageDto,
   ) {
-    return this.sampleMessagesService.updateSampleMessage(
+    return await this.sampleMessagesService.updateSampleMessage(
       id,
       updateSampleMessageDto,
     );
@@ -87,7 +87,7 @@ export class SampleMessagesController {
     status: 404,
     description: "O'chiriladigan Sample Message topilmadi",
   })
-  remove(@Param('id') id: string) {
-    return this.sampleMessagesService.deleteSampleMessage(id);
+  async remove(@Param('id') id: string) {
+    return await this.sampleMessagesService.deleteSampleMessage(id);
   }
 }

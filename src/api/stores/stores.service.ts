@@ -2,9 +2,11 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as fs from 'fs/promises';
 import { BaseService } from 'src/infrastructure/baseService/baseService';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
@@ -12,21 +14,30 @@ import { StoreEntity } from 'src/core/entity';
 import { BcryptService } from 'src/infrastructure';
 import { LoginStoreDto } from './dto/login-store.dto';
 import { TokenService } from 'src/common/guard';
+import { FileService } from '../file-service/file-service.service';
+import { FileFolder } from 'src/common/enum';
 
 @Injectable()
 export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
+  private static readonly logger = new Logger(StoresService.name);
   constructor(
     @InjectRepository(StoreEntity)
     private readonly storeRepository: Repository<StoreEntity>,
     private readonly bcryptService: BcryptService,
     private readonly tokenService: TokenService,
+    private readonly fileService: FileService,
   ) {
     super(storeRepository);
   }
 
   async createStore(createStoreDto: CreateStoreDto) {
-    const { login, email, password } = createStoreDto;
-
+    const { login, email, password, image } = createStoreDto;
+    try {
+      await fs.access(image);
+    } catch (error) {
+      StoresService.logger.warn(error);
+      throw new BadRequestException(`Invalid path: ${image}`);
+    }
     const existingStore = await this.getRepository.findOne({
       where: [{ login }, { email }],
     });
@@ -53,6 +64,7 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
       password,
       store.password,
     );
+
     if (!isPasswordMatch) {
       throw new BadRequestException('Login or password not valid');
     }
@@ -78,7 +90,14 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
 
   async updateStore(id: string, updateStoreDto: UpdateStoreDto) {
     const { password } = updateStoreDto;
-
+    if (updateStoreDto?.image) {
+      try {
+        await fs.access(updateStoreDto.image);
+      } catch (error) {
+        StoresService.logger.warn(error);
+        throw new BadRequestException(`Invalid path: ${updateStoreDto.image}`);
+      }
+    }
     const store = await this.getRepository.findOne({ where: { id } });
     if (!store) {
       throw new BadRequestException('Store not found');
@@ -97,5 +116,63 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
       throw new BadRequestException('Store not found');
     }
     return await this.delete(id);
+  }
+
+  async upload(file: Express.Multer.File) {
+    const queryRunner =
+      this.storeRepository.manager.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const fileUrl = await this.fileService.saveFile(file, FileFolder.STORE);
+      if (!fileUrl) {
+        throw new Error('File could not be saved');
+      }
+
+      await queryRunner.commitTransaction();
+
+      return {
+        status_code: 200,
+        message: 'success',
+        data: { path: fileUrl },
+      };
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      return {
+        status_code: 200,
+        message: 'fail',
+        data: { error },
+      };
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async deleteImage(imagePath: string) {
+    const queryRunner =
+      this.storeRepository.manager.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await this.fileService.deleteFile(imagePath, FileFolder.STORE);
+      await queryRunner.commitTransaction();
+
+      return {
+        status_code: 200,
+        message: 'success',
+        data: {},
+      };
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      return {
+        status_code: 200,
+        message: 'fail',
+        data: { error },
+      };
+    } finally {
+      await queryRunner.release();
+    }
   }
 }
