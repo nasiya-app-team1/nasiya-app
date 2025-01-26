@@ -10,7 +10,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
@@ -354,6 +354,7 @@ export class AdminController {
   @ApiOperation({
     summary: 'Get admin by id',
   })
+  @ApiParam({ name: 'id', description: 'The ID of the admin', type: String })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Get one admin',
@@ -409,6 +410,7 @@ export class AdminController {
   @ApiOperation({
     summary: 'Update admin',
   })
+  @ApiParam({ name: 'id', description: 'The ID of the admin', type: String })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Admin updated',
@@ -464,6 +466,7 @@ export class AdminController {
   @ApiOperation({
     summary: 'Delete admin',
   })
+  @ApiParam({ name: 'id', description: 'The ID of the admin', type: String })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Admin deleted',

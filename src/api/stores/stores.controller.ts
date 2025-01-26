@@ -11,7 +11,7 @@ import {
   UploadedFile,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { StoresService } from './stores.service';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
@@ -209,6 +209,7 @@ export class StoresController {
   @ApiOperation({
     summary: 'Get a store by id',
   })
+  @ApiParam({ name: 'id', description: 'The ID of the store', type: String })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Get one store',
@@ -282,6 +283,7 @@ export class StoresController {
   @ApiOperation({
     summary: 'Update a store by id',
   })
+  @ApiParam({ name: 'id', description: 'The ID of the store', type: String })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Get one store',
@@ -495,6 +497,7 @@ export class StoresController {
   @ApiOperation({
     summary: 'Delete a store by id',
   })
+  @ApiParam({ name: 'id', description: 'The ID of the store', type: String })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Get one store',

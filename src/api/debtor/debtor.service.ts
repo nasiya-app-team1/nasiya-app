@@ -5,8 +5,7 @@ import { DebtorRepository, DebtorEntity } from 'src/core';
 import { CreateDebtorDto } from './dto/create-debtor.dto';
 import { BaseService } from 'src/infrastructure/baseService/baseService';
 import { UpdateDebtorDto } from './dto/update-debtor.dto';
-import { DebtorImagesService } from '../debtor-images/debtor-images.service';
-import { PhoneNumbersService } from '../phone-numbers/phone-numbers.service';
+import { StoresService } from '../stores/stores.service';
 
 @Injectable()
 export class DebtorService extends BaseService<
@@ -15,20 +14,29 @@ export class DebtorService extends BaseService<
 > {
   constructor(
     @InjectRepository(DebtorEntity) repository: DebtorRepository,
-    private readonly debtorImageService: DebtorImagesService,
-    private readonly phoneNumberService: PhoneNumbersService,
+    private readonly storeService: StoresService,
   ) {
     super(repository);
   }
 
   async createDebtor(dto: CreateDebtorDto) {
-    const store = await this.getRepository.findOneBy({ id: dto.store_id });
+    const store = await this.storeService.getRepository.findOneBy({
+      id: dto.store_id,
+    });
     if (!store) {
       throw new BadRequestException('Store not found');
     }
     return await this.create(dto);
   }
 
+  async findAllStoreDebtors(id: string) {
+    const debtors = await this.getRepository.find({ where: { store_id: id } });
+    return {
+      status_code: 200,
+      message: 'Success',
+      data: debtors,
+    };
+  }
   async updateDebtor(id: string, dto: UpdateDebtorDto) {
     const debtor = await this.getRepository.findOneBy({ id });
     if (!debtor) {
