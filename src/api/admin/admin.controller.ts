@@ -24,26 +24,89 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @ApiOperation({
-    summary: 'Create super_admin',
+    summary: 'Create super admin',
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'Super admin  created',
+    description: 'Admin  created',
     schema: {
       example: {
         status_code: 201,
-        message: 'success',
-        data: {},
+        message: 'Admin created',
+        data: {
+          id: 'de40ee6e-2770-4d17-96fe-a11ce9a1d457',
+          role: 'superadmin',
+          created_at: '2025-01-26',
+        },
       },
     },
   })
   @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Failed creating super admin',
-    schema: {
-      example: {
-        status_code: 400,
-        message: 'Error on creating super admin',
+    status: HttpStatus.CONFLICT,
+    description: 'Conflict errors',
+    content: {
+      'application/json': {
+        examples: {
+          usernameConflict: {
+            summary: 'Username conflict',
+            value: {
+              message: 'Username already exists',
+              error: 'Conflict',
+              statusCode: 409,
+            },
+          },
+          phoneNumberConflict: {
+            summary: 'Phone number conflict',
+            value: {
+              message: 'Phone number already exists',
+              error: 'Conflict',
+              statusCode: 409,
+            },
+          },
+
+          emailConflict: {
+            summary: 'Email address conflict',
+            value: {
+              message: 'Email address already exists',
+              error: 'Conflict',
+              statusCode: 409,
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+    content: {
+      'application/json': {
+        examples: {
+          Forbidden: {
+            summary: 'Forbidden',
+            value: {
+              message: 'Forbidden user',
+              statusCode: 403,
+            },
+          },
+        },
       },
     },
   })
@@ -58,22 +121,85 @@ export class AdminController {
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'Admin created',
+    description: 'Admin  created',
     schema: {
       example: {
         status_code: 201,
-        message: 'success',
-        data: {},
+        message: 'Admin created',
+        data: {
+          id: 'de40ee6e-2770-4d17-96fe-a11ce9a1d457',
+          role: 'superadmin',
+          created_at: '2025-01-26',
+        },
       },
     },
   })
   @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Failed creating admin',
-    schema: {
-      example: {
-        status_code: 400,
-        message: 'Error on creating admin',
+    status: HttpStatus.CONFLICT,
+    description: 'Conflict errors',
+    content: {
+      'application/json': {
+        examples: {
+          usernameConflict: {
+            summary: 'Username conflict',
+            value: {
+              message: 'Username already exists',
+              error: 'Conflict',
+              statusCode: 409,
+            },
+          },
+          phoneNumberConflict: {
+            summary: 'Phone number conflict',
+            value: {
+              message: 'Phone number already exists',
+              error: 'Conflict',
+              statusCode: 409,
+            },
+          },
+
+          emailConflict: {
+            summary: 'Email address conflict',
+            value: {
+              message: 'Email address already exists',
+              error: 'Conflict',
+              statusCode: 409,
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+    content: {
+      'application/json': {
+        examples: {
+          Forbidden: {
+            summary: 'Forbidden',
+            value: {
+              message: 'Forbidden user',
+              statusCode: 403,
+            },
+          },
+        },
       },
     },
   })
@@ -88,11 +214,11 @@ export class AdminController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Admin logged in',
+    description: 'Log in',
     schema: {
       example: {
         status_code: 200,
-        message: 'success',
+        message: 'Logged in',
         data: {
           access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
           refresh_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
@@ -101,12 +227,20 @@ export class AdminController {
     },
   })
   @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Invalid credentials',
-    schema: {
-      example: {
-        status_code: 401,
-        message: 'Invalid credentials',
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad request errors',
+    content: {
+      'application/json': {
+        examples: {
+          invalidCredentionals: {
+            summary: 'Invalid Credentionals',
+            value: {
+              message: 'Username or password invalid',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+        },
       },
     },
   })
@@ -124,11 +258,11 @@ export class AdminController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Token refreshed',
+    description: 'Token refresh',
     schema: {
       example: {
         status_code: 200,
-        message: 'success',
+        message: 'Token refreshed',
         data: {
           access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
         },
@@ -140,8 +274,26 @@ export class AdminController {
     description: 'Invalid refresh token',
     schema: {
       example: {
-        status_code: 401,
-        message: 'Invalid refresh token',
+        message: 'Invalid or expired token',
+        error: 'Unauthorized',
+        statusCode: 401,
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
+        },
       },
     },
   })
@@ -168,8 +320,26 @@ export class AdminController {
     description: 'Invalid refresh token',
     schema: {
       example: {
-        status_code: 401,
-        message: 'Invalid refresh token',
+        message: 'Invalid or expired token',
+        error: 'Unauthorized',
+        statusCode: 401,
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
+        },
       },
     },
   })
@@ -186,15 +356,19 @@ export class AdminController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Admin',
+    description: 'Get one admin',
     schema: {
       example: {
         status_code: 200,
-        message: 'success',
+        message: 'Success',
         data: {
-          id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-          username: 'admin',
-          email: 'admin@example.com',
+          id: 'b262531c-808e-405a-a2ef-66714fa7e01d',
+          created_at: '2025-01-26',
+          updated_at: '2025-01-26',
+          username: 'user1',
+          phone_number: '+998908717388',
+          email: 'user1@gmail.com',
+          role: 'superadmin',
         },
       },
     },
@@ -204,8 +378,26 @@ export class AdminController {
     description: 'Admin not found',
     schema: {
       example: {
-        status_code: 404,
         message: 'Admin not found',
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
+        },
       },
     },
   })
@@ -223,18 +415,44 @@ export class AdminController {
     schema: {
       example: {
         status_code: 200,
-        message: 'success',
-        data: {},
+        message: 'Updated',
+        data: {
+          id: '53fa6809-d804-483a-b244-045396379d06',
+          created_at: '2025-01-26',
+          updated_at: '2025-01-26',
+          username: 'abdulaziz',
+          phone_number: '+998908717304',
+          email: null,
+          role: 'superadmin',
+        },
       },
     },
   })
   @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Failed updating admin',
+    status: HttpStatus.NOT_FOUND,
+    description: 'Admin not found',
     schema: {
       example: {
-        status_code: 400,
-        message: 'Error on updating admin',
+        message: 'Admin not found',
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
+        },
       },
     },
   })
@@ -252,8 +470,10 @@ export class AdminController {
     schema: {
       example: {
         status_code: 200,
-        message: 'success',
-        data: {},
+        message: 'Deleted',
+        data: {
+          id: '53fa6809-d804-483a-b244-045396379d06',
+        },
       },
     },
   })
@@ -262,8 +482,26 @@ export class AdminController {
     description: 'Admin not found',
     schema: {
       example: {
-        status_code: 404,
         message: 'Admin not found',
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
+        },
       },
     },
   })
