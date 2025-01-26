@@ -30,7 +30,7 @@ export class DebtorImagesController {
     status: 400,
     description: 'Bad Request.',
   })
-  @Post('save')
+  @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   @UsePipes(ImageValidationPipe)
   async uploadFileAndCreate(

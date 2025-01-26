@@ -7,7 +7,7 @@ import { DebtorEntity } from './debtor.entity';
 
 @Entity('stores')
 export class StoreEntity extends BaseEntity {
-  @Column({ type: 'varchar', name: 'full_name', length: 40 })
+  @Column({ type: 'varchar', name: 'full_name' })
   full_name: string;
 
   @Column({ type: 'varchar', name: 'email', length: 40, unique: true })

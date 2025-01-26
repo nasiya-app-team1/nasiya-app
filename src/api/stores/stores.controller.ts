@@ -6,12 +6,17 @@ import {
   Param,
   Delete,
   Put,
+  UseInterceptors,
+  UsePipes,
+  UploadedFile,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { StoresService } from './stores.service';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { LoginStoreDto } from './dto/login-store.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ImageValidationPipe } from 'src/infrastructure';
 
 @ApiTags('stores')
 @Controller('stores')
@@ -29,7 +34,7 @@ export class StoresController {
     status: 400,
     description: 'Bad Request.',
   })
-  @Post()
+  @Post('/create')
   create(@Body() createStoreDto: CreateStoreDto) {
     return this.storesService.createStore(createStoreDto);
   }
@@ -45,7 +50,7 @@ export class StoresController {
     status: 401,
     description: 'Unauthorized.',
   })
-  @Post('login')
+  @Post('/login')
   login(@Body() loginDto: LoginStoreDto) {
     return this.storesService.loginStore(loginDto);
   }
@@ -57,7 +62,7 @@ export class StoresController {
     status: 200,
     description: 'Return all stores.',
   })
-  @Get()
+  @Get('/all')
   findAll() {
     return this.storesService.findAll();
   }
@@ -108,5 +113,17 @@ export class StoresController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.storesService.removeStore(id);
+  }
+
+  @Post('upload-image')
+  @UseInterceptors(FileInterceptor('file'))
+  @UsePipes(ImageValidationPipe)
+  async uploadImage(@UploadedFile() file: Express.Multer.File) {
+    return await this.storesService.upload(file);
+  }
+
+  @Post('delete-image')
+  async deleteImage(path: string) {
+    return await this.storesService.deleteImage(path);
   }
 }
