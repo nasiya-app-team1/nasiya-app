@@ -16,6 +16,7 @@ import { StoresModule } from '../stores/stores.module';
   ],
   controllers: [DebtorController],
   providers: [DebtorService],
+  exports: [DebtorService]
   exports: [DebtorService],
 })
 export class DebtorModule {}

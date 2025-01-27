@@ -6,15 +6,14 @@ import {
   Param,
   Body,
   HttpStatus,
-  Patch,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { LikesService } from './likes.service';
-import { CreateLikeDto, UpdateLikeDto } from './dto';
+import { CreateLikeDto } from './dto/create-like.dto';
 
 @Controller('likes')
 export class LikesController {
-  constructor(private readonly likesService: LikesService) {}
+  constructor(private readonly likesService: LikesService) { }
 
   @ApiOperation({ summary: 'Create a new Like' })
   @ApiResponse({
@@ -23,30 +22,58 @@ export class LikesController {
     schema: {
       example: {
         status_code: 201,
-        message: 'Like created successfully.',
-        data: {},
+        message: "Created",
+        data: {
+          store_id: "64efa2f4-665c-4dfe-984e-ea852c03dd10",
+          debtor_id: "1a55a3b3-46fc-46f1-8fed-e6b6f211213c",
+          id: "a6915609-0580-422c-994b-a11e573cd698",
+          created_at: "2025-01-27",
+          updated_at: "2025-01-27"
+        }
       },
     },
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Invalid input.',
-    schema: {
-      example: {
-        status_code: 400,
-        message: 'Bad Request',
-        data: {},
+    description: 'Bad request errors',
+    content: {
+      'application/json': {
+        examples: {
+          invalidUUID: {
+            summary: 'Invalid id',
+            value: {
+              message: 'Invalid UUID format for id',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+          invalidDebtor: {
+            summary: 'Invalid debtor',
+            value: {
+              message: 'Related debtor not found',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+          invalidStore: {
+            summary: 'Invalid store',
+            value: {
+              message: 'Related store not found',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+        },
       },
     },
   })
-  @ApiResponse({  
+  @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized',
     schema: {
       example: {
-        status_code: 401,
+        statusCode: 401,
         message: 'Unauthorized',
-        data: {},
       },
     },
   })
@@ -57,7 +84,6 @@ export class LikesController {
       example: {
         status_code: 403,
         message: 'Forbidden',
-        data: {},
       },
     },
   })
@@ -68,18 +94,16 @@ export class LikesController {
       example: {
         status_code: 404,
         message: 'Not found',
-        data: {},
       },
-    },  
+    },
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
-    description: 'Conflict',  
+    description: 'Conflict',
     schema: {
       example: {
         status_code: 409,
-        message: 'Conflict',
-        data: {},
+        message: 'Like already exists',
       },
     },
   })
@@ -95,24 +119,33 @@ export class LikesController {
     schema: {
       example: {
         status_code: 200,
-        message: 'Like of all likes',
+        message: "Success",
         data: [
           {
-            store_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-            debtor_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-          },
-        ],
+            id: "a6915609-0580-422c-994b-a11e573cd698",
+            created_at: "2025-01-27",
+            updated_at: "2025-01-27",
+            store_id: "64efa2f4-665c-4dfe-984e-ea852c03dd10",
+            debtor_id: "1a55a3b3-46fc-46f1-8fed-e6b6f211213c"
+          }
+        ]
       },
     },
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
     description: 'Invalid input.',
-    schema: {
-      example: {
-        status_code: 400,
-        message: 'Bad Request',
-        data: {},
+    content: {
+      'application/json': {
+        examples: {
+          notFound: {
+            value: {
+              error: 'Bad Request',
+              message:'Like not found',
+              statusCode: 400,
+            },
+          },
+        },
       },
     },
   })
@@ -123,7 +156,6 @@ export class LikesController {
       example: {
         status_code: 401,
         message: 'Unauthorized',
-        data: {},
       },
     },
   })
@@ -134,7 +166,6 @@ export class LikesController {
       example: {
         status_code: 403,
         message: 'Forbidden',
-        data: {},
       },
     },
   })
@@ -144,19 +175,7 @@ export class LikesController {
     schema: {
       example: {
         status_code: 404,
-        message: 'Not found',
-        data: {},
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
-    description: 'Internal server error',
-    schema: {
-      example: {
-        status_code: 500,
-        message: 'Internal server error',
-        data: {},
+        message: 'Like not found',
       },
     },
   })
@@ -180,21 +199,40 @@ export class LikesController {
     schema: {
       example: {
         status_code: 200,
-        message: 'success',
+        message: "Success",
         data: {
-          store_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-          debtor_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-        },
+          id: "a6915609-0580-422c-994b-a11e573cd698",
+          created_at: "2025-01-27",
+          updated_at: "2025-01-27",
+          store_id: "64efa2f4-665c-4dfe-984e-ea852c03dd10",
+          debtor_id: "1a55a3b3-46fc-46f1-8fed-e6b6f211213c"
+        }
       },
     },
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Invalid input.',
-    schema: {
-      example: {
-        status_code: 400,
-        message: 'Bad Request',
+    description: 'Bad request errors',
+    content: {
+      'application/json': {
+        examples: {
+          invalidUUID: {
+            summary: 'Invalid id',
+            value: {
+              message: 'Invalid UUID format for id',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+          notfound: {
+            summary: 'not found',
+            value: {
+              message: 'Like not found',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+        },
       },
     },
   })
@@ -205,7 +243,6 @@ export class LikesController {
       example: {
         status_code: 401,
         message: 'Unauthorized',
-        data: {},
       },
     },
   })
@@ -216,7 +253,6 @@ export class LikesController {
       example: {
         status_code: 403,
         message: 'Forbidden',
-        data: {},
       },
     },
   })
@@ -227,18 +263,6 @@ export class LikesController {
       example: {
         status_code: 404,
         message: 'Not found',
-        data: {},
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
-    description: 'Internal server error',
-    schema: {
-      example: {
-        status_code: 500,
-        message: 'Internal server error',
-        data: {},
       },
     },
   })
@@ -247,88 +271,7 @@ export class LikesController {
     return this.likesService.findOneLikeById(id);
   }
 
-  @ApiOperation({ summary: 'Update a like by ID' })
-  @ApiParam({
-    name: 'id',
-    description: 'The ID of the like',
-    type: String,
-    example: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Like updated successfully.',
-    schema: {
-      example: {
-        status_code: 200,
-        message: 'Like updated successfully.',
-        data: {},
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Invalid input.',
-    schema: {
-      example: {
-        status_code: 400,
-        message: 'Bad Request',
-        data: {},
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Forbidden',
-    schema: {
-      example: {
-        status_code: 403,
-        message: 'Forbidden',
-        data: {},
-      },
-    },
-  })
-  @ApiResponse({  
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-    schema: {
-      example: {
-        status_code: 401,
-        message: 'Unauthorized',
-        data: {},
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-    schema: {
-      example: {
-        status_code: 404,
-        message: 'Not found',
-        data: {},
-      },
-    },  
-  })
-  @ApiResponse({
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
-    description: 'Internal server error', 
-    schema: {
-      example: {
-        status_code: 500,
-        message: 'Internal server error',
-        data: {},
-      },
-    },
-  })
-  @Patch(':id')
-  async updateLike(
-    @Param('id') id: string,
-    @Body() updateLikeDto: UpdateLikeDto,
-  ) {
-    return this.likesService.updateLike(id, updateLikeDto);
-  }
-
-  @ApiOperation({ summary: 'Delete a like by ID' })
+  @ApiOperation({ summary: 'Delete a like by id' })
   @ApiParam({
     name: 'id',
     description: 'The ID of the like',
@@ -341,30 +284,53 @@ export class LikesController {
     schema: {
       example: {
         status_code: 200,
-        message: 'Like deleted successfully.',
-        data: {},
+        message: "Deleted",
+        data: {
+          id: "a6915609-0580-422c-994b-a11e573cd698"
+        }
       },
     },
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Invalid input.',
-    schema: {
-      example: {
-        status_code: 400,
-        message: 'Bad Request',
-        data: {},
+    description: 'Bad reqest errors',
+    content: {
+      'application/json': {
+        examples: {
+          invalidUUID: {
+            summary: 'Invalid id',
+            value: {
+              message: 'Invalid UUID format for id',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+          notfound: {
+            summary: 'not found',
+            value: {
+              message: 'Like not found',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+        },
       },
     },
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized',
-    schema: {
-      example: {
-        status_code: 401,
-        message: 'Unauthorized',
-        data: {},
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
+        },
       },
     },
   })
@@ -375,7 +341,6 @@ export class LikesController {
       example: {
         status_code: 403,
         message: 'Forbidden',
-        data: {},
       },
     },
   })
@@ -385,19 +350,7 @@ export class LikesController {
     schema: {
       example: {
         status_code: 404,
-        message: 'Not found',
-        data: {},
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
-    description: 'Internal server error',
-    schema: {
-      example: {
-        status_code: 500,
-        message: 'Internal server error',
-        data: {},
+        message: 'Like not found',
       },
     },
   })
