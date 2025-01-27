@@ -16,6 +16,7 @@ import { LoginStoreDto } from './dto/login-store.dto';
 import { TokenService } from 'src/common/guard';
 import { FileService } from '../file-service/file-service.service';
 import { FileFolder } from 'src/common/enum';
+import { DeleteStoreImageDto } from './dto/delete-image.dto';
 
 @Injectable()
 export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
@@ -33,7 +34,9 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
   async createStore(createStoreDto: CreateStoreDto) {
     const { login, email, password, image } = createStoreDto;
     try {
-      await fs.access(image);
+      const imageName = image.split('/')[3];
+      const imagePath = process.cwd() + '/uploads/store/' + imageName;
+      await fs.access(imagePath);
     } catch (error) {
       StoresService.logger.warn(error);
       throw new BadRequestException(`Invalid path: ${image}`);
@@ -47,8 +50,22 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
 
     createStoreDto.password = await this.bcryptService.encrypt(password);
 
+    const store = await this.create(createStoreDto);
+    const { id, created_at } = store.data;
+    return {
+      status_code: 201,
+      message: 'Created',
+      data: { id, created_at },
+    };
+  }
 
-    return this.create(createStoreDto);
+  async findAllStores() {
+    const stores = (await this.findAll()).data;
+    for (const store of stores) {
+      delete store.pass_code;
+      delete store.password;
+    }
+    return { status_code: 200, message: 'Success', data: stores };
   }
 
   async loginStore(loginDto: LoginStoreDto) {
@@ -76,24 +93,32 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
 
     return {
       status_code: 200,
-      message: 'success',
+      message: 'Logged in',
       data: { access_token: accessToken, refresh_token: refreshToken },
     };
   }
 
   async findStoreById(id: string) {
-    const store = await this.findOneById(id);
+    const store = await this.getRepository.findOneBy({ id });
     if (!store) {
       throw new BadRequestException('Store not found');
     }
-    return store;
+    delete store.password;
+    delete store.pass_code;
+    return {
+      status_code: 201,
+      message: 'Created',
+      data: store,
+    };
   }
 
   async updateStore(id: string, updateStoreDto: UpdateStoreDto) {
     const { password } = updateStoreDto;
     if (updateStoreDto?.image) {
       try {
-        await fs.access(updateStoreDto.image);
+        const imageName = updateStoreDto.image.split('/')[3];
+        const imagePath = process.cwd() + '/uploads/store/' + imageName;
+        await fs.access(imagePath);
       } catch (error) {
         StoresService.logger.warn(error);
         throw new BadRequestException(`Invalid path: ${updateStoreDto.image}`);
@@ -108,7 +133,14 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
       updateStoreDto.password = await this.bcryptService.encrypt(password);
     }
 
-    return await this.update(id, updateStoreDto);
+    const newStore = (await this.update(id, updateStoreDto)).data;
+    delete newStore.password;
+    delete newStore.pass_code;
+    return {
+      status_code: 200,
+      message: 'Updated',
+      data: newStore,
+    };
   }
 
   async removeStore(id: string) {
@@ -134,14 +166,14 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
       await queryRunner.commitTransaction();
 
       return {
-        status_code: 200,
-        message: 'success',
+        status_code: 201,
+        message: 'Created',
         data: { path: fileUrl },
       };
     } catch (error) {
       await queryRunner.rollbackTransaction();
       return {
-        status_code: 200,
+        status_code: 400,
         message: 'fail',
         data: { error },
       };
@@ -150,19 +182,21 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
     }
   }
 
-  async deleteImage(imagePath: string) {
+  async deleteImage(dto: DeleteStoreImageDto) {
     const queryRunner =
       this.storeRepository.manager.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
     try {
-      await this.fileService.deleteFile(imagePath, FileFolder.STORE);
+      const imageName = dto.path.split('/')[3];
+      await this.fileService.deleteFile(imageName, FileFolder.STORE);
+
       await queryRunner.commitTransaction();
 
       return {
         status_code: 200,
-        message: 'success',
+        message: 'Deleted',
         data: {},
       };
     } catch (error) {
@@ -170,7 +204,7 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
       return {
         status_code: 200,
         message: 'fail',
-        data: { error },
+        data: { error: error.response },
       };
     } finally {
       await queryRunner.release();

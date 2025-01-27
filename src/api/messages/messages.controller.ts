@@ -47,6 +47,61 @@ export class MessagesController {
       },
     },
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    schema: {
+      example: {
+        status_code: 401,
+        message: 'Unauthorized',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+    schema: {
+      example: {
+        status_code: 403,
+        message: 'Forbidden',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Not found',
+    schema: {
+      example: {
+        status_code: 404,
+        message: 'Not found',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'Conflict',
+    schema: {
+      example: {
+        status_code: 409,
+        message: 'Conflict',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+    schema: {
+      example: {
+        status_code: 500,
+        message: 'Internal server error',
+        data: {},
+      },
+    },
+  })
   @Post()
   async createMessage(@Body() createMessageDto: CreateMessageDto) {
     return await this.messagesService.createMessage(createMessageDto);
@@ -81,6 +136,50 @@ export class MessagesController {
       example: {
         status_code: 400,
         message: 'Bad Request',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    schema: {
+      example: {
+        status_code: 401,
+        message: 'Unauthorized',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+    schema: {
+      example: {
+        status_code: 403,
+        message: 'Forbidden',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Not found',
+    schema: {
+      example: {
+        status_code: 404,
+        message: 'Not found',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+    schema: {
+      example: {
+        status_code: 500,
+        message: 'Internal server error',
         data: {},
       },
     },
@@ -127,6 +226,51 @@ export class MessagesController {
       example: {
         status_code: 400,
         message: 'Bad Request',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    schema: {
+      example: {
+        status_code: 401,
+        message: 'Unauthorized',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+    schema: {
+      example: {
+        status_code: 403,
+        message: 'Forbidden',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Not found',
+    schema: {
+      example: {
+        status_code: 404,
+        message: 'Not found',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+    schema: {
+      example: {
+        status_code: 500,
+        message: 'Internal server error',
+        data: {},
       },
     },
   })
@@ -172,6 +316,50 @@ export class MessagesController {
       },
     },
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    schema: {
+      example: {
+        status_code: 401,
+        message: 'Unauthorized',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+    schema: {
+      example: {
+        status_code: 403,
+        message: 'Forbidden',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Not found',
+    schema: {
+      example: {
+        status_code: 404,
+        message: 'Not found',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+    schema: {
+      example: {
+        status_code: 500,
+        message: 'Internal server error',
+        data: {},
+      },
+    },
+  })
   @Patch(':id')
   async updateMessage(
     @Param('id') id: string,
@@ -207,6 +395,50 @@ export class MessagesController {
       example: {
         status_code: 400,
         message: 'Bad Request',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    schema: {
+      example: {
+        status_code: 401,
+        message: 'Unauthorized',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+    schema: {
+      example: {
+        status_code: 403,
+        message: 'Forbidden',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Not found',
+    schema: {
+      example: {
+        status_code: 404,
+        message: 'Not found',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+    schema: {
+      example: {
+        status_code: 500,
+        message: 'Internal server error',
         data: {},
       },
     },

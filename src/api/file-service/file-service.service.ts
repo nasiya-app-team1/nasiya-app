@@ -37,7 +37,10 @@ export class FileService {
 
       await fs.unlink(filePath);
     } catch (error) {
-      throw new BadRequestException(`Errod deleting file: ${error.message}`);
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new BadRequestException('Error deleting file');
     }
   }
 

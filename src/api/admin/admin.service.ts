@@ -28,7 +28,7 @@ export class AdminService extends BaseService<
     super(repository);
   }
 
-  async createAdmin(createAdminDto: CreateAdminDto, role: RoleAdmin) {
+  async createAdmin(createAdminDto: CreateAdminDto, adminRole: RoleAdmin) {
     const { username, phone_number, email } = createAdminDto;
     const usernameCondition = { username };
     const phoneNumberCondition = phone_number ? { phone_number } : null;
@@ -66,12 +66,13 @@ export class AdminService extends BaseService<
       createAdminDto.hashed_password,
     );
     createAdminDto.hashed_password = hash_password;
-    createAdminDto.role = role;
-    await this.getRepository.save(createAdminDto);
+    createAdminDto.role = adminRole;
+    const { id, role, created_at } =
+      await this.getRepository.save(createAdminDto);
     return {
       status_code: 201,
-      message: 'success',
-      data: {},
+      message: 'Admin created',
+      data: { id, role, created_at },
     };
   }
 
@@ -98,7 +99,7 @@ export class AdminService extends BaseService<
     this.writeToCookie(refresh_token, res);
     return {
       status_code: 200,
-      message: 'success',
+      message: 'Logged in',
       data: {
         access_token,
         refresh_token,
@@ -111,10 +112,11 @@ export class AdminService extends BaseService<
     if (!admin) {
       throw new BadRequestException('Admin not found');
     }
+    delete admin.hashed_password;
     return {
       status_code: 200,
-      message: 'success',
-      data: { admin },
+      message: 'Success',
+      data: admin,
     };
   }
 
@@ -126,8 +128,8 @@ export class AdminService extends BaseService<
     await this.getRepository.delete(id);
     return {
       status_code: 200,
-      message: 'success',
-      data: {},
+      message: 'Deleted',
+      data: { id },
     };
   }
 
@@ -142,7 +144,7 @@ export class AdminService extends BaseService<
     const access_token = this.tokenService.createAccessToken(payload);
     return {
       status_code: 200,
-      message: 'success',
+      message: 'Token refreshed',
       data: {
         token: access_token,
       },
@@ -157,7 +159,7 @@ export class AdminService extends BaseService<
     res.clearCookie('refresh_token_admin');
     return {
       status_code: 200,
-      message: 'success',
+      message: 'Success',
       data: {},
     };
   }
@@ -176,10 +178,12 @@ export class AdminService extends BaseService<
       ...updateAdminDto,
       updated_at: new Date(Date.now()),
     });
+    const newAdmin = await this.getRepository.findOneBy({ id });
+    delete newAdmin.hashed_password;
     return {
       status_code: 200,
-      message: 'success',
-      data: {},
+      message: 'Updated',
+      data: newAdmin,
     };
   }
 

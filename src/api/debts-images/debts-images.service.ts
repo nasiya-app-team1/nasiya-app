@@ -55,7 +55,7 @@ export class DebtsImagesService extends BaseService<
     }
   }
 
-  async delete(id: string) {
+  async remove(id: string) {
     const queryRunner =
       this.getRepository.manager.connection.createQueryRunner();
     await queryRunner.connect();
