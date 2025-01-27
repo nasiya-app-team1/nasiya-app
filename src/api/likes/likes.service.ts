@@ -9,7 +9,8 @@ import { BaseService } from 'src/infrastructure/baseService/baseService';
 import { CreateLikeDto } from './dto/create-like.dto';
 import { LikeEntity } from 'src/core/entity/likes.entity';
 import { LikeRepository } from 'src/core/repository/like.repository';
-import { UpdateLikeDto } from './dto';
+import { DebtorService } from '../debtor/debtor.service';
+import { StoresService } from '../stores/stores.service';
 
 @Injectable()
 export class LikesService extends BaseService<
@@ -19,14 +20,16 @@ export class LikesService extends BaseService<
   constructor(
     @InjectRepository(LikeEntity)
     protected readonly repository: LikeRepository,
+    private readonly debtorService: DebtorService,
+    private readonly storeService:StoresService,
   ) {
     super(repository);
   }
 
   async createLike(dto: CreateLikeDto) {
     const [debtor, store, like] = await Promise.all([
-      this.getRepository.findOneBy({ id: dto.debtor_id }),
-      this.getRepository.findOneBy({ id: dto.store_id }),
+      this.debtorService.getRepository.findOneBy({ id: dto.debtor_id }),
+      this.storeService.getRepository.findOneBy({ id: dto.store_id }),
       this.getRepository.findOne({
         where: { debtor_id: dto.debtor_id, store_id: dto.store_id },
       }),
@@ -41,25 +44,6 @@ export class LikesService extends BaseService<
       throw new BadRequestException('Related store not found');
     }
     return await this.create(dto);
-  }
-
-  async updateLike(id: string, dto: UpdateLikeDto) {
-    const [debtor, store] = await Promise.all([
-      dto.store_id
-        ? this.getRepository.findOneBy({ id: dto.debtor_id })
-        : Promise.resolve(null),
-      dto.debtor_id
-        ? this.getRepository.findOneBy({ id: dto.store_id })
-        : Promise.resolve(null),
-    ]);
-    if (dto.store_id && !store) {
-      throw new BadRequestException('Related store not found');
-    }
-    if (dto.debtor_id && !debtor) {
-      throw new BadRequestException('Related debtor not found');
-    }
-
-    return await this.update(id, dto);
   }
 
   async findOneLikeById(id: string) {

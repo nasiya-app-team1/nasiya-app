@@ -6,10 +6,10 @@ import { DebtorEntity } from './debtor.entity';
 @Entity('likes')
 export class LikeEntity extends BaseEntity {
   @Column({ type: 'uuid', name: 'store_id' })
-  storeId: string;
+  store_id: string;
 
   @Column({ type: 'uuid', name: 'debtor_id' })
-  debtorId: string;
+  debtor_id: string;
 
   @ManyToOne(() => StoreEntity, (store) => store.likes, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'store_id' })
