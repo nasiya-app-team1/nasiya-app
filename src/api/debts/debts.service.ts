@@ -18,6 +18,7 @@ export class DebtsService extends BaseService<
   ) {
     super(repository);
   }
+
   async createDebt(dto: CreateDebtDto) {
     const debtor = await this.getRepository.findOneBy({ id: dto.debtor_id });
     if (!debtor) {
