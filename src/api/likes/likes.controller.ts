@@ -270,7 +270,6 @@ export class LikesController {
   async getLikeById(@Param('id') id: string) {
     return this.likesService.findOneLikeById(id);
   }
-
   @ApiOperation({ summary: 'Delete a like by id' })
   @ApiParam({
     name: 'id',

@@ -20,7 +20,7 @@ export class DebtsImagesService extends BaseService<
     super(repository);
   }
 
-  async createImage(dto: CreateDebtsImageDto, file: Express.Multer.File) {
+  async createImage(file: Express.Multer.File, id: string) {
     const queryRunner =
       this.getRepository.manager.connection.createQueryRunner();
     await queryRunner.connect();
@@ -32,7 +32,7 @@ export class DebtsImagesService extends BaseService<
 
       const imageData = {
         image: fileName,
-        ...dto,
+        debt_id: id,
       };
 
       const image = await queryRunner.manager.save(
@@ -44,7 +44,7 @@ export class DebtsImagesService extends BaseService<
 
       return {
         status_code: 201,
-        message: 'success',
+        message: 'Success',
         data: image,
       };
     } catch (error) {
