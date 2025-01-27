@@ -2,11 +2,11 @@ import {
   Controller,
   Get,
   Post,
-  Put,
   Delete,
   Param,
   Body,
   HttpStatus,
+  Patch,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { LikesService } from './likes.service';
@@ -35,6 +35,50 @@ export class LikesController {
       example: {
         status_code: 400,
         message: 'Bad Request',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({  
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    schema: {
+      example: {
+        status_code: 401,
+        message: 'Unauthorized',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+    schema: {
+      example: {
+        status_code: 403,
+        message: 'Forbidden',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Not found',
+    schema: {
+      example: {
+        status_code: 404,
+        message: 'Not found',
+        data: {},
+      },
+    },  
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'Conflict',  
+    schema: {
+      example: {
+        status_code: 409,
+        message: 'Conflict',
         data: {},
       },
     },
@@ -68,6 +112,50 @@ export class LikesController {
       example: {
         status_code: 400,
         message: 'Bad Request',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    schema: {
+      example: {
+        status_code: 401,
+        message: 'Unauthorized',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+    schema: {
+      example: {
+        status_code: 403,
+        message: 'Forbidden',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Not found',
+    schema: {
+      example: {
+        status_code: 404,
+        message: 'Not found',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+    schema: {
+      example: {
+        status_code: 500,
+        message: 'Internal server error',
         data: {},
       },
     },
@@ -110,6 +198,50 @@ export class LikesController {
       },
     },
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    schema: {
+      example: {
+        status_code: 401,
+        message: 'Unauthorized',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+    schema: {
+      example: {
+        status_code: 403,
+        message: 'Forbidden',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Not found',
+    schema: {
+      example: {
+        status_code: 404,
+        message: 'Not found',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+    schema: {
+      example: {
+        status_code: 500,
+        message: 'Internal server error',
+        data: {},
+      },
+    },
+  })
   @Get(':id')
   async getLikeById(@Param('id') id: string) {
     return this.likesService.findOneLikeById(id);
@@ -144,7 +276,51 @@ export class LikesController {
       },
     },
   })
-  @Put(':id')
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+    schema: {
+      example: {
+        status_code: 403,
+        message: 'Forbidden',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({  
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    schema: {
+      example: {
+        status_code: 401,
+        message: 'Unauthorized',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Not found',
+    schema: {
+      example: {
+        status_code: 404,
+        message: 'Not found',
+        data: {},
+      },
+    },  
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error', 
+    schema: {
+      example: {
+        status_code: 500,
+        message: 'Internal server error',
+        data: {},
+      },
+    },
+  })
+  @Patch(':id')
   async updateLike(
     @Param('id') id: string,
     @Body() updateLikeDto: UpdateLikeDto,
@@ -177,6 +353,50 @@ export class LikesController {
       example: {
         status_code: 400,
         message: 'Bad Request',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    schema: {
+      example: {
+        status_code: 401,
+        message: 'Unauthorized',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+    schema: {
+      example: {
+        status_code: 403,
+        message: 'Forbidden',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Not found',
+    schema: {
+      example: {
+        status_code: 404,
+        message: 'Not found',
+        data: {},
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+    schema: {
+      example: {
+        status_code: 500,
+        message: 'Internal server error',
         data: {},
       },
     },
