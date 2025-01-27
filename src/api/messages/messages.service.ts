@@ -5,20 +5,27 @@ import { CreateMessageDto } from './dto/create-message.dto';
 import { BaseService } from 'src/infrastructure/baseService/baseService';
 import { MessageEntity } from 'src/core/entity/message.entity';
 import { MessageRepository } from 'src/core/repository/message.repository';
+import { DebtorService } from '../debtor/debtor.service';
+import { StoresService } from '../stores/stores.service';
+import { SampleMessagesService } from '../sample_messages/sample_messages.service';
 
 @Injectable()
 export class MessagesService extends BaseService<
   CreateMessageDto,
   DeepPartial<MessageEntity>
 > {
-  constructor(@InjectRepository(MessageEntity) repository: MessageRepository) {
+  constructor(@InjectRepository(MessageEntity) repository: MessageRepository,
+    private readonly storeService:StoresService,
+    private readonly debtorService:DebtorService,
+    private readonly sampleMessageService:SampleMessagesService
+  ) {
     super(repository);
   }
   async createMessage(dto: CreateMessageDto) {
     const [debtor, store, sampleMessage] = await Promise.all([
-      this.getRepository.findOneBy({ id: dto.debtor_id }),
-      this.getRepository.findOneBy({ id: dto.store_id }),
-      this.getRepository.findOneBy({ id: dto.sample_message_id }),
+      this.debtorService.getRepository.findOneBy({ id: dto.debtor_id }),
+      this.storeService.getRepository.findOneBy({ id: dto.store_id }),
+      this.sampleMessageService.getRepository.findOneBy({ id: dto.sample_message_id }),
     ]);
     if (!debtor) {
       throw new BadRequestException('Related debtor not found');

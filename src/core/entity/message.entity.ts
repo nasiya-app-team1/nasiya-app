@@ -8,10 +8,10 @@ import { MessageStatus } from 'src/common/enum/message.enum';
 @Entity('messages')
 export class MessageEntity extends BaseEntity {
   @Column({ type: 'uuid', name: 'store_id' })
-  storeId: string;
+  store_id: string;
 
   @Column({ type: 'uuid', name: 'debtor_id' })
-  debtorId: string;
+  debtor_id: string;
 
   @Column({ type: 'text', name: 'message' })
   message: string;
@@ -25,7 +25,7 @@ export class MessageEntity extends BaseEntity {
   status: MessageStatus;
 
   @Column({ type: 'uuid', name: 'sample_message_id' })
-  sampleMessageId: string;
+  sample_message_id: string;
 
   @ManyToOne(() => StoreEntity, (store) => store.messages, {
     onDelete: 'CASCADE',
@@ -40,7 +40,6 @@ export class MessageEntity extends BaseEntity {
   )
   @JoinColumn({ name: 'sample_message_id' })
   sampleMessage: SampleMessageEntity;
-
   @ManyToOne(() => DebtorEntity, (debtor) => debtor.messages, {
     onDelete: 'CASCADE',
   })

@@ -7,7 +7,7 @@ import { PaymentEntity } from './payment.entity';
 
 @Entity('debts')
 export class DebtEntity extends BaseEntity {
-  @Column({ type: 'date', name: 'debt_date' })
+  @Column({ type: 'varchar', name: 'debt_date' })
   debt_date: Date;
 
   @Column({ type: 'uuid', name: 'debtor_id' })

@@ -16,7 +16,7 @@ import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 
 @Controller('messages')
 export class MessagesController {
-  constructor(private readonly messagesService: MessagesService) {}
+  constructor(private readonly messagesService: MessagesService) { }
 
   @ApiOperation({ summary: 'Create a new message' })
   @ApiResponse({
@@ -25,25 +25,59 @@ export class MessagesController {
     schema: {
       example: {
         status_code: 201,
-        message: 'Message created successfully.',
+        message: "Created",
         data: {
-          store_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-          debtor_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-          message: 'is is just simple message for swagger',
-          status: 'pending',
-          sample_message_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-        },
+          store_id: "64efa2f4-665c-4dfe-984e-ea852c03dd10",
+          debtor_id: "97d74dd9-5b1b-43f7-a4a1-ba97db6cd814",
+          message: "Assalomu alaykum! Eslatma: 05 Sentyabr kuni 800.000 so'm miqdordagi oylik to'lovingizni amalga oshirishingizni so'raymiz. O'z vaqtida to'lov qilishni unutmang. Raxmat",
+          status: "pending",
+          sample_message_id: "063ddb0d-678f-467a-b05e-d2d37f6fb3c4",
+          id: "a7f98405-8147-41d0-82da-fbf86e0cd36f",
+          created_at: "2025-01-27",
+          updated_at: "2025-01-27"
+        }
       },
     },
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
     description: 'Invalid input.',
-    schema: {
-      example: {
-        status_code: 400,
-        message: 'Bad Request',
-        data: {},
+    content: {
+      'application/json': {
+        examples: {
+          invalidUUID: {
+            summary: 'Invalid id',
+            value: {
+              message: 'Invalid UUID format for id',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+          invalidDebtor: {
+            summary: 'Invalid debtor',
+            value: {
+              message: 'Related debtor not found',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+          invalidStore: {
+            summary: 'Invalid store',
+            value: {
+              message: 'Related store not found',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+          invalidSampleMessage: {
+            summary: 'Invalid sampleMessage',
+            value: {
+              message: 'Related sample message not found',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+        },
       },
     },
   })
@@ -54,7 +88,6 @@ export class MessagesController {
       example: {
         status_code: 401,
         message: 'Unauthorized',
-        data: {},
       },
     },
   })
@@ -65,7 +98,6 @@ export class MessagesController {
       example: {
         status_code: 403,
         message: 'Forbidden',
-        data: {},
       },
     },
   })
@@ -76,7 +108,6 @@ export class MessagesController {
       example: {
         status_code: 404,
         message: 'Not found',
-        data: {},
       },
     },
   })
@@ -87,18 +118,6 @@ export class MessagesController {
       example: {
         status_code: 409,
         message: 'Conflict',
-        data: {},
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
-    description: 'Internal server error',
-    schema: {
-      example: {
-        status_code: 500,
-        message: 'Internal server error',
-        data: {},
       },
     },
   })
@@ -116,27 +135,36 @@ export class MessagesController {
     schema: {
       example: {
         status_code: 200,
-        message: 'List of all messages.',
+        message: "Success",
         data: [
           {
-            store_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-            debtor_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-            message: 'is is just simple message for swagger',
-            status: 'pending',
-            sample_message_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-          },
-        ],
+            id: "9e26f495-1ab6-4c85-860d-5b2e8d307a5a",
+            created_at: "2025-01-27",
+            updated_at: "2025-01-27",
+            store_id: "64efa2f4-665c-4dfe-984e-ea852c03dd10",
+            debtor_id: "97d74dd9-5b1b-43f7-a4a1-ba97db6cd814",
+            message: "Assalomu alaykum! Eslatma: 05 Sentyabr kuni 800.000 so'm miqdordagi oylik to'lovingizni amalga oshirishingizni so'raymiz. O'z vaqtida to'lov qilishni unutmang. Raxmat",
+            status: "pending",
+            sample_message_id: "063ddb0d-678f-467a-b05e-d2d37f6fb3c4"
+          }
+        ]
       },
     },
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
     description: 'Invalid input.',
-    schema: {
-      example: {
-        status_code: 400,
-        message: 'Bad Request',
-        data: {},
+    content: {
+      'application/json': {
+        examples: {
+          notFound: {
+            value: {
+              error: 'Bad Request',
+              message:'Message not found',
+              statusCode: 400,
+            },
+          },
+        },
       },
     },
   })
@@ -147,7 +175,6 @@ export class MessagesController {
       example: {
         status_code: 401,
         message: 'Unauthorized',
-        data: {},
       },
     },
   })
@@ -158,29 +185,6 @@ export class MessagesController {
       example: {
         status_code: 403,
         message: 'Forbidden',
-        data: {},
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-    schema: {
-      example: {
-        status_code: 404,
-        message: 'Not found',
-        data: {},
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
-    description: 'Internal server error',
-    schema: {
-      example: {
-        status_code: 500,
-        message: 'Internal server error',
-        data: {},
       },
     },
   })
@@ -200,7 +204,7 @@ export class MessagesController {
     name: 'id',
     description: 'The ID of the message',
     type: String,
-    example: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
+    example: '9e26f495-1ab6-4c85-860d-5b2e8d307a5a',
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -208,25 +212,43 @@ export class MessagesController {
     schema: {
       example: {
         status_code: 200,
-        message: 'success',
+        message: "Success",
         data: {
-          store_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-          debtor_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-          message: 'is is just simple message for swagger',
-          status: 'pending',
-          sample_message_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-        },
+          id: "9e26f495-1ab6-4c85-860d-5b2e8d307a5a",
+          created_at: "2025-01-27",
+          updated_at: "2025-01-27",
+          store_id: "64efa2f4-665c-4dfe-984e-ea852c03dd10",
+          debtor_id: "97d74dd9-5b1b-43f7-a4a1-ba97db6cd814",
+          message: "Assalomu alaykum! Eslatma: 05 Sentyabr kuni 800.000 so'm miqdordagi oylik to'lovingizni amalga oshirishingizni so'raymiz. O'z vaqtida to'lov qilishni unutmang. Raxmat",
+          status: "pending",
+          sample_message_id: "063ddb0d-678f-467a-b05e-d2d37f6fb3c4"
+        }
       },
     },
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Invalid input.',
-    schema: {
-      example: {
-        status_code: 400,
-        message: 'Bad Request',
-        data: {},
+    description: 'Bad request errors',
+    content: {
+      'application/json': {
+        examples: {
+          invalidUUID: {
+            summary: 'Invalid id',
+            value: {
+              message: 'Invalid UUID format for id',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+          notfound: {
+            summary: 'not found',
+            value: {
+              message: 'Message not found',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+        },
       },
     },
   })
@@ -237,7 +259,6 @@ export class MessagesController {
       example: {
         status_code: 401,
         message: 'Unauthorized',
-        data: {},
       },
     },
   })
@@ -248,29 +269,6 @@ export class MessagesController {
       example: {
         status_code: 403,
         message: 'Forbidden',
-        data: {},
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-    schema: {
-      example: {
-        status_code: 404,
-        message: 'Not found',
-        data: {},
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
-    description: 'Internal server error',
-    schema: {
-      example: {
-        status_code: 500,
-        message: 'Internal server error',
-        data: {},
       },
     },
   })
@@ -286,7 +284,7 @@ export class MessagesController {
     name: 'id',
     description: 'The ID of the message to update',
     type: String,
-    example: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
+    example: '9e26f495-1ab6-4c85-860d-5b2e8d307a5a',
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -294,25 +292,43 @@ export class MessagesController {
     schema: {
       example: {
         status_code: 200,
-        message: 'success',
+        message: "Updated",
         data: {
-          store_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-          debtor_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-          message: 'is is just simple message for swagger',
-          status: 'pending',
-          sample_message_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-        },
+          id: "a7f98405-8147-41d0-82da-fbf86e0cd36f",
+          created_at: "2025-01-27",
+          updated_at: "2025-01-27",
+          store_id: "64efa2f4-665c-4dfe-984e-ea852c03dd10",
+          debtor_id: "97d74dd9-5b1b-43f7-a4a1-ba97db6cd814",
+          message: "Assalomu alaykum, Hurmatli mijoz! Iltimos, to'lov muddatigacha to'lov qiling. Ma'lumot uchun: +998 20 001 10 10",
+          status: "pending",
+          sample_message_id: "063ddb0d-678f-467a-b05e-d2d37f6fb3c4"
+        }
       },
     },
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Invalid input.',
-    schema: {
-      example: {
-        status_code: 400,
-        message: 'Bad Request',
-        data: {},
+    description: 'Bad request errors',
+    content: {
+      'application/json': {
+        examples: {
+          invalidUUID: {
+            summary: 'Invalid id',
+            value: {
+              message: 'Invalid UUID format for id',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+          notfound: {
+            summary: 'not found',
+            value: {
+              message: 'Message not found',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+        },
       },
     },
   })
@@ -323,7 +339,6 @@ export class MessagesController {
       example: {
         status_code: 401,
         message: 'Unauthorized',
-        data: {},
       },
     },
   })
@@ -334,29 +349,6 @@ export class MessagesController {
       example: {
         status_code: 403,
         message: 'Forbidden',
-        data: {},
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-    schema: {
-      example: {
-        status_code: 404,
-        message: 'Not found',
-        data: {},
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
-    description: 'Internal server error',
-    schema: {
-      example: {
-        status_code: 500,
-        message: 'Internal server error',
-        data: {},
       },
     },
   })
@@ -375,7 +367,7 @@ export class MessagesController {
     name: 'id',
     description: 'The ID of the message to delete',
     type: String,
-    example: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
+    example: '9e26f495-1ab6-4c85-860d-5b2e8d307a5a',
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -383,19 +375,36 @@ export class MessagesController {
     schema: {
       example: {
         status_code: 200,
-        message: 'success',
-        data: {},
+        message: "Deleted",
+        data: {
+          id: "bc6d7f35-6f23-41de-9855-1c211aeb16c7"
+        }
       },
     },
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Invalid input.',
-    schema: {
-      example: {
-        status_code: 400,
-        message: 'Bad Request',
-        data: {},
+    description: 'Bad request errors',
+    content: {
+      'application/json': {
+        examples: {
+          invalidUUID: {
+            summary: 'Invalid id',
+            value: {
+              message: 'Invalid UUID format for id',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+          notfound: {
+            summary: 'not found',
+            value: {
+              message: 'Message not found',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+        },
       },
     },
   })
@@ -406,7 +415,6 @@ export class MessagesController {
       example: {
         status_code: 401,
         message: 'Unauthorized',
-        data: {},
       },
     },
   })
@@ -417,29 +425,6 @@ export class MessagesController {
       example: {
         status_code: 403,
         message: 'Forbidden',
-        data: {},
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-    schema: {
-      example: {
-        status_code: 404,
-        message: 'Not found',
-        data: {},
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
-    description: 'Internal server error',
-    schema: {
-      example: {
-        status_code: 500,
-        message: 'Internal server error',
-        data: {},
       },
     },
   })

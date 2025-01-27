@@ -4,7 +4,7 @@ import { IsOptional, IsString } from 'class-validator';
 export class CreateLikeDto {
   @ApiProperty({
     description: 'Store id',
-    example: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
+    example: '64efa2f4-665c-4dfe-984e-ea852c03dd10',
   })
   @IsOptional()
   @IsString()
@@ -12,7 +12,7 @@ export class CreateLikeDto {
 
   @ApiProperty({
     description: 'Debtor id',
-    example: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
+    example: '415d8a85-a090-479e-bd5c-1d7a0e89c7eb',
   })
   @IsOptional()
   @IsString()
