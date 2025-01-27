@@ -55,6 +55,14 @@ export class DebtController {
               statusCode: 400,
             },
           },
+          notFound: {
+            summary: ' Not Found',
+            value: {
+              message: 'Debtor not Found',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
         },
       },
     },
@@ -117,6 +125,31 @@ export class DebtController {
               statusCode: 400,
             },
           },
+          notFound: {
+            summary: ' Not Found',
+            value: {
+              message: 'Debt not Found',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
         },
       },
     },
@@ -143,9 +176,9 @@ export class DebtController {
           id: '4ae68292-ab80-42de-a499-0f34b9b3feed',
           debt_date: '2025-01-26',
           debtor_id: 'ab735ba5-f229-4c9f-8bd3-33ad11e221b9',
-          debt_period: 'MONTHLY',
+          debt_period: '1 oy',
           debt_sum: 600.0,
-          description: 'Updated bill',
+          description: 'Updated',
           created_at: '2025-01-26',
           updated_at: '2025-01-27',
         },
@@ -164,6 +197,31 @@ export class DebtController {
               message: 'Invalid UUID format for id',
               error: 'Bad Request',
               statusCode: 400,
+            },
+          },
+          notfound: {
+            summary: 'debtor id not found',
+            value: {
+              message: 'Debt not found',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
             },
           },
         },
@@ -206,6 +264,31 @@ export class DebtController {
               message: 'Invalid UUID format for id',
               error: 'Bad Request',
               statusCode: 400,
+            },
+          },
+          notFound: {
+            summary: ' Not Found',
+            value: {
+              message: 'Debtor not Found',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
             },
           },
         },
