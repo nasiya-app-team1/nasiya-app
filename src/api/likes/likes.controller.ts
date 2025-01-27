@@ -39,7 +39,7 @@ export class LikesController {
       },
     },
   })
-  @ApiResponse({  
+  @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized',
     schema: {
@@ -70,11 +70,11 @@ export class LikesController {
         message: 'Not found',
         data: {},
       },
-    },  
+    },
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
-    description: 'Conflict',  
+    description: 'Conflict',
     schema: {
       example: {
         status_code: 409,
@@ -287,7 +287,7 @@ export class LikesController {
       },
     },
   })
-  @ApiResponse({  
+  @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized',
     schema: {
@@ -307,11 +307,11 @@ export class LikesController {
         message: 'Not found',
         data: {},
       },
-    },  
+    },
   })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
-    description: 'Internal server error', 
+    description: 'Internal server error',
     schema: {
       example: {
         status_code: 500,
