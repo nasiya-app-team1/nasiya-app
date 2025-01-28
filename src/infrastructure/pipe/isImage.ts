@@ -12,19 +12,15 @@ export class ImageValidationPipe implements PipeTransform<any> {
   ];
 
   transform(value: any) {
-    if (value && value.originalname) {
-      const file = value;
-      const fileExtension = extname(file.originalname).toLowerCase();
-
-      if (!this.allowedExtensions.includes(fileExtension)) {
-        throw new BadRequestException(
-          'Only image files (JPEG, JPG, PNG, SVG, HEIC) are allowed.',
-        );
-      }
-
+    if (!value || !value.originalname || !value.mimetype) {
       return value;
-    } else {
-      throw new BadRequestException('No file uploaded or invalid file');
     }
+    const fileExtension = extname(value.originalname).toLowerCase();
+    if (!this.allowedExtensions.includes(fileExtension)) {
+      throw new BadRequestException(
+        `Only image files (JPEG, JPG, PNG, SVG, HEIC) are allowed.`,
+      );
+    }
+    return value;
   }
 }

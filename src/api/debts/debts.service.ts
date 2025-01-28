@@ -6,6 +6,7 @@ import { BaseService } from 'src/infrastructure/baseService/baseService';
 import { UpdateDebtDto } from './dto/update-debt.dto';
 import { DebtsImagesService } from '../debts-images/debts-images.service';
 import { DebtEntity, DebtsRepository } from 'src/core';
+import { DebtorService } from '../debtor/debtor.service';
 
 @Injectable()
 export class DebtsService extends BaseService<
@@ -15,11 +16,15 @@ export class DebtsService extends BaseService<
   constructor(
     @InjectRepository(DebtEntity) repository: DebtsRepository,
     private readonly debtsImagesService: DebtsImagesService,
+    private readonly debtorService: DebtorService,
   ) {
     super(repository);
   }
+
   async createDebt(dto: CreateDebtDto) {
-    const debtor = await this.getRepository.findOneBy({ id: dto.debtor_id });
+    const debtor = await this.debtorService.getRepository.findOneBy({
+      id: dto.debtor_id,
+    });
     if (!debtor) {
       throw new BadRequestException('Debtor not found');
     }

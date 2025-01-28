@@ -14,5 +14,5 @@ export class CreateDebtsImageDto {
     example: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
   })
   @IsNotEmpty()
-  debts_id: string;
+  debt_id: string;
 }

@@ -8,7 +8,7 @@ export class DebtorImageEntity extends BaseEntity {
   image: string;
 
   @Column({ type: 'uuid', name: 'debtor_id' })
-  debtorId: string;
+  debtor_id: string;
 
   @ManyToOne(() => DebtorEntity, (debtor) => debtor.debtorImages, {
     onDelete: 'CASCADE',
