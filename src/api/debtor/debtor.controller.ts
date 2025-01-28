@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { CreateDebtorDto } from './dto/create-debtor.dto';
@@ -141,6 +142,114 @@ export class DebtorController {
   @Get('all/:id')
   async findAll(@Param('id') id: string) {
     return this.debtorService.findAllStoreDebtors(id);
+  }
+
+  @ApiOperation({ summary: 'Get all debtor' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get with pagination',
+    schema: {
+      example: {
+        data: [
+          {
+            id: 'd3d4f330-b519-46bc-a5f5-2d3f23a9cee9',
+            created_at: '2025-01-27',
+            updated_at: '2025-01-27',
+            full_name: 'Javohir',
+            address: 'hello ',
+            description: 'test just',
+            store_id: '1e11108d-37ec-4679-ba47-c9e6bc8c6d71',
+          },
+        ],
+        total_elements: 14,
+        total_pages: 14,
+        page_size: '1',
+        current_page: '1',
+        from: 1,
+        to: 1,
+        status_code: 200,
+        message: 'Success',
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
+        },
+      },
+    },
+  })
+  @Get('pagination')
+  async findAllWithPagination(@Query() query: any) {
+    const option = {
+      take: query.take,
+      skip: query.skip,
+    };
+    return this.debtorService.findAllWithPagination(option);
+  }
+
+  @ApiOperation({ summary: 'search debtors' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get with pagination',
+    schema: {
+      example: {
+        data: [
+          {
+            id: 'd3d4f330-b519-46bc-a5f5-2d3f23a9cee9',
+            created_at: '2025-01-27',
+            updated_at: '2025-01-27',
+            full_name: 'Javohir',
+            address: 'hello ',
+            description: 'test just',
+            store_id: '1e11108d-37ec-4679-ba47-c9e6bc8c6d71',
+          },
+        ],
+        total_elements: 14,
+        total_pages: 14,
+        page_size: '1',
+        current_page: '1',
+        from: 1,
+        to: 1,
+        status_code: 200,
+        message: 'Success',
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
+        },
+      },
+    },
+  })
+  @Get('search')
+  async search(@Query() query: any) {
+    const option = {
+      full_name: query?.full_name,
+      phone_number: query?.phone_number,
+    };
+    return this.debtorService.searchDebtors(option);
   }
 
   @Get(':id')

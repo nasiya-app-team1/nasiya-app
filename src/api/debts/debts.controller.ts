@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { CreateDebtDto } from './dto/create-debt.dto';
@@ -87,6 +88,61 @@ export class DebtController {
   @Post('create')
   async create(@Body() createDebtDto: CreateDebtDto) {
     return this.debtService.createDebt(createDebtDto);
+  }
+
+  @ApiOperation({ summary: 'Get all debt' })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get with pagination',
+    schema: {
+      example: {
+        data: [
+          {
+            id: '03b5cc1b-af21-46ea-b2fc-b43a489ffab7',
+            created_at: '2025-01-27',
+            updated_at: '2025-01-27',
+            debt_date: '2025-01-27T09:07:07.502Z',
+            debtor_id: '78fb3a41-5ec5-4587-9818-11cb6a2cd9bc',
+            debt_period: '1 oy',
+            debt_sum: '12121.12',
+            description: 'sdkfsnfskanfasnfaskjdfsd',
+          },
+        ],
+        total_elements: 14,
+        total_pages: 14,
+        page_size: '1',
+        current_page: '1',
+        from: 1,
+        to: 1,
+        status_code: 200,
+        message: 'Success',
+      },
+    },
+  })
+  @Get('pagination')
+  async findAll(@Query() query: any) {
+    const option = {
+      take: query.take,
+      skip: query.skip,
+    };
+    return this.debtService.findAllWithPagination(option);
   }
 
   @ApiOperation({ summary: 'Get a debt by ID' })

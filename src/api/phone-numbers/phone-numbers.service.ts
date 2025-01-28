@@ -2,6 +2,8 @@ import {
   Injectable,
   BadRequestException,
   ConflictException,
+  forwardRef,
+  Inject,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, In } from 'typeorm';
@@ -19,6 +21,7 @@ export class PhoneNumbersService extends BaseService<
 > {
   constructor(
     @InjectRepository(PhoneNumberEntity) repository: PhoneNumberRepository,
+    @Inject(forwardRef(() => DebtorService))
     private readonly debtorService: DebtorService,
   ) {
     super(repository);

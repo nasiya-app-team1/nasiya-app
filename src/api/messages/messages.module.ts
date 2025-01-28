@@ -8,8 +8,13 @@ import { DebtorModule } from '../debtor/debtor.module';
 import { SampleMessagesModule } from '../sample_messages/sample_messages.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([MessageEntity]), StoresModule, DebtorModule, SampleMessagesModule],
+  imports: [
+    TypeOrmModule.forFeature([MessageEntity]),
+    StoresModule,
+    DebtorModule,
+    SampleMessagesModule,
+  ],
   controllers: [MessagesController],
   providers: [MessagesService],
 })
-export class MessagesModule { }
+export class MessagesModule {}
