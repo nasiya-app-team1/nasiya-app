@@ -7,6 +7,7 @@ import {
   IsPhoneNumber,
   MaxLength,
   IsStrongPassword,
+  MinLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
