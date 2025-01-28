@@ -21,7 +21,7 @@ export class LikesService extends BaseService<
     @InjectRepository(LikeEntity)
     protected readonly repository: LikeRepository,
     private readonly debtorService: DebtorService,
-    private readonly storeService:StoresService,
+    private readonly storeService: StoresService,
   ) {
     super(repository);
   }

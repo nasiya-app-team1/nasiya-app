@@ -14,10 +14,11 @@ export class MessagesService extends BaseService<
   CreateMessageDto,
   DeepPartial<MessageEntity>
 > {
-  constructor(@InjectRepository(MessageEntity) repository: MessageRepository,
-    private readonly storeService:StoresService,
-    private readonly debtorService:DebtorService,
-    private readonly sampleMessageService:SampleMessagesService
+  constructor(
+    @InjectRepository(MessageEntity) repository: MessageRepository,
+    private readonly storeService: StoresService,
+    private readonly debtorService: DebtorService,
+    private readonly sampleMessageService: SampleMessagesService,
   ) {
     super(repository);
   }
@@ -25,7 +26,9 @@ export class MessagesService extends BaseService<
     const [debtor, store, sampleMessage] = await Promise.all([
       this.debtorService.getRepository.findOneBy({ id: dto.debtor_id }),
       this.storeService.getRepository.findOneBy({ id: dto.store_id }),
-      this.sampleMessageService.getRepository.findOneBy({ id: dto.sample_message_id }),
+      this.sampleMessageService.getRepository.findOneBy({
+        id: dto.sample_message_id,
+      }),
     ]);
     if (!debtor) {
       throw new BadRequestException('Related debtor not found');

@@ -13,7 +13,7 @@ import { CreateLikeDto } from './dto/create-like.dto';
 
 @Controller('likes')
 export class LikesController {
-  constructor(private readonly likesService: LikesService) { }
+  constructor(private readonly likesService: LikesService) {}
 
   @ApiOperation({ summary: 'Create a new Like' })
   @ApiResponse({
@@ -22,14 +22,14 @@ export class LikesController {
     schema: {
       example: {
         status_code: 201,
-        message: "Created",
+        message: 'Created',
         data: {
-          store_id: "64efa2f4-665c-4dfe-984e-ea852c03dd10",
-          debtor_id: "1a55a3b3-46fc-46f1-8fed-e6b6f211213c",
-          id: "a6915609-0580-422c-994b-a11e573cd698",
-          created_at: "2025-01-27",
-          updated_at: "2025-01-27"
-        }
+          store_id: '64efa2f4-665c-4dfe-984e-ea852c03dd10',
+          debtor_id: '1a55a3b3-46fc-46f1-8fed-e6b6f211213c',
+          id: 'a6915609-0580-422c-994b-a11e573cd698',
+          created_at: '2025-01-27',
+          updated_at: '2025-01-27',
+        },
       },
     },
   })
@@ -119,16 +119,16 @@ export class LikesController {
     schema: {
       example: {
         status_code: 200,
-        message: "Success",
+        message: 'Success',
         data: [
           {
-            id: "a6915609-0580-422c-994b-a11e573cd698",
-            created_at: "2025-01-27",
-            updated_at: "2025-01-27",
-            store_id: "64efa2f4-665c-4dfe-984e-ea852c03dd10",
-            debtor_id: "1a55a3b3-46fc-46f1-8fed-e6b6f211213c"
-          }
-        ]
+            id: 'a6915609-0580-422c-994b-a11e573cd698',
+            created_at: '2025-01-27',
+            updated_at: '2025-01-27',
+            store_id: '64efa2f4-665c-4dfe-984e-ea852c03dd10',
+            debtor_id: '1a55a3b3-46fc-46f1-8fed-e6b6f211213c',
+          },
+        ],
       },
     },
   })
@@ -141,7 +141,7 @@ export class LikesController {
           notFound: {
             value: {
               error: 'Bad Request',
-              message:'Like not found',
+              message: 'Like not found',
               statusCode: 400,
             },
           },
@@ -199,14 +199,14 @@ export class LikesController {
     schema: {
       example: {
         status_code: 200,
-        message: "Success",
+        message: 'Success',
         data: {
-          id: "a6915609-0580-422c-994b-a11e573cd698",
-          created_at: "2025-01-27",
-          updated_at: "2025-01-27",
-          store_id: "64efa2f4-665c-4dfe-984e-ea852c03dd10",
-          debtor_id: "1a55a3b3-46fc-46f1-8fed-e6b6f211213c"
-        }
+          id: 'a6915609-0580-422c-994b-a11e573cd698',
+          created_at: '2025-01-27',
+          updated_at: '2025-01-27',
+          store_id: '64efa2f4-665c-4dfe-984e-ea852c03dd10',
+          debtor_id: '1a55a3b3-46fc-46f1-8fed-e6b6f211213c',
+        },
       },
     },
   })
@@ -283,10 +283,10 @@ export class LikesController {
     schema: {
       example: {
         status_code: 200,
-        message: "Deleted",
+        message: 'Deleted',
         data: {
-          id: "a6915609-0580-422c-994b-a11e573cd698"
-        }
+          id: 'a6915609-0580-422c-994b-a11e573cd698',
+        },
       },
     },
   })
