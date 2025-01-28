@@ -1,17 +1,16 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  forwardRef,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, In, Like } from 'typeorm';
-import { DebtorRepository, DebtorEntity } from 'src/core';
+import {
+  DebtorRepository,
+  DebtorEntity,
+  PhoneNumberEntity,
+  PhoneNumberRepository,
+} from 'src/core';
 import { CreateDebtorDto } from './dto/create-debtor.dto';
 import { BaseService } from 'src/infrastructure/baseService/baseService';
 import { UpdateDebtorDto } from './dto/update-debtor.dto';
 import { StoresService } from '../stores/stores.service';
-import { PhoneNumbersService } from '../phone-numbers/phone-numbers.service';
 
 @Injectable()
 export class DebtorService extends BaseService<
@@ -19,11 +18,11 @@ export class DebtorService extends BaseService<
   DeepPartial<DebtorEntity>
 > {
   constructor(
-    @Inject(forwardRef(() => PhoneNumbersService))
     @InjectRepository(DebtorEntity)
     repository: DebtorRepository,
     private readonly storeService: StoresService,
-    private readonly phoneService: PhoneNumbersService,
+    @InjectRepository(PhoneNumberEntity)
+    private phoneRepository: PhoneNumberRepository,
   ) {
     super(repository);
   }
@@ -39,7 +38,7 @@ export class DebtorService extends BaseService<
   }
 
   async findAllStoreDebtors(id: string) {
-    const debtors = await this.getRepository.find({ where: { store_id: id } });
+    const debtors = await this.repository.find({ where: { store_id: id } });
     return {
       status_code: 200,
       message: 'Success',
@@ -64,13 +63,13 @@ export class DebtorService extends BaseService<
 
     if (phone_number) {
       numberFilter.phone_number = Like(`%${phone_number}%`);
-      const numbers = await this.phoneService.getRepository.find({
+      const numbers = await this.phoneRepository.find({
         where: numberFilter,
       });
-      for (let i = 0; i < numbers.length; i++) {
-        debtorId.push(numbers[i].id);
-      }
 
+      for (let i = 0; i < numbers.length; i++) {
+        debtorId.push(numbers[i].debtor_id);
+      }
       debtors = await this.getRepository.find({ where: { id: In(debtorId) } });
     }
 
