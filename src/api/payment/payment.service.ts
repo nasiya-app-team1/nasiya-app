@@ -16,15 +16,17 @@ export class PaymentService extends BaseService<
     super(repository);
   }
 
-  async createPaymetn(createPaymentDto: CreatePaymentDto) {
-    const debt = await this.getRepository.findOneBy({
-      id: createPaymentDto.debt_id,
-    });
-    if (!debt) {
+  async createPayment(createPaymentDto: CreatePaymentDto) {
+
+    const debt = await this.getRepository.findOne({where:{
+      id:createPaymentDto.debt_id
+   } });                                                                                                                                
+    
+    if (!debt) {  
       throw new BadRequestException('Relation debt not found');
     }
     return await this.create(createPaymentDto);
-  }
+  }      
 
   async findOnePayment(id: string) {
     const result = await this.getRepository.findOne({ where: { id } });
