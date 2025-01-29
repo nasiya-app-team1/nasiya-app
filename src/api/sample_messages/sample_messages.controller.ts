@@ -66,14 +66,16 @@ export class SampleMessagesController {
       },
     },
   })
-  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Invalid input.',
-  schema: {
-    example: {
-      status_code: 400,
-      message: 'Bad Request',
-      data: {},
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Invalid input.',
+    schema: {
+      example: {
+        status_code: 400,
+        message: 'Bad Request',
+        data: {},
+      },
     },
-  },
   })
   @Get('all')
   async findAll() {
@@ -85,23 +87,31 @@ export class SampleMessagesController {
     name: 'id',
     description: 'The ID of the sample-message',
     type: String,
-    example:'e2f48432-0de3-4a0f-b1f6-42bbace74a14'
+    example: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
   })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Details of the sample-messages.',schema:{
-    example:{
-      status_code: 200,
-      message: 'success',
-      data: {
-        store_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Details of the sample-messages.',
+    schema: {
+      example: {
+        status_code: 200,
+        message: 'success',
+        data: {
+          store_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
+        },
       },
-    }
-  } })
-  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Invalid input.' ,schema:{
-    example:{
-      status_code: 400,
-      message: 'Bad Request',
-    }
-  }})
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Invalid input.',
+    schema: {
+      example: {
+        status_code: 400,
+        message: 'Bad Request',
+      },
+    },
+  })
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.sampleMessagesService.findSampleMessageById(id);
@@ -112,24 +122,30 @@ export class SampleMessagesController {
     name: 'id',
     description: 'The ID of the sample-message to update',
     type: String,
-    example:'e2f48432-0de3-4a0f-b1f6-42bbace74a14'
+    example: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
   })
-  @ApiResponse({ status: HttpStatus.OK, description:'Sample-message updated succesfully.',
-  schema:{
-    example:{
-      status_code: 200,
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Sample-message updated succesfully.',
+    schema: {
+      example: {
+        status_code: 200,
         message: 'Sample-message updated successfully.',
         data: {},
-    }
-  }
+      },
+    },
   })
-  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Invalid input.' ,schema:{
-    example:{
-      status_code: 400,
-      message: 'Bad Request',
-      data: {},
-    }
-  }})
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Invalid input.',
+    schema: {
+      example: {
+        status_code: 400,
+        message: 'Bad Request',
+        data: {},
+      },
+    },
+  })
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -146,29 +162,29 @@ export class SampleMessagesController {
     name: 'id',
     description: 'The ID of the sample-message to delete',
     type: String,
-    example:'e2f48432-0de3-4a0f-b1f6-42bbace74a14'
+    example: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Sample-message deleted successfully.',
-    schema:{
-      example:{
+    schema: {
+      example: {
         status_code: 200,
         message: 'Sample-message deleted successfully.',
         data: {},
-      }
-    }
+      },
+    },
   })
   @ApiResponse({
     status: 404,
-    description: "Invalid input.",
-    schema:{
-      example:{
+    description: 'Invalid input.',
+    schema: {
+      example: {
         status_code: 400,
         message: 'Bad Request.',
         data: {},
-      }
-    }
+      },
+    },
   })
   @Delete(':id')
   async remove(@Param('id') id: string) {

@@ -117,7 +117,7 @@ export class LikesController {
     status: HttpStatus.OK,
     description: 'List of all likes',
     schema: {
-    example: {
+      example: {
         status_code: 200,
         message: 'Success',
         data: [

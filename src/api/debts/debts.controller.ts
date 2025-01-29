@@ -90,10 +90,9 @@ export class DebtController {
   }
 
   @Get('summa')
-  async getdebtssumma(){
-    return this.debtService.getdebtssums()
+  async getdebtssumma() {
+    return this.debtService.getdebtssums();
   }
-
 
   @ApiOperation({ summary: 'Get a debt by ID' })
   @ApiParam({ name: 'id', description: 'The ID of the debt', type: String })
@@ -164,7 +163,6 @@ export class DebtController {
   async findOne(@Param('id') id: string) {
     return this.debtService.findOneDebtById(id);
   }
-
 
   @ApiOperation({ summary: 'Update a debt by ID' })
   @ApiParam({
