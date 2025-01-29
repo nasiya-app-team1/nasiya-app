@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
-import { DebtsPeriod } from 'src/common/enum/debts.enum';
 
 export class CreateDebtDto {
   @IsNotEmpty()
@@ -15,8 +14,8 @@ export class CreateDebtDto {
   debtor_id: string;
 
   @IsNotEmpty()
-  @ApiProperty({ description: 'Enum for Debts', example: '1 oy' })
-  debt_period: DebtsPeriod;
+  @ApiProperty({ description: 'Month for Debts', example: 1 })
+  debt_period: number;
 
   @IsNotEmpty()
   @ApiProperty({ description: 'Sum to Debts', example: '800000' })

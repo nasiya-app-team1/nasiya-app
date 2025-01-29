@@ -38,9 +38,8 @@ export class PaymentController {
     description: 'Invalid input.',
     schema: {
       example: {
-        status_code: 201,
         message: 'Bad Request',
-        data: {},
+        statusCode: 201,
       },
     },
   })
@@ -67,9 +66,8 @@ export class PaymentController {
     description: 'Invalid input.',
     schema: {
       example: {
-        status_code: 400,
         message: 'Bad Request',
-        data: {},
+        statusCode: 201,
       },
     },
   })
@@ -103,8 +101,8 @@ export class PaymentController {
     description: 'Invalid input .',
     schema: {
       example: {
-        status_code: 400,
         message: 'Bad Request',
+        statusCode: 201,
       },
     },
   })
@@ -137,9 +135,8 @@ export class PaymentController {
     description: 'Invalid input.',
     schema: {
       example: {
-        status_code: 400,
         message: 'Bad Request',
-        data: {},
+        statusCode: 201,
       },
     },
   })
@@ -170,9 +167,8 @@ export class PaymentController {
     description: "O'chiriladigan Payment topilmadi",
     schema: {
       example: {
-        status_code: 400,
         message: 'Bad Request',
-        data: {},
+        statusCode: 201,
       },
     },
   })

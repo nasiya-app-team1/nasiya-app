@@ -33,14 +33,17 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
   }
 
   async createStore(createStoreDto: CreateStoreDto) {
-    const { login, email, password, image } = createStoreDto;
-    try {
-      const imageName = image.split('/')[3];
-      const imagePath = process.cwd() + '/uploads/store/' + imageName;
-      await fs.access(imagePath);
-    } catch (error) {
-      StoresService.logger.warn(error);
-      throw new BadRequestException(`Invalid path: ${image}`);
+    const { login, email, password } = createStoreDto;
+    if (createStoreDto?.image) {
+      const image = createStoreDto.image;
+      try {
+        const imageName = image.split('/')[3];
+        const imagePath = process.cwd() + '/uploads/store/' + imageName;
+        await fs.access(imagePath);
+      } catch (error) {
+        StoresService.logger.warn(error);
+        throw new BadRequestException(`Invalid path: ${image}`);
+      }
     }
     const existingStore = await this.getRepository.findOne({
       where: [{ login }, { email }],
@@ -232,10 +235,6 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
       .loadRelationCountAndMap('store.debtorCount', 'store.debtors')
       .getOne();
 
-    if (!store) {
-      throw new BadRequestException('Store not found');
-    }
-
     return {
       status_code: 200,
       storeId: store.id,
@@ -244,5 +243,71 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
     };
   }
 
-  async getMonthlyDebt(id: UserRequest) {}
+  async getMonthlyDebt(id: UserRequest, start: Date, end: Date) {
+    const result = await this.getRepository
+      .createQueryBuilder('stores')
+      .leftJoinAndSelect('stores.debtors', 'debtors')
+      .leftJoinAndSelect('debtors.debts', 'debts')
+      .where('debtors.store_id = :id', { id })
+      .andWhere('debts.debt_date BETWEEN :start AND :end', { start, end })
+      .getMany();
+    let totalSum = 0;
+    for (const store of result) {
+      for (const debtor of store.debtors) {
+        for (const debt of debtor.debts) {
+          totalSum += debt.debt_sum / debt.debt_period;
+          console.log(debt.debt_sum, debt.debt_period);
+        }
+      }
+    }
+    return {
+      status_code: 200,
+      message: 'Success',
+      amount: totalSum,
+    };
+  }
+
+  async getDailyDebtAndDebtors(id: string, date: Date | string) {
+    console.log(date);
+
+    const result = await this.getRepository
+      .createQueryBuilder('stores')
+      .leftJoinAndSelect('stores.debtors', 'debtors')
+      .leftJoinAndSelect('debtors.debts', 'debts')
+      .where('debtors.store_id = :id', { id })
+      .andWhere('debts.debt_date = :date', { date })
+      .getMany();
+
+    let totalSum = 0;
+    const debtors = {};
+    for (const store of result) {
+      for (const debtor of store.debtors) {
+        const full_name = debtor.full_name;
+        debtors[`${full_name}`] = 0;
+        for (const debt of debtor.debts) {
+          totalSum += debt.debt_sum / debt.debt_period;
+          debtors[`${full_name}`] += debt.debt_sum / debt.debt_period;
+        }
+      }
+    }
+    return {
+      status_code: 200,
+      message: 'Success',
+      amount: totalSum,
+      debtors,
+    };
+  }
+
+  async latePayments(id: string) {
+    const debts = await this.getRepository
+      .createQueryBuilder('stores')
+      .leftJoin('stores.debtors', 'debtors')
+      .leftJoin('debtors.debts', 'debts')
+      .where('debtors.store_id = :id', { id })
+      .select('debts.id', 'debt_id')
+      .getRawMany();
+
+    const debtIds = debts.map((d) => d.debt_id);
+    return debtIds;
+  }
 }

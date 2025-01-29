@@ -89,11 +89,6 @@ export class DebtController {
     return this.debtService.createDebt(createDebtDto);
   }
 
-  @Get('summa')
-  async getdebtssumma() {
-    return this.debtService.getdebtssums();
-  }
-
   @ApiOperation({ summary: 'Get a debt by ID' })
   @ApiParam({ name: 'id', description: 'The ID of the debt', type: String })
   @ApiResponse({
