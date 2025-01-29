@@ -212,6 +212,7 @@ export class StoresController {
   findAll() {
     return this.storesService.findAllStores();
   }
+
   @ApiOperation({
     summary: "Retrieve a store's wallet by ID",
     description:
@@ -275,6 +276,40 @@ export class StoresController {
   getWallet(@Request() req: UserRequest) {
     const id = req.user.id;
     return this.storesService.getWallet(id);
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get all debtors payment',
+    schema: {
+      example: {
+        status_code: 200,
+        message: 'Success',
+        total_amount: 12121.12,
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
+        },
+      },
+    },
+  })
+  @Public()
+  @Get('allpayment')
+  getAllPayment() {
+    return this.storesService.findAllPayment();
   }
 
   @ApiOperation({

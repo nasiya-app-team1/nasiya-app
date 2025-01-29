@@ -72,6 +72,30 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
     return { status_code: 200, message: 'Success', data: stores };
   }
 
+  async findAllPayment() {
+    const result = await this.getRepository
+      .createQueryBuilder('stores')
+      .leftJoinAndSelect('stores.debtors', 'debtors')
+      .leftJoinAndSelect('debtors.debts', 'debts')
+      .getMany();
+
+    let totalSum = 0;
+
+    for (const store of result) {
+      for (const debtor of store.debtors) {
+        for (const debt of debtor.debts) {
+          totalSum += parseFloat(debt.debt_sum);
+        }
+      }
+    }
+
+    return {
+      status_code: 200,
+      message: 'Success',
+      total_amount: totalSum,
+    };
+  }
+
   async loginStore(loginDto: LoginStoreDto) {
     const { login, password } = loginDto;
 
@@ -268,8 +292,6 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
   }
 
   async getDailyDebtAndDebtors(id: string, date: Date | string) {
-    console.log(date);
-
     const result = await this.getRepository
       .createQueryBuilder('stores')
       .leftJoinAndSelect('stores.debtors', 'debtors')
