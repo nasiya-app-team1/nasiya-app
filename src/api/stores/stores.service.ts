@@ -17,6 +17,7 @@ import { TokenService } from 'src/common/guard';
 import { FileService } from '../file-service/file-service.service';
 import { FileFolder } from 'src/common/enum';
 import { DeleteStoreImageDto } from './dto/delete-image.dto';
+import { UserRequest } from 'src/common/guard/request';
 
 @Injectable()
 export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
@@ -211,7 +212,7 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
     }
   }
 
-  async getWallet(id: string){
+  async getWallet(id: string) {
     const store = await this.getRepository.findOne({ where: { id } });
     if (!store) {
       throw new BadRequestException('Store not found');
@@ -219,11 +220,11 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
     return {
       status_code: 200,
       message: 'Success',
-      wallet: store.wallet
+      wallet: store.wallet,
     };
   }
 
-  async getDebtorCount(id:string){
+  async getDebtorCount(id: string) {
     const store = await this.storeRepository
       .createQueryBuilder('store')
       .leftJoinAndSelect('store.debtors', 'debtor')
@@ -239,7 +240,9 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
       status_code: 200,
       storeId: store.id,
       storeName: store.full_name,
-      debtorCount: store['debtorCount'], // TypeORM `loadRelationCountAndMap` orqali keladi
+      debtorCount: store['debtorCount'],
     };
   }
+
+  async getMonthlyDebt(id: UserRequest) {}
 }
