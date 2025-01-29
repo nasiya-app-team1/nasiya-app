@@ -280,7 +280,6 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
       for (const debtor of store.debtors) {
         for (const debt of debtor.debts) {
           totalSum += debt.debt_sum / debt.debt_period;
-          console.log(debt.debt_sum, debt.debt_period);
         }
       }
     }
@@ -321,15 +320,31 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
   }
 
   async latePayments(id: string) {
-    const debts = await this.getRepository
+    const result = await this.getRepository
       .createQueryBuilder('stores')
-      .leftJoin('stores.debtors', 'debtors')
-      .leftJoin('debtors.debts', 'debts')
-      .where('debtors.store_id = :id', { id })
-      .select('debts.id', 'debt_id')
-      .getRawMany();
+      .leftJoinAndSelect('stores.debtors', 'debtors')
+      .leftJoinAndSelect('debtors.debts', 'debts')
+      .where('stores.id = :id', { id })
+      .getOne();
+    let totalLateDebts = 0;
+    if (Array.isArray(result.debtors)) {
+      for (const debtor of result.debtors) {
+        if (Array.isArray(debtor.debts) && debtor.debts.length > 0) {
+          for (const debt of debtor.debts) {
+            const time = new Date(Date.now());
+            const debtDate = new Date(debt.debt_date);
+            const diffTime = time.getTime() - debtDate.getTime();
+            const diffMonths = Math.floor(diffTime / (1000 * 3600 * 24 * 30));
 
-    const debtIds = debts.map((d) => d.debt_id);
-    return debtIds;
+            totalLateDebts += diffMonths;
+          }
+        }
+      }
+    }
+    return {
+      status_code: 200,
+      message: 'Success',
+      lateDebts: totalLateDebts,
+    };
   }
 }
