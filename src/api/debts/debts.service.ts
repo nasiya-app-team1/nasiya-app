@@ -56,6 +56,11 @@ export class DebtsService extends BaseService<
     return await this.findOneById(id);
   }
 
+  async findOne(id: string) {
+    const debt = await this.getRepository.findOne({where:{id}});
+    return debt;
+  }
+
   async deleteDebtById(id: string) {
     const debt = await this.getRepository.findOneBy({ id });
     if (!debt) {

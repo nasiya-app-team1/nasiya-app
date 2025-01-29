@@ -6,22 +6,23 @@ import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { PaymentEntity } from 'src/core/entity/payment.entity';
 import { BaseService } from 'src/infrastructure';
 import { PaymentRepository } from 'src/core';
+import { DebtsService } from '../debts/debts.service';
 
 @Injectable()
 export class PaymentService extends BaseService<
   CreatePaymentDto,
   DeepPartial<PaymentEntity>
 > {
-  constructor(@InjectRepository(PaymentEntity) repository: PaymentRepository) {
+  constructor(@InjectRepository(PaymentEntity) repository: PaymentRepository,
+  private readonly debtsservice:DebtsService
+  ) {
     super(repository);
   }
 
   async createPayment(createPaymentDto: CreatePaymentDto) {
 
-    const debt = await this.getRepository.findOne({where:{
-      id:createPaymentDto.debt_id
-   } });                                                                                                                                
-    
+    const debt = await this.debtsservice.findOne(createPaymentDto.debt_id);                                                                                                                                
+  
     if (!debt) {  
       throw new BadRequestException('Relation debt not found');
     }
@@ -38,11 +39,12 @@ export class PaymentService extends BaseService<
 
   async updatePayment(id: string, dto: UpdatePaymentDto) {
     const [payment, debt] = await Promise.all([
-      this.getRepository.findOneBy({ id }),
+      this.findOneById( id ),
       dto.debt_id
-        ? this.getRepository.findOneBy({ id: dto.debt_id })
+        ? this.debtsservice.findOne(dto.debt_id)
         : Promise.resolve(null),
     ]);
+    
     if (!payment) {
       throw new BadRequestException('Payment not found');
     }
