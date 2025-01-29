@@ -16,7 +16,7 @@ import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 
 @Controller('messages')
 export class MessagesController {
-  constructor(private readonly messagesService: MessagesService) { }
+  constructor(private readonly messagesService: MessagesService) {}
 
   @ApiOperation({ summary: 'Create a new message' })
   @ApiResponse({
@@ -25,17 +25,18 @@ export class MessagesController {
     schema: {
       example: {
         status_code: 201,
-        message: "Created",
+        message: 'Created',
         data: {
-          store_id: "64efa2f4-665c-4dfe-984e-ea852c03dd10",
-          debtor_id: "97d74dd9-5b1b-43f7-a4a1-ba97db6cd814",
-          message: "Assalomu alaykum! Eslatma: 05 Sentyabr kuni 800.000 so'm miqdordagi oylik to'lovingizni amalga oshirishingizni so'raymiz. O'z vaqtida to'lov qilishni unutmang. Raxmat",
-          status: "pending",
-          sample_message_id: "063ddb0d-678f-467a-b05e-d2d37f6fb3c4",
-          id: "a7f98405-8147-41d0-82da-fbf86e0cd36f",
-          created_at: "2025-01-27",
-          updated_at: "2025-01-27"
-        }
+          store_id: '64efa2f4-665c-4dfe-984e-ea852c03dd10',
+          debtor_id: '97d74dd9-5b1b-43f7-a4a1-ba97db6cd814',
+          message:
+            "Assalomu alaykum! Eslatma: 05 Sentyabr kuni 800.000 so'm miqdordagi oylik to'lovingizni amalga oshirishingizni so'raymiz. O'z vaqtida to'lov qilishni unutmang. Raxmat",
+          status: 'pending',
+          sample_message_id: '063ddb0d-678f-467a-b05e-d2d37f6fb3c4',
+          id: 'a7f98405-8147-41d0-82da-fbf86e0cd36f',
+          created_at: '2025-01-27',
+          updated_at: '2025-01-27',
+        },
       },
     },
   })
@@ -135,19 +136,20 @@ export class MessagesController {
     schema: {
       example: {
         status_code: 200,
-        message: "Success",
+        message: 'Success',
         data: [
           {
-            id: "9e26f495-1ab6-4c85-860d-5b2e8d307a5a",
-            created_at: "2025-01-27",
-            updated_at: "2025-01-27",
-            store_id: "64efa2f4-665c-4dfe-984e-ea852c03dd10",
-            debtor_id: "97d74dd9-5b1b-43f7-a4a1-ba97db6cd814",
-            message: "Assalomu alaykum! Eslatma: 05 Sentyabr kuni 800.000 so'm miqdordagi oylik to'lovingizni amalga oshirishingizni so'raymiz. O'z vaqtida to'lov qilishni unutmang. Raxmat",
-            status: "pending",
-            sample_message_id: "063ddb0d-678f-467a-b05e-d2d37f6fb3c4"
-          }
-        ]
+            id: '9e26f495-1ab6-4c85-860d-5b2e8d307a5a',
+            created_at: '2025-01-27',
+            updated_at: '2025-01-27',
+            store_id: '64efa2f4-665c-4dfe-984e-ea852c03dd10',
+            debtor_id: '97d74dd9-5b1b-43f7-a4a1-ba97db6cd814',
+            message:
+              "Assalomu alaykum! Eslatma: 05 Sentyabr kuni 800.000 so'm miqdordagi oylik to'lovingizni amalga oshirishingizni so'raymiz. O'z vaqtida to'lov qilishni unutmang. Raxmat",
+            status: 'pending',
+            sample_message_id: '063ddb0d-678f-467a-b05e-d2d37f6fb3c4',
+          },
+        ],
       },
     },
   })
@@ -160,7 +162,7 @@ export class MessagesController {
           notFound: {
             value: {
               error: 'Bad Request',
-              message:'Message not found',
+              message: 'Message not found',
               statusCode: 400,
             },
           },
@@ -212,17 +214,18 @@ export class MessagesController {
     schema: {
       example: {
         status_code: 200,
-        message: "Success",
+        message: 'Success',
         data: {
-          id: "9e26f495-1ab6-4c85-860d-5b2e8d307a5a",
-          created_at: "2025-01-27",
-          updated_at: "2025-01-27",
-          store_id: "64efa2f4-665c-4dfe-984e-ea852c03dd10",
-          debtor_id: "97d74dd9-5b1b-43f7-a4a1-ba97db6cd814",
-          message: "Assalomu alaykum! Eslatma: 05 Sentyabr kuni 800.000 so'm miqdordagi oylik to'lovingizni amalga oshirishingizni so'raymiz. O'z vaqtida to'lov qilishni unutmang. Raxmat",
-          status: "pending",
-          sample_message_id: "063ddb0d-678f-467a-b05e-d2d37f6fb3c4"
-        }
+          id: '9e26f495-1ab6-4c85-860d-5b2e8d307a5a',
+          created_at: '2025-01-27',
+          updated_at: '2025-01-27',
+          store_id: '64efa2f4-665c-4dfe-984e-ea852c03dd10',
+          debtor_id: '97d74dd9-5b1b-43f7-a4a1-ba97db6cd814',
+          message:
+            "Assalomu alaykum! Eslatma: 05 Sentyabr kuni 800.000 so'm miqdordagi oylik to'lovingizni amalga oshirishingizni so'raymiz. O'z vaqtida to'lov qilishni unutmang. Raxmat",
+          status: 'pending',
+          sample_message_id: '063ddb0d-678f-467a-b05e-d2d37f6fb3c4',
+        },
       },
     },
   })
@@ -292,17 +295,18 @@ export class MessagesController {
     schema: {
       example: {
         status_code: 200,
-        message: "Updated",
+        message: 'Updated',
         data: {
-          id: "a7f98405-8147-41d0-82da-fbf86e0cd36f",
-          created_at: "2025-01-27",
-          updated_at: "2025-01-27",
-          store_id: "64efa2f4-665c-4dfe-984e-ea852c03dd10",
-          debtor_id: "97d74dd9-5b1b-43f7-a4a1-ba97db6cd814",
-          message: "Assalomu alaykum, Hurmatli mijoz! Iltimos, to'lov muddatigacha to'lov qiling. Ma'lumot uchun: +998 20 001 10 10",
-          status: "pending",
-          sample_message_id: "063ddb0d-678f-467a-b05e-d2d37f6fb3c4"
-        }
+          id: 'a7f98405-8147-41d0-82da-fbf86e0cd36f',
+          created_at: '2025-01-27',
+          updated_at: '2025-01-27',
+          store_id: '64efa2f4-665c-4dfe-984e-ea852c03dd10',
+          debtor_id: '97d74dd9-5b1b-43f7-a4a1-ba97db6cd814',
+          message:
+            "Assalomu alaykum, Hurmatli mijoz! Iltimos, to'lov muddatigacha to'lov qiling. Ma'lumot uchun: +998 20 001 10 10",
+          status: 'pending',
+          sample_message_id: '063ddb0d-678f-467a-b05e-d2d37f6fb3c4',
+        },
       },
     },
   })
@@ -375,10 +379,10 @@ export class MessagesController {
     schema: {
       example: {
         status_code: 200,
-        message: "Deleted",
+        message: 'Deleted',
         data: {
-          id: "bc6d7f35-6f23-41de-9855-1c211aeb16c7"
-        }
+          id: 'bc6d7f35-6f23-41de-9855-1c211aeb16c7',
+        },
       },
     },
   })
