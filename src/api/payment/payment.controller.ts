@@ -45,7 +45,7 @@ export class PaymentController {
    } 
   })
   create(@Body() createPaymentDto: CreatePaymentDto) {
-    return this.paymentService.createPaymetn(createPaymentDto);
+    return this.paymentService.createPayment(createPaymentDto);
   }
 
   @ApiOperation({ summary: 'Retrieve all Payments' })
