@@ -7,6 +7,7 @@ import {
   Delete,
   HttpStatus,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PaymentService } from './payment.service';
@@ -47,33 +48,58 @@ export class PaymentController {
     return this.paymentService.createPayment(createPaymentDto);
   }
 
-  @ApiOperation({ summary: 'Retrieve all Payments' })
+  @ApiOperation({ summary: 'Get all payment' })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'List of all Payments.',
+    description: 'Get with pagination',
     schema: {
       example: {
+        data: [
+          {
+            id: 'f959aed9-0735-4ddb-a42d-963632a65a71',
+            created_at: '2025-01-29',
+            updated_at: '2025-01-29',
+            date: '2024-03-12',
+            sum: '150000.00',
+            debt_id: '2013583b-e197-45b6-978f-338f85c7d7c9',
+            type: 'one_month',
+          },
+        ],
+        total_elements: 14,
+        total_pages: 14,
+        page_size: '1',
+        current_page: '1',
+        from: 1,
+        to: 1,
         status_code: 200,
-        message: 'Payment off all debtors',
-        data: {
-          debt_id: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
+        message: 'Success',
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
         },
       },
     },
   })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Invalid input.',
-    schema: {
-      example: {
-        message: 'Bad Request',
-        statusCode: 201,
-      },
-    },
-  })
-  @Get()
-  findAll() {
-    return this.paymentService.findAll();
+  @Get('pagination')
+  async findAllWithPagination(@Query() query: any) {
+    const option = {
+      take: query.take,
+      skip: query.skip,
+    };
+    return this.paymentService.findAllWithPagination(option);
   }
 
   @ApiOperation({ summary: 'Retrieve a payment by ID' })
