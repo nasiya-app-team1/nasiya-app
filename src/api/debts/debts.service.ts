@@ -64,7 +64,7 @@ export class DebtsService extends BaseService<
   async getdebtssums(){
     const debts=await this.getRepository.find()
     if(debts.length){
-      const summa=debts.reduce((a,b)=>a+b.debt_sum,0)
+      const summa=debts.reduce((a,b)=>a+(+b.debt_sum),0)
       return summa
     }
     return 0
