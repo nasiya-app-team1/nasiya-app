@@ -15,13 +15,13 @@ export class PaymentService extends BaseService<
 > {
   constructor(
     @InjectRepository(PaymentEntity) repository: PaymentRepository,
-    private readonly debtsservice: DebtsService,
+    private readonly debtsService: DebtsService,
   ) {
     super(repository);
   }
 
   async createPayment(createPaymentDto: CreatePaymentDto) {
-    const debt = await this.debtsservice.findOne(createPaymentDto.debt_id);
+    const debt = await this.debtsService.findOne(createPaymentDto.debt_id);
 
     if (!debt) {
       throw new BadRequestException('Relation debt not found');
@@ -41,7 +41,7 @@ export class PaymentService extends BaseService<
     const [payment, debt] = await Promise.all([
       this.findOneById(id),
       dto.debt_id
-        ? this.debtsservice.findOne(dto.debt_id)
+        ? this.debtsService.findOne(dto.debt_id)
         : Promise.resolve(null),
     ]);
 
