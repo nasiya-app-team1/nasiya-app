@@ -210,4 +210,36 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
       await queryRunner.release();
     }
   }
+
+  async getWallet(id: string){
+    const store = await this.getRepository.findOne({ where: { id } });
+    if (!store) {
+      throw new BadRequestException('Store not found');
+    }
+    return {
+      status_code: 200,
+      message: 'Success',
+      wallet: store.wallet
+    };
+  }
+
+  async getDebtorCount(id:string){
+    const store = await this.storeRepository
+      .createQueryBuilder('store')
+      .leftJoinAndSelect('store.debtors', 'debtor')
+      .where('store.id = :id', { id })
+      .loadRelationCountAndMap('store.debtorCount', 'store.debtors')
+      .getOne();
+
+    if (!store) {
+      throw new BadRequestException('Store not found');
+    }
+
+    return {
+      status_code: 200,
+      storeId: store.id,
+      storeName: store.full_name,
+      debtorCount: store['debtorCount'], // TypeORM `loadRelationCountAndMap` orqali keladi
+    };
+  }
 }

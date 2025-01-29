@@ -558,4 +558,131 @@ export class StoresController {
   remove(@Param('id') id: string) {
     return this.storesService.removeStore(id);
   }
+
+  @ApiOperation({
+    summary: "Retrieve a store's wallet by ID",
+    description: "Returns the wallet information of a specific store based on its unique ID."  
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get one store wallet',
+    schema: {
+      example:{
+        status_code: 200,
+        message: "Success",
+        wallet: "15000.00"
+      }
+    }
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad request errors',
+    content: {
+      'application/json': {
+        examples: {
+          invalidUUID: {
+            summary: 'Invalid id',
+            value: {
+              message: 'Invalid UUID format for id',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+          notfound: {
+            summary: 'not found',
+            value: {
+              message: 'Store not found',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+        },
+      },
+    },
+  })
+  @Get('wallet/:id')
+  getWallet(@Param('id') id: string): Promise<any>{
+    return this.storesService.getWallet(id);
+  }
+
+  @ApiOperation({
+    summary: "Fetch the count of debtors linked to a store",
+    description: "This endpoint returns the total number of debtors assigned to a specific store, identified by its unique ID."
+  })  
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get one store debtorCount',
+    schema: {
+      example:{
+        status_code: 200,
+        storeId: "64efa2f4-665c-4dfe-984e-ea852c03dd10",
+        storeName: "Abdulaziz",
+        debtorCount: 6
+      }
+    }
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              status_code: 401,
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad request errors',
+    content: {
+      'application/json': {
+        examples: {
+          invalidUUID: {
+            summary: 'Invalid id',
+            value: {
+              message: 'Invalid UUID format for id',
+              error: 'Bad Request',
+              status_code: 400,
+            },
+          },
+          notfound: {
+            summary: 'not found',
+            value: {
+              message: 'Store not found',
+              error: 'Bad Request',
+              status_code: 400,
+            },
+          },
+        },
+      },
+    },
+  })
+  @Get('debtor-count/:id')
+  getDebtorCount(@Param('id') id: string): Promise<any>{
+    return this.storesService.getDebtorCount(id);
+  }
 }
