@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateDebtorDto {
   @ApiProperty({ description: 'Name of the customer', example: 'Test' })
@@ -14,14 +14,11 @@ export class CreateDebtorDto {
   @IsNotEmpty()
   address: string;
 
-  @ApiProperty({
-    description: 'Id of store',
-    example: 'e2f48432-0de3-4a0f-b1f6-42bbace74a14',
-  })
-  @IsNotEmpty()
-  store_id: string;
-
   @ApiProperty({ description: 'Note of the customer', example: 'Test' })
   @IsNotEmpty()
   description: string;
+
+  @ApiProperty({ description: 'Is like or not liked debtor', example: true })
+  @IsOptional()
+  is_liked?: boolean;
 }

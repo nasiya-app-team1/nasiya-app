@@ -21,6 +21,9 @@ export class DebtorEntity extends BaseEntity {
   @Column({ type: 'uuid', name: 'store_id' })
   store_id: string;
 
+  @Column({ type: 'boolean', name: 'is_liked', default: false })
+  is_liked: boolean;
+
   @OneToMany(() => DebtEntity, (debt) => debt.debtor, { cascade: true })
   debts: DebtEntity[];
 

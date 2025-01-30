@@ -12,7 +12,7 @@ import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SampleMessagesService } from './sample_messages.service';
 import { CreateSampleMessageDto } from './dto/create-sample_message.dto';
 import { UpdateSampleMessageDto } from './dto/update-sample_message.dto';
-import { Public } from 'src/common/decorator';
+import { Public, UserID } from 'src/common/decorator';
 
 @ApiTags('Sample-messages')
 @Public()
@@ -44,9 +44,13 @@ export class SampleMessagesController {
     },
   })
   @Post('create')
-  async create(@Body() createSampleMessageDto: CreateSampleMessageDto) {
+  async create(
+    @Body() createSampleMessageDto: CreateSampleMessageDto,
+    @UserID() id: string,
+  ) {
     return await this.sampleMessagesService.createSampleMessage(
       createSampleMessageDto,
+      id,
     );
   }
 

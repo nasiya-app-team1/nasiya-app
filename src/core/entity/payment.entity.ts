@@ -5,7 +5,11 @@ import { DebtEntity } from './debt.entity';
 
 @Entity('payments')
 export class PaymentEntity extends BaseEntity {
-  @Column({ type: 'date', name: 'payment_date', default: () => 'CURRENT_DATE' })
+  @Column({
+    type: 'date',
+    name: 'payment_date',
+    default: () => 'CURRENT_DATE',
+  })
   date: Date;
 
   @Column({ type: 'decimal', name: 'payment_sum', precision: 10, scale: 2 })

@@ -26,17 +26,19 @@ export class PaymentService extends BaseService<
     if (!debt) {
       throw new BadRequestException('Relation debt not found');
     }
-    const date = new Date(debt.debt_date);
-    date.setMonth(date.getMonth() + 1);
-    const newDate = date.toISOString().split('T')[0];
     let month: number;
+    let newDate: string;
     if (createPaymentDto.type == 'one_month') {
       month = 1;
+      newDate = this.addMonth(debt.debt_date, 1);
     } else if (createPaymentDto.type == 'multi_month') {
       const moneyForMonth = debt.debt_sum / debt.debt_period;
-      month = Math.floor(createPaymentDto.sum / moneyForMonth);
+      const numMonth = Math.floor(createPaymentDto.sum / moneyForMonth);
+      month = numMonth;
+      newDate = this.addMonth(debt.debt_date, numMonth);
     } else {
       month = 1;
+      newDate = this.addMonth(debt.debt_date);
     }
     const newDebt = {
       updated_at: new Date(Date.now()),
@@ -80,5 +82,10 @@ export class PaymentService extends BaseService<
       throw new BadRequestException('Payment not found');
     }
     return await this.delete(id);
+  }
+  addMonth(dateString: Date, months: number = 1) {
+    const date = new Date(dateString);
+    date.setMonth(date.getMonth() + months);
+    return date.toISOString().split('T')[0];
   }
 }

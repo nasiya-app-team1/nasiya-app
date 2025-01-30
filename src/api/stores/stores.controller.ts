@@ -732,6 +732,7 @@ export class StoresController {
       },
     },
   })
+  @Public()
   @Post('upload-image')
   @UseInterceptors(FileInterceptor('file'))
   @UsePipes(ImageValidationPipe)
