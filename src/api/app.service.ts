@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { config } from 'src/config';
 import { logger, UUIDInterceptor } from 'src/infrastructure';
+import { AllExceptionsFilter } from 'src/common/index.common';
 
 export default class Application {
   private static readonly logger = new Logger(Application.name);
@@ -40,6 +41,7 @@ export default class Application {
 
     app.useLogger(logLevels);
     app.useGlobalInterceptors(new UUIDInterceptor());
+    app.useGlobalFilters(new AllExceptionsFilter());
     app.useGlobalPipes(
       new ValidationPipe({
         transform: true,
