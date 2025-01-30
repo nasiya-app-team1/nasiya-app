@@ -10,7 +10,6 @@ import {
   UsePipes,
   UploadedFile,
   HttpStatus,
-  Request,
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -21,8 +20,7 @@ import { LoginStoreDto } from './dto/login-store.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageValidationPipe } from 'src/infrastructure';
 import { DeleteStoreImageDto } from './dto/delete-image.dto';
-import { UserRequest } from 'src/common/guard/request';
-import { Public } from 'src/common/decorator';
+import { Public, UserID } from 'src/common/decorator';
 import { endOfMonth, startOfMonth } from 'date-fns';
 
 @ApiTags('stores')
@@ -273,8 +271,7 @@ export class StoresController {
     },
   })
   @Get('wallet')
-  getWallet(@Request() req: UserRequest) {
-    const id = req.user.id;
+  getWallet(@UserID() id: string) {
     return this.storesService.getWallet(id);
   }
 
@@ -308,8 +305,8 @@ export class StoresController {
   })
   @Public()
   @Get('allpayment')
-  getAllPayment() {
-    return this.storesService.findAllPayment();
+  getAllPayment(@UserID() id: string) {
+    return this.storesService.findAllPayment(id);
   }
 
   @ApiOperation({
@@ -373,8 +370,7 @@ export class StoresController {
     },
   })
   @Get('debtor-count')
-  getDebtorCount(@Request() req: UserRequest) {
-    const id = req.user.id;
+  getDebtorCount(@UserID() id: string) {
     return this.storesService.getDebtorCount(id);
   }
 
@@ -411,11 +407,10 @@ export class StoresController {
   })
   @Get('monthly-debt')
   getMonthlyDebt(
-    @Request() req: UserRequest,
+    @UserID() id: string,
     @Query('startDate') startDate?: string,
     @Query('endDate') endDate?: string,
   ) {
-    const id = req.user.id;
     const start = startDate ? new Date(startDate) : startOfMonth(new Date());
     const end = endDate ? new Date(endDate) : endOfMonth(new Date());
 
@@ -457,12 +452,8 @@ export class StoresController {
     },
   })
   @Get('daily-debt')
-  getDailyDebtAndDebtors(
-    @Request() req: UserRequest,
-    @Query('date') date?: Date,
-  ) {
-    const id = req.user.id;
-    const curDate = String(new Date(Date.now())).split('T')[0];
+  getDailyDebtAndDebtors(@UserID() id: string, @Query('date') date?: Date) {
+    const curDate = new Date(Date.now()).toISOString().split('T')[0];
     const time = date || curDate;
 
     return this.storesService.getDailyDebtAndDebtors(id, time);
@@ -503,8 +494,7 @@ export class StoresController {
     },
   })
   @Get('late-payments')
-  latePayments(@Request() req: UserRequest) {
-    const id = req.user.id;
+  latePayments(@UserID() id: string) {
     return this.storesService.latePayments(id);
   }
 

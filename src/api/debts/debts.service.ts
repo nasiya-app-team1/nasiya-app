@@ -28,7 +28,10 @@ export class DebtsService extends BaseService<
     if (!debtor) {
       throw new BadRequestException('Debtor not found');
     }
-    return await this.create(dto);
+    const date = new Date(Date.now());
+    date.setMonth(date.getMonth() + 1);
+    const newDate = date.toISOString().split('T')[0];
+    return await this.create({ ...dto, debt_date: newDate });
   }
 
   async updateDebt(id: string, dto: UpdateDebtDto) {

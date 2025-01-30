@@ -46,9 +46,9 @@ export class PaymentService extends BaseService<
       debt_sum: debt.debt_sum - createPaymentDto.sum,
       debt_period: debt.debt_period - month,
     };
-
+    const date = new Date(Date.now()).toISOString().split('T')[0];
     await this.debtsRepository.update(debt.id, newDebt);
-    return await this.create(createPaymentDto);
+    return await this.create({ ...createPaymentDto, date });
   }
 
   async findOnePayment(id: string) {

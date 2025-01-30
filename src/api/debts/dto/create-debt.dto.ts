@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateDebtDto {
   @IsNotEmpty()
+  @IsOptional()
   @ApiProperty({ description: 'Debt date for Debts', example: '2025-01-22' })
-  debt_date: Date;
+  debt_date?: Date | string;
 
   @IsNotEmpty()
   @ApiProperty({

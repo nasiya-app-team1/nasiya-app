@@ -17,7 +17,6 @@ import { TokenService } from 'src/common/guard';
 import { FileService } from '../file-service/file-service.service';
 import { FileFolder } from 'src/common/enum';
 import { DeleteStoreImageDto } from './dto/delete-image.dto';
-import { UserRequest } from 'src/common/guard/request';
 
 @Injectable()
 export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
@@ -72,19 +71,21 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
     return { status_code: 200, message: 'Success', data: stores };
   }
 
-  async findAllPayment() {
+  async findAllPayment(storeId: string) {
     const result = await this.getRepository
       .createQueryBuilder('stores')
       .leftJoinAndSelect('stores.debtors', 'debtors')
       .leftJoinAndSelect('debtors.debts', 'debts')
-      .getMany();
+      .where('stores.id = :storeId', { storeId })
+      .getOne();
 
     let totalSum = 0;
-
-    for (const store of result) {
-      for (const debtor of store.debtors) {
-        for (const debt of debtor.debts) {
-          totalSum += parseFloat(debt.debt_sum);
+    if (result.debtors && result.debtors.length > 0) {
+      for (const debtor of result.debtors) {
+        if (debtor.debts && debtor.debts.length > 0) {
+          for (const debt of debtor.debts) {
+            totalSum += parseFloat(debt.debt_sum);
+          }
         }
       }
     }
@@ -267,7 +268,7 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
     };
   }
 
-  async getMonthlyDebt(id: UserRequest, start: Date, end: Date) {
+  async getMonthlyDebt(id: string, start: Date, end: Date) {
     const result = await this.getRepository
       .createQueryBuilder('stores')
       .leftJoinAndSelect('stores.debtors', 'debtors')
@@ -331,10 +332,13 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
       for (const debtor of result.debtors) {
         if (Array.isArray(debtor.debts) && debtor.debts.length > 0) {
           for (const debt of debtor.debts) {
-            const time = new Date(Date.now());
+            const now = new Date();
             const debtDate = new Date(debt.debt_date);
-            const diffTime = time.getTime() - debtDate.getTime();
-            const diffMonths = Math.floor(diffTime / (1000 * 3600 * 24 * 30));
+            let diffMonths = 0;
+            if (debtDate < now) {
+              const diffTime = now.getTime() - debtDate.getTime();
+              diffMonths = Math.floor(diffTime / (1000 * 3600 * 24 * 30));
+            }
 
             totalLateDebts += diffMonths;
           }
