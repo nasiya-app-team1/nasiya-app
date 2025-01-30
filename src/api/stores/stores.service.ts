@@ -2,7 +2,6 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
-  Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -11,7 +10,7 @@ import { BaseService } from 'src/infrastructure/baseService/baseService';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { StoreEntity } from 'src/core/entity';
-import { BcryptService } from 'src/infrastructure';
+import { BcryptService, logger } from 'src/infrastructure';
 import { LoginStoreDto } from './dto/login-store.dto';
 import { TokenService } from 'src/common/guard';
 import { FileService } from '../file-service/file-service.service';
@@ -20,7 +19,6 @@ import { DeleteStoreImageDto } from './dto/delete-image.dto';
 
 @Injectable()
 export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
-  private static readonly logger = new Logger(StoresService.name);
   constructor(
     @InjectRepository(StoreEntity)
     private readonly storeRepository: Repository<StoreEntity>,
@@ -40,7 +38,7 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
         const imagePath = process.cwd() + '/uploads/store/' + imageName;
         await fs.access(imagePath);
       } catch (error) {
-        StoresService.logger.warn(error);
+        logger.error(error);
         throw new BadRequestException(`Invalid path: ${image}`);
       }
     }
@@ -149,7 +147,7 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
         const imagePath = process.cwd() + '/uploads/store/' + imageName;
         await fs.access(imagePath);
       } catch (error) {
-        StoresService.logger.warn(error);
+        logger.error(error);
         throw new BadRequestException(`Invalid path: ${updateStoreDto.image}`);
       }
     }
@@ -200,6 +198,7 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
         data: { path: fileUrl },
       };
     } catch (error) {
+      logger.error(error);
       await queryRunner.rollbackTransaction();
       return {
         status_code: 400,
@@ -229,6 +228,7 @@ export class StoresService extends BaseService<CreateStoreDto, StoreEntity> {
         data: {},
       };
     } catch (error) {
+      logger.error(error);
       await queryRunner.rollbackTransaction();
       return {
         status_code: 200,

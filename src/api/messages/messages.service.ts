@@ -22,10 +22,9 @@ export class MessagesService extends BaseService<
   ) {
     super(repository);
   }
-  async createMessage(dto: CreateMessageDto) {
-    const [debtor, store, sampleMessage] = await Promise.all([
+  async createMessage(dto: CreateMessageDto, store_id: string) {
+    const [debtor, sampleMessage] = await Promise.all([
       this.debtorService.getRepository.findOneBy({ id: dto.debtor_id }),
-      this.storeService.getRepository.findOneBy({ id: dto.store_id }),
       this.sampleMessageService.getRepository.findOneBy({
         id: dto.sample_message_id,
       }),
@@ -33,13 +32,15 @@ export class MessagesService extends BaseService<
     if (!debtor) {
       throw new BadRequestException('Related debtor not found');
     }
-    if (!store) {
-      throw new BadRequestException('Related store not found');
-    }
     if (!sampleMessage) {
       throw new BadRequestException('Related sample message not found');
     }
-    return await this.create(dto);
+    const message = await this.getRepository.save({ ...dto, store_id });
+    return {
+      status_code: 201,
+      message: 'Created',
+      data: message,
+    };
   }
 
   async findOneMessage(id: string) {

@@ -3,7 +3,7 @@ import { Logger, LogLevel, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { config } from 'src/config';
-import { UUIDInterceptor } from 'src/infrastructure';
+import { logger, UUIDInterceptor } from 'src/infrastructure';
 
 export default class Application {
   private static readonly logger = new Logger(Application.name);
@@ -47,9 +47,7 @@ export default class Application {
       }),
     );
     await app.listen(port, () => {
-      Application.logger.log(
-        `Server is running on http://localhost:${port}/${apiPrefix}`,
-      );
+      logger.info(`Server is running on http://localhost:${port}/${apiPrefix}`);
     });
   }
 }

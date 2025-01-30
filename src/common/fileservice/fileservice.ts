@@ -2,6 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { resolve, join, extname } from 'path';
 import { existsSync, mkdirSync, unlink, writeFile } from 'fs';
+import { logger } from 'src/infrastructure';
 
 @Injectable()
 export class FileService {
@@ -40,6 +41,7 @@ export class FileService {
 
       return `/uploads/${folder}/${fileName}`;
     } catch (error) {
+      logger.error(error);
       throw new BadRequestException(`Error creating file: ${error.message}`);
     }
   }
@@ -63,6 +65,7 @@ export class FileService {
         });
       });
     } catch (error) {
+      logger.error(error);
       throw new BadRequestException(`Error deleting file: ${error.message}`);
     }
   }
