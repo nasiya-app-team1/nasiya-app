@@ -28,7 +28,10 @@ export class DebtsService extends BaseService<
     if (!debtor) {
       throw new BadRequestException('Debtor not found');
     }
-    return await this.create(dto);
+    const date = new Date(Date.now());
+    date.setMonth(date.getMonth() + 1);
+    const newDate = date.toISOString().split('T')[0];
+    return await this.create({ ...dto, debt_date: newDate });
   }
 
   async updateDebt(id: string, dto: UpdateDebtDto) {
@@ -59,15 +62,6 @@ export class DebtsService extends BaseService<
   async findOne(id: string) {
     const debt = await this.getRepository.findOne({ where: { id } });
     return debt;
-  }
-
-  async getdebtssums() {
-    const debts = await this.getRepository.find();
-    if (debts.length) {
-      const summa = debts.reduce((a, b) => a + +b.debt_sum, 0);
-      return summa;
-    }
-    return 0;
   }
 
   async deleteDebtById(id: string) {

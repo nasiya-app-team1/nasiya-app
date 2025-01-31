@@ -5,7 +5,7 @@ import { DebtsPeriod } from 'src/common/enum/debts.enum';
 export class CreateDebtDto {
   @IsNotEmpty()
   @ApiProperty({ description: 'Debt date for Debts', example: '2025-01-22' })
-  debt_date: Date;
+  debt_date?: Date|string;
 
   @IsNotEmpty()
   @ApiProperty({

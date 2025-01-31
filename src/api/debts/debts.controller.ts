@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { CreateDebtDto } from './dto/create-debt.dto';
@@ -89,11 +90,59 @@ export class DebtController {
     return this.debtService.createDebt(createDebtDto);
   }
 
-  @Get('summa')
-  async getdebtssumma() {
-    return this.debtService.getdebtssums();
+  @ApiOperation({ summary: 'Get all debtor' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get with pagination',
+    schema: {
+      example: {
+        data: [
+          {
+            id: 'd3d4f330-b519-46bc-a5f5-2d3f23a9cee9',
+            created_at: '2025-01-27',
+            updated_at: '2025-01-27',
+            full_name: 'Javohir',
+            address: 'hello ',
+            description: 'test just',
+            store_id: '1e11108d-37ec-4679-ba47-c9e6bc8c6d71',
+          },
+        ],
+        total_elements: 14,
+        total_pages: 14,
+        page_size: '1',
+        current_page: '1',
+        from: 1,
+        to: 1,
+        status_code: 200,
+        message: 'Success',
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
+        },
+      },
+    },
+  })
+  @Get('pagination')
+  async findAllWithPagination(@Query() query: any) {
+    const option = {
+      take: query.take,
+      skip: query.skip,
+    };
+    return this.debtService.findAllWithPagination(option);
   }
-
   @ApiOperation({ summary: 'Get a debt by ID' })
   @ApiParam({ name: 'id', description: 'The ID of the debt', type: String })
   @ApiResponse({

@@ -25,10 +25,10 @@ export class SampleMessagesService extends BaseService<
     super(sampleMessageRepository);
   }
 
-  async createSampleMessage(dto: CreateSampleMessageDto) {
+  async createSampleMessage(dto: CreateSampleMessageDto, id: string) {
     const [existingSample, existingStore] = await Promise.all([
       this.getRepository.findOne({ where: { sample: dto.sample } }),
-      this.storeService.getRepository.findOneBy({ id: dto.store_id }),
+      this.storeService.getRepository.findOneBy({ id }),
     ]);
 
     if (!existingStore) {
@@ -41,7 +41,12 @@ export class SampleMessagesService extends BaseService<
       );
     }
 
-    return await this.create(dto);
+    const message = await this.getRepository.create({ ...dto, store_id: id });
+    return {
+      status_code: 201,
+      message: 'Created',
+      data: message,
+    };
   }
 
   async findSampleMessageById(id: string) {
@@ -53,16 +58,10 @@ export class SampleMessagesService extends BaseService<
   }
 
   async updateSampleMessage(id: string, dto: UpdateSampleMessageDto) {
-    const [existingStore, existingMessage, existingSample] = await Promise.all([
-      dto.store_id
-        ? this.storeService.getRepository.findOneBy({ id: dto.store_id })
-        : Promise.resolve(null),
+    const [existingStore, existingMessage] = await Promise.all([
       this.getRepository.findOne({ where: { sample: dto.sample } }),
       this.getRepository.findOneBy({ id }),
     ]);
-    if (!existingSample) {
-      throw new BadRequestException('Sample not found');
-    }
     if (!existingStore) {
       throw new BadRequestException('Related store not found');
     }
