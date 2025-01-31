@@ -17,6 +17,7 @@ import { UpdateAdminDto } from './dto/update-admin.dto';
 import { LoginAdminDto } from './dto/login-admin.dto';
 import { RefreshDto } from './dto/refresh_token-admin.dto';
 import { Public, RoleAdmin } from 'src/common/index.common';
+import { PayDto } from './dto/pay.dto';
 
 @ApiTags('admin')
 @Controller('admin')
@@ -511,5 +512,55 @@ export class AdminController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.adminService.remove(id);
+  }
+
+  @ApiOperation({
+    summary: 'Delete admin',
+  })
+  @ApiParam({ name: 'id', description: 'The ID of the admin', type: String })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Admin deleted',
+    schema: {
+      example: {
+        status_code: 200,
+        message: 'Deleted',
+        data: {
+          id: '53fa6809-d804-483a-b244-045396379d06',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Admin not found',
+    schema: {
+      example: {
+        message: 'Admin not found',
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
+        },
+      },
+    },
+  })
+  @Post('pay')
+  payToWallet(@Body() payDto: PayDto) {
+    return this.adminService.pay(payDto);
   }
 }

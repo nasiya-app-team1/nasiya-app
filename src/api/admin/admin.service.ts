@@ -14,6 +14,8 @@ import { RefreshDto } from './dto/refresh_token-admin.dto';
 import { AdminEntity, AdminRepository } from 'src/core';
 import { BaseService, BcryptService } from 'src/infrastructure';
 import { TokenService, RoleAdmin } from 'src/common/index.common';
+import { PayDto } from './dto/pay.dto';
+import { StoresService } from '../stores/stores.service';
 
 @Injectable()
 export class AdminService extends BaseService<
@@ -24,6 +26,7 @@ export class AdminService extends BaseService<
     @InjectRepository(AdminEntity) repository: AdminRepository,
     private readonly hashService: BcryptService,
     private readonly tokenService: TokenService,
+    private readonly storeService: StoresService,
   ) {
     super(repository);
   }
@@ -161,6 +164,24 @@ export class AdminService extends BaseService<
       status_code: 200,
       message: 'Success',
       data: {},
+    };
+  }
+
+  async pay(dto: PayDto) {
+    const store = await this.storeService.getRepository.findOneBy({
+      id: dto.store_id,
+    });
+    if (!store) {
+      throw new BadRequestException('Store not found');
+    }
+    const data = { wallet: parseFloat(store.wallet) + dto.sum };
+    await this.storeService.getRepository.update(dto.store_id, data);
+    return {
+      status_code: 200,
+      message: 'Success',
+      data: {
+        id: dto.store_id,
+      },
     };
   }
 
