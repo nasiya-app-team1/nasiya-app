@@ -17,7 +17,7 @@ export class BaseService<CreateDto, Entity> {
     created_data = await this.repository.save(created_data);
     return {
       status_code: 201,
-      message: 'sucess',
+      message: 'Created',
       data: created_data,
     };
   }
@@ -28,7 +28,7 @@ export class BaseService<CreateDto, Entity> {
     })) as Entity[];
     return {
       status_code: 200,
-      message: 'success',
+      message: 'Success',
       data: data,
     };
   }
@@ -36,7 +36,7 @@ export class BaseService<CreateDto, Entity> {
   async findAllWithPagination(options?: IFindOptions<Entity>) {
     return await RepositoryPager.findAll(
       this.getRepository,
-      'success',
+      'Success',
       options,
     );
   }
@@ -48,11 +48,11 @@ export class BaseService<CreateDto, Entity> {
       where: options.where,
     })) as Entity;
     if (!data) {
-      throw new HttpException('not found', 404);
+      throw new HttpException('Not found', 404);
     }
     return {
       status_code: 200,
-      message: 'success',
+      message: 'Success',
       data: data,
     };
   }
@@ -64,35 +64,34 @@ export class BaseService<CreateDto, Entity> {
       where: { id, ...options?.where },
     })) as unknown as Entity;
     if (!data) {
-      throw new HttpException('not found', 404);
+      throw new HttpException('Not found', 404);
     }
     return {
       status_code: 200,
-      message: 'success',
+      message: 'Success',
       data,
     };
   }
 
   async update(id: string, dto: Partial<CreateDto>) {
-    await this.findOneById(id);
     await this.repository.update(id, {
       ...dto,
-      updated_at: Date.now(),
+      updated_at: new Date(Date.now()),
     });
+    const newData = await this.repository.findOneBy({ id });
     return {
       status_code: 200,
-      message: 'success',
-      data: {},
+      message: 'Updated',
+      data: newData,
     };
   }
 
   async delete(id: string) {
-    await this.findOneById(id);
     (await this.repository.delete(id)) as unknown as Entity;
     return {
       status_code: 200,
-      message: 'success',
-      data: {},
+      message: 'Deleted',
+      data: { id },
     };
   }
 }

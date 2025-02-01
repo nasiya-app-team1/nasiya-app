@@ -1,25 +1,48 @@
-import { BaseEntity } from "src/common/database/baseEntity";
-import {Column, Entity } from "typeorm";
-// export enum Message {
-//     SENT = 'sent',
-//     FAILED = 'failed',
-//     PENDING = 'pending',
-// }
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { BaseEntity } from 'src/common/database/baseEntity';
+import { SampleMessageEntity } from './sample_message.entity';
+import { StoreEntity } from './stores.entity';
+import { DebtorEntity } from './debtor.entity';
+import { MessageStatus } from 'src/common/enum/message.enum';
 
-@Entity('message')
+@Entity('messages')
 export class MessageEntity extends BaseEntity {
-    @Column({ type: 'varchar', name: 'store_id' })
-    store_id: string;
+  @Column({ type: 'uuid', name: 'store_id' })
+  store_id: string;
 
-    @Column({ type: 'varchar', name: 'debtor_id' })
-    debtor_id: string;
+  @Column({ type: 'uuid', name: 'debtor_id' })
+  debtor_id: string;
 
-    @Column({type: 'varchar', name: 'content'})
-    content: string;
+  @Column({ type: 'text', name: 'message' })
+  message: string;
 
-    // @Column({ type: 'enum', name: 'status' })
-    // status: Message;
+  @Column({
+    type: 'enum',
+    enum: MessageStatus,
+    name: 'status',
+    default: MessageStatus.PENDING,
+  })
+  status: MessageStatus;
 
-    @Column({ type: 'varchar', name: 'sample_message_id' })
-    sample_message_id: string;
+  @Column({ type: 'uuid', name: 'sample_message_id' })
+  sample_message_id: string;
+
+  @ManyToOne(() => StoreEntity, (store) => store.messages, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'store_id' })
+  store: StoreEntity;
+
+  @ManyToOne(
+    () => SampleMessageEntity,
+    (sampleMessage) => sampleMessage.messages,
+    { onDelete: 'CASCADE' },
+  )
+  @JoinColumn({ name: 'sample_message_id' })
+  sampleMessage: SampleMessageEntity;
+  @ManyToOne(() => DebtorEntity, (debtor) => debtor.messages, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'debtor_id' })
+  debtor: DebtorEntity;
 }

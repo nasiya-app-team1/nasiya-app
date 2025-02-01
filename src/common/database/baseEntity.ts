@@ -7,15 +7,15 @@ export class BaseEntity {
 
   @Column({
     name: 'created_at',
-    type: 'bigint',
-    default: () => 'EXTRACT(epoch FROM NOW()) * 1000',
+    type: 'date',
+    default: new Date(Date.now()),
   })
   created_at: Date;
 
   @Column({
     name: 'updated_at',
-    type: 'bigint',
-    default: Date.now(),
+    type: 'date',
+    default: new Date(Date.now()),
   })
   updated_at: Date;
 }

@@ -4,68 +4,78 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { DeepPartial } from 'typeorm';
+import { Response } from 'express';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Admin } from 'src/core/entities/admin.entity';
-import { BaseService } from 'src/infrastructure/baseService/baseService';
-import { DeepPartial } from 'typeorm';
-import { BcryptService } from 'src/infrastructure/bcrypt/bcrypt.service';
-import { Response } from 'express';
 import { LoginAdminDto } from './dto/login-admin.dto';
-import { AdminRepository } from 'src/core/repositories/admin.repository';
-import { TokenService } from 'src/common/guard/jwt.service';
+import { RefreshDto } from './dto/refresh_token-admin.dto';
+import { AdminEntity, AdminRepository } from 'src/core';
+import { BaseService, BcryptService } from 'src/infrastructure';
+import { TokenService, RoleAdmin } from 'src/common/index.common';
+import { PayDto } from './dto/pay.dto';
+import { StoresService } from '../stores/stores.service';
 
 @Injectable()
 export class AdminService extends BaseService<
   CreateAdminDto,
-  DeepPartial<Admin>
+  DeepPartial<AdminEntity>
 > {
   constructor(
-    @InjectRepository(Admin) repository: AdminRepository,
+    @InjectRepository(AdminEntity) repository: AdminRepository,
     private readonly hashService: BcryptService,
     private readonly tokenService: TokenService,
+    private readonly storeService: StoresService,
   ) {
     super(repository);
   }
 
-  async createSuperAdmin(createAdminDto: CreateAdminDto) {
+  async createAdmin(createAdminDto: CreateAdminDto, adminRole: RoleAdmin) {
+    const { username, phone_number, email } = createAdminDto;
+    const usernameCondition = { username };
+    const phoneNumberCondition = phone_number ? { phone_number } : null;
+    const emailCondition = email ? { email } : null;
+
+    const existingAdminByUsername = await this.getRepository.findOne({
+      where: usernameCondition,
+    });
+
+    if (existingAdminByUsername) {
+      throw new ConflictException(`Username already exists`);
+    }
+
+    if (phoneNumberCondition) {
+      const existingAdminByPhoneNumber = await this.getRepository.findOne({
+        where: phoneNumberCondition,
+      });
+
+      if (existingAdminByPhoneNumber) {
+        throw new ConflictException(`Phone number already exists`);
+      }
+    }
+
+    if (emailCondition) {
+      const existingAdminByEmail = await this.getRepository.findOne({
+        where: emailCondition,
+      });
+
+      if (existingAdminByEmail) {
+        throw new ConflictException(`Email address already exists`);
+      }
+    }
+
     const hash_password = await this.hashService.encrypt(
       createAdminDto.hashed_password,
     );
     createAdminDto.hashed_password = hash_password;
-    await this.getRepository.save(createAdminDto);
+    createAdminDto.role = adminRole;
+    const { id, role, created_at } =
+      await this.getRepository.save(createAdminDto);
     return {
       status_code: 201,
-      message: 'super admin created',
-      data: {},
-    };
-  }
-
-  async createAdmin(createAdminDto: CreateAdminDto) {
-    const { username, phone_number, email } = createAdminDto;
-    const existingAdmin = await this.getRepository.findOne({
-      where: [{ username }, { phone_number }, { email }],
-    });
-    if (existingAdmin) {
-      if (username) {
-        throw new ConflictException(`Username already exist`);
-      }
-      if (phone_number) {
-        throw new ConflictException(`Phone number already exist`);
-      }
-      if (email) {
-        throw new ConflictException(`Email address already exist`);
-      }
-    }
-    const hash_password = await this.hashService.encrypt(
-      createAdminDto.hashed_password,
-    );
-    await this.getRepository.save(hash_password);
-    return {
-      status_code: 201,
-      message: 'success',
-      data: {},
+      message: 'Admin created',
+      data: { id, role, created_at },
     };
   }
 
@@ -92,7 +102,7 @@ export class AdminService extends BaseService<
     this.writeToCookie(refresh_token, res);
     return {
       status_code: 200,
-      message: 'success',
+      message: 'Logged in',
       data: {
         access_token,
         refresh_token,
@@ -105,10 +115,11 @@ export class AdminService extends BaseService<
     if (!admin) {
       throw new BadRequestException('Admin not found');
     }
+    delete admin.hashed_password;
     return {
       status_code: 200,
-      message: 'success',
-      data: { admin },
+      message: 'Success',
+      data: admin,
     };
   }
 
@@ -120,14 +131,15 @@ export class AdminService extends BaseService<
     await this.getRepository.delete(id);
     return {
       status_code: 200,
-      message: 'success',
-      data: {},
+      message: 'Deleted',
+      data: { id },
     };
   }
 
-  async refreshToken(refresh_token: string) {
-    const data = await this.tokenService.verifyRefreshToken(refresh_token);
-    await this.findOneById(data?.id);
+  async refreshToken(refreshDto: RefreshDto) {
+    const data = await this.tokenService.verifyRefreshToken(
+      refreshDto.refresh_token,
+    );
     const payload = {
       id: data.id,
       role: data.role,
@@ -135,21 +147,41 @@ export class AdminService extends BaseService<
     const access_token = this.tokenService.createAccessToken(payload);
     return {
       status_code: 200,
-      message: 'success',
+      message: 'Token refreshed',
       data: {
         token: access_token,
       },
     };
   }
 
-  async logout(refresh_token: string, res: Response) {
-    const data = await this.tokenService.verifyRefreshToken(refresh_token);
+  async logout(refreshDto: RefreshDto, res: Response) {
+    const data = await this.tokenService.verifyRefreshToken(
+      refreshDto.refresh_token,
+    );
     await this.findOneById(data?.id);
     res.clearCookie('refresh_token_admin');
     return {
       status_code: 200,
-      message: 'success',
+      message: 'Success',
       data: {},
+    };
+  }
+
+  async pay(dto: PayDto) {
+    const store = await this.storeService.getRepository.findOneBy({
+      id: dto.store_id,
+    });
+    if (!store) {
+      throw new BadRequestException('Store not found');
+    }
+    const data = { wallet: parseFloat(store.wallet) + dto.sum };
+    await this.storeService.getRepository.update(dto.store_id, data);
+    return {
+      status_code: 200,
+      message: 'Success',
+      data: {
+        id: dto.store_id,
+      },
     };
   }
 
@@ -165,12 +197,14 @@ export class AdminService extends BaseService<
     }
     await this.getRepository.update(id, {
       ...updateAdminDto,
-      updated_at: Date.now(),
+      updated_at: new Date(Date.now()),
     });
+    const newAdmin = await this.getRepository.findOneBy({ id });
+    delete newAdmin.hashed_password;
     return {
       status_code: 200,
-      message: 'success',
-      data: {},
+      message: 'Updated',
+      data: newAdmin,
     };
   }
 

@@ -1,13 +1,19 @@
 import { Module } from '@nestjs/common';
-import { DebtsService } from './debts.service';
-import { DebtsController } from './debts.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DebtEntity } from 'src/core/entities/debt.entity';
-import { DebtorEntity } from 'src/core/entities/debtor.entity';
+import { DebtsService } from './debts.service';
+import { DebtEntity } from 'src/core/entity/debt.entity';
+import { DebtsImagesModule } from '../debts-images/debts-images.module';
+import { DebtController } from './debts.controller';
+import { DebtorModule } from '../debtor/debtor.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([DebtEntity, DebtorEntity])],
-  controllers: [DebtsController],
+  imports: [
+    TypeOrmModule.forFeature([DebtEntity]),
+    DebtsImagesModule,
+    DebtorModule,
+  ],
+  controllers: [DebtController],
   providers: [DebtsService],
+  exports: [DebtsService],
 })
 export class DebtsModule {}

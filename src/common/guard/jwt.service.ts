@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { config } from 'src/config/config.service';
 
@@ -27,7 +27,7 @@ export class TokenService {
       return payload;
     } catch (error) {
       console.error('Token verification failed:', error.message);
-      throw new HttpException('Invalid or expired token', 400);
+      throw new UnauthorizedException('Invalid or expired token');
     }
   }
 
@@ -39,7 +39,7 @@ export class TokenService {
       return payload;
     } catch (error) {
       console.error('Token verification failed:', error.message);
-      throw new HttpException('Invalid or expired token', 400);
+      throw new UnauthorizedException('Invalid or expired token');
     }
   }
 }

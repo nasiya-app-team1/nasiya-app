@@ -4,7 +4,7 @@ import {
   ExecutionContext,
   ForbiddenException,
 } from '@nestjs/common';
-import { RoleAdmin } from '../enum/index';
+import { RoleAdmin } from '../enum/admin.enum';
 
 @Injectable()
 export class SelfGuard implements CanActivate {

@@ -1,17 +1,13 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Inject,
-  Injectable,
-  NotFoundException
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { DeepPartial } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateMessageDto } from './dto/create-message.dto';
-import { UpdateMessageDto } from './dto/update-message.dto';
 import { BaseService } from 'src/infrastructure/baseService/baseService';
 import { MessageEntity } from 'src/core/entity/message.entity';
 import { MessageRepository } from 'src/core/repository/message.repository';
+import { DebtorService } from '../debtor/debtor.service';
+import { StoresService } from '../stores/stores.service';
+import { SampleMessagesService } from '../sample_messages/sample_messages.service';
 
 @Injectable()
 export class MessagesService extends BaseService<
@@ -19,112 +15,47 @@ export class MessagesService extends BaseService<
   DeepPartial<MessageEntity>
 > {
   constructor(
-    @InjectRepository(MessageEntity)
-    repository: MessageRepository,
+    @InjectRepository(MessageEntity) repository: MessageRepository,
+    private readonly storeService: StoresService,
+    private readonly debtorService: DebtorService,
+    private readonly sampleMessageService: SampleMessagesService,
   ) {
     super(repository);
   }
-
-  async createMessage(createMessageDto: CreateMessageDto) {
-
-    const { content } = createMessageDto;
-
-    // Check if a message with the same content already exists
-    const existingMessage = await this.repository.findOne({
-      where: { content },
-    });
-
-    if (existingMessage) {
-      throw new ConflictException('Message with this content already exists');
+  async createMessage(dto: CreateMessageDto, store_id: string) {
+    const [debtor, sampleMessage] = await Promise.all([
+      this.debtorService.getRepository.findOneBy({ id: dto.debtor_id }),
+      this.sampleMessageService.getRepository.findOneBy({
+        id: dto.sample_message_id,
+      }),
+    ]);
+    if (!debtor) {
+      throw new BadRequestException('Related debtor not found');
     }
-    let newMessage;
-    try {
-      newMessage = this.repository.create({ content });
-      newMessage = await this.repository.save(newMessage);
-    } catch (error) {
-      throw new BadRequestException(`Error: ${error.message}`);
+    if (!sampleMessage) {
+      throw new BadRequestException('Related sample message not found');
     }
+    const message = await this.getRepository.save({ ...dto, store_id });
     return {
       status_code: 201,
-      message: 'Message created successfully',
-      data: newMessage,
-    };
-  }
-
-  async updateMessage(
-    id: string,
-    updateMessageDto: UpdateMessageDto,
-  ) {
-    const { content } = updateMessageDto;
-
-    // Find the message by ID
-    const message = await this.repository.findOne({ where: { id } });
-    if (!message) {
-      throw new NotFoundException('Message not found by ID');
-    }
-    // updatethe message content
-    message.content = content;
-    try {
-      await this.repository.save(message);
-
-    } catch (error) {
-      throw new BadRequestException(`Error: ${error.message}`);
-    }
-
-    return {
-      status_code: 200,
-      message: 'Message updated successfully',
+      message: 'Created',
       data: message,
     };
   }
 
-  // Delete a message by ID
+  async findOneMessage(id: string) {
+    const message = await this.getRepository.findOneBy({ id });
+    if (!message) {
+      throw new BadRequestException('Message not found');
+    }
+    return await this.findOneById(id);
+  }
+
   async deleteMessage(id: string) {
-    const message = await this.repository.findOne({ where: { id } });
+    const message = await this.getRepository.findOneBy({ id });
     if (!message) {
-      throw new NotFoundException('Message not found by ID');
+      throw new BadRequestException('Message not found');
     }
-
-    try {
-      await this.repository.delete(id);
-    } catch (error) {
-      throw new BadRequestException(`Error deleting message: ${error.message}`);
-    }
-
-    return {
-      status_code: 200,
-      message: 'Message deleted successfully',
-      data: { id },
-    };
-  }
-
-  // Get all messages
-  async getAllMessages() {
-    let messages;
-    try {
-      messages = await this.repository.find();
-    } catch (error) {
-      throw new BadRequestException(`Error fetching messages: ${error.message}`);
-    }
-
-    return {
-      status_code: 200,
-      message: 'Messages retrieved successfully',
-      data: messages,
-    };
-  }
-
-  // Get a message by ID
-  async getMessageById(id: string) {
-    const message = await this.repository.findOne({ where: { id } });
-    if (!message) {
-      throw new NotFoundException('Message not found by ID');
-    }
-
-    return {
-      status_code: 200,
-      message: 'Message retrieved successfully',
-      data: message,
-    };
+    return await this.delete(id);
   }
 }
