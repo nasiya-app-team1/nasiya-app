@@ -2,6 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { join, extname } from 'path';
 import { promises as fs } from 'fs';
+import { logger } from 'src/infrastructure';
 
 @Injectable()
 export class FileService {
@@ -23,6 +24,7 @@ export class FileService {
 
       return `/static/${category}/${fileName}`;
     } catch (error) {
+      logger.error(error);
       throw new BadRequestException(`Error saving file: ${error.message}`);
     }
   }
@@ -37,6 +39,7 @@ export class FileService {
 
       await fs.unlink(filePath);
     } catch (error) {
+      logger.error(error);
       if (error instanceof BadRequestException) {
         throw error;
       }

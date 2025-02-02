@@ -14,6 +14,7 @@ import { CreateDebtorDto } from './dto/create-debtor.dto';
 import { UpdateDebtorDto } from './dto/update-debtor.dto';
 import { DebtorService } from './debtor.service';
 import { Public } from 'src/common/decorator/jwt-public.decorator';
+import { UserID } from 'src/common/decorator';
 
 @ApiTags('Debtors')
 @Public()
@@ -42,24 +43,6 @@ export class DebtorController {
     },
   })
   @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Store not found',
-    content: {
-      'application/json': {
-        examples: {
-          invalidImagePath: {
-            summary: 'store not found',
-            value: {
-              message: 'Store not found',
-              error: 'Bad Request',
-              statusCode: 400,
-            },
-          },
-        },
-      },
-    },
-  })
-  @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized',
     content: {
@@ -77,8 +60,11 @@ export class DebtorController {
     },
   })
   @Post('create')
-  async create(@Body() createDebtorDto: CreateDebtorDto) {
-    return this.debtorService.createDebtor(createDebtorDto);
+  async create(
+    @Body() createDebtorDto: CreateDebtorDto,
+    @UserID() store_id: string,
+  ) {
+    return this.debtorService.createDebtor(createDebtorDto, store_id);
   }
 
   @ApiOperation({ summary: 'Get all store debtors' })
@@ -105,24 +91,6 @@ export class DebtorController {
     },
   })
   @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Store not found',
-    content: {
-      'application/json': {
-        examples: {
-          invalidUUID: {
-            summary: 'Invalid id',
-            value: {
-              message: 'Invalid UUID format for id',
-              error: 'Bad Request',
-              statusCode: 400,
-            },
-          },
-        },
-      },
-    },
-  })
-  @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized',
     content: {
@@ -139,8 +107,8 @@ export class DebtorController {
       },
     },
   })
-  @Get('all/:id')
-  async findAll(@Param('id') id: string) {
+  @Get('all')
+  async findAll(@UserID() id: string) {
     return this.debtorService.findAllStoreDebtors(id);
   }
 
@@ -244,10 +212,11 @@ export class DebtorController {
     },
   })
   @Get('search')
-  async search(@Query() query: any) {
+  async search(@Query() query: any, @UserID() store_id: string) {
     const option = {
       full_name: query?.full_name,
       phone_number: query?.phone_number,
+      store_id,
     };
     return this.debtorService.searchDebtors(option);
   }
@@ -270,32 +239,6 @@ export class DebtorController {
           address: 'hello ',
           description: 'test just',
           store_id: 'ab735ba5-f229-4c9f-8bd3-33ad11e221b9',
-        },
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Store not found',
-    content: {
-      'application/json': {
-        examples: {
-          invalidUUID: {
-            summary: 'Invalid id',
-            value: {
-              message: 'Invalid UUID format for id',
-              error: 'Bad Request',
-              statusCode: 400,
-            },
-          },
-          notfound: {
-            summary: 'not found',
-            value: {
-              message: 'Debtor not found',
-              error: 'Bad Request',
-              statusCode: 400,
-            },
-          },
         },
       },
     },
@@ -364,14 +307,6 @@ export class DebtorController {
             summary: 'not found',
             value: {
               message: 'Debtor not found',
-              error: 'Bad Request',
-              statusCode: 400,
-            },
-          },
-          storenotfound: {
-            summary: 'not found',
-            value: {
-              message: 'Store not found',
               error: 'Bad Request',
               statusCode: 400,
             },

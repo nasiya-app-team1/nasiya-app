@@ -5,6 +5,7 @@ import {
   IsEnum,
   IsUUID,
   IsString,
+  IsOptional,
 } from 'class-validator';
 import { PaymentType } from 'src/common/enum/payment.enum';
 
@@ -21,7 +22,8 @@ export class CreatePaymentDto {
     example: '2025-01-23T19:49:06.798Z',
   })
   @IsDateString()
-  date: string;
+  @IsOptional()
+  date?: string;
 
   @ApiProperty({
     description: 'Debtor id it is related to debt',

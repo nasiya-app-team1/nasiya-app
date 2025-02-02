@@ -10,6 +10,7 @@ import {
   UsePipes,
   UploadedFile,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { StoresService } from './stores.service';
@@ -19,6 +20,8 @@ import { LoginStoreDto } from './dto/login-store.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageValidationPipe } from 'src/infrastructure';
 import { DeleteStoreImageDto } from './dto/delete-image.dto';
+import { Public, UserID } from 'src/common/decorator';
+import { endOfMonth, startOfMonth } from 'date-fns';
 
 @ApiTags('stores')
 @Controller('stores')
@@ -95,6 +98,7 @@ export class StoresController {
       },
     },
   })
+  @Public()
   @Post('create')
   create(@Body() createStoreDto: CreateStoreDto) {
     return this.storesService.createStore(createStoreDto);
@@ -152,6 +156,7 @@ export class StoresController {
       },
     },
   })
+  @Public()
   @Post('login')
   login(@Body() loginDto: LoginStoreDto) {
     return this.storesService.loginStore(loginDto);
@@ -204,6 +209,293 @@ export class StoresController {
   @Get('all')
   findAll() {
     return this.storesService.findAllStores();
+  }
+
+  @ApiOperation({
+    summary: "Retrieve a store's wallet by ID",
+    description:
+      'Returns the wallet information of a specific store based on its unique ID.',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get one store wallet',
+    schema: {
+      example: {
+        status_code: 200,
+        message: 'Success',
+        wallet: '15000.00',
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad request errors',
+    content: {
+      'application/json': {
+        examples: {
+          invalidUUID: {
+            summary: 'Invalid id',
+            value: {
+              message: 'Invalid UUID format for id',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+          notfound: {
+            summary: 'not found',
+            value: {
+              message: 'Store not found',
+              error: 'Bad Request',
+              statusCode: 400,
+            },
+          },
+        },
+      },
+    },
+  })
+  @Get('wallet')
+  getWallet(@UserID() id: string) {
+    return this.storesService.getWallet(id);
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get all debtors payment',
+    schema: {
+      example: {
+        status_code: 200,
+        message: 'Success',
+        total_amount: 12121.12,
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              statusCode: 401,
+            },
+          },
+        },
+      },
+    },
+  })
+  @Public()
+  @Get('allpayment')
+  getAllPayment(@UserID() id: string) {
+    return this.storesService.findAllPayment(id);
+  }
+
+  @ApiOperation({
+    summary: 'Fetch the count of debtors linked to a store',
+    description:
+      'This endpoint returns the total number of debtors assigned to a specific store, identified by its unique ID.',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get one store debtorCount',
+    schema: {
+      example: {
+        status_code: 200,
+        storeId: '64efa2f4-665c-4dfe-984e-ea852c03dd10',
+        storeName: 'Abdulaziz',
+        debtorCount: 6,
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              status_code: 401,
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad request errors',
+    content: {
+      'application/json': {
+        examples: {
+          invalidUUID: {
+            summary: 'Invalid id',
+            value: {
+              message: 'Invalid UUID format for id',
+              error: 'Bad Request',
+              status_code: 400,
+            },
+          },
+          notfound: {
+            summary: 'not found',
+            value: {
+              message: 'Store not found',
+              error: 'Bad Request',
+              status_code: 400,
+            },
+          },
+        },
+      },
+    },
+  })
+  @Get('debtor-count')
+  getDebtorCount(@UserID() id: string) {
+    return this.storesService.getDebtorCount(id);
+  }
+
+  @ApiOperation({
+    summary: 'will return the value of the entire loan for this month',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get one store debtorCount',
+    schema: {
+      example: {
+        status_code: 200,
+        message: 'Success',
+        amount: 40,
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              status_code: 401,
+            },
+          },
+        },
+      },
+    },
+  })
+  @Get('monthly-debt')
+  getMonthlyDebt(
+    @UserID() id: string,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+  ) {
+    const start = startDate ? new Date(startDate) : startOfMonth(new Date());
+    const end = endDate ? new Date(endDate) : endOfMonth(new Date());
+
+    return this.storesService.getMonthlyDebt(id, start, end);
+  }
+
+  @ApiOperation({
+    summary: 'will return the value of the entire loan for this day',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'get total amount by day',
+    schema: {
+      example: {
+        status_code: 200,
+        message: 'Success',
+        amount: 20,
+        debtors: {
+          Abdulaziz: 20,
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              status_code: 401,
+            },
+          },
+        },
+      },
+    },
+  })
+  @Get('daily-debt')
+  getDailyDebtAndDebtors(@UserID() id: string, @Query('date') date?: Date) {
+    const curDate = new Date(Date.now()).toISOString().split('T')[0];
+    const time = date || curDate;
+
+    return this.storesService.getDailyDebtAndDebtors(id, time);
+  }
+
+  @ApiOperation({
+    summary: 'will return the value of the entire loan for this day',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'get total amount by day',
+    schema: {
+      example: {
+        status_code: 200,
+        message: 'Success',
+        amount: 20,
+        debtors: {
+          Abdulaziz: 20,
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    content: {
+      'application/json': {
+        examples: {
+          unauthorized: {
+            summary: 'Unauthorized',
+            value: {
+              message: 'Unauthorized',
+              status_code: 401,
+            },
+          },
+        },
+      },
+    },
+  })
+  @Get('late-payments')
+  latePayments(@UserID() id: string) {
+    return this.storesService.latePayments(id);
   }
 
   @ApiOperation({
@@ -430,6 +722,7 @@ export class StoresController {
       },
     },
   })
+  @Public()
   @Post('upload-image')
   @UseInterceptors(FileInterceptor('file'))
   @UsePipes(ImageValidationPipe)

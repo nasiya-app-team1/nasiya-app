@@ -16,10 +16,10 @@ export class AdminEntity extends BaseEntity {
     nullable: true,
     unique: true,
   })
-  phone_number: string;
+  phone_number?: string;
 
   @Column({ type: 'varchar', name: 'email', nullable: true, unique: true })
-  email: string;
+  email?: string;
 
   @Column({
     type: 'enum',

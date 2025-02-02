@@ -10,7 +10,6 @@ import {
 import { CreateDebtorDto } from './dto/create-debtor.dto';
 import { BaseService } from 'src/infrastructure/baseService/baseService';
 import { UpdateDebtorDto } from './dto/update-debtor.dto';
-import { StoresService } from '../stores/stores.service';
 
 @Injectable()
 export class DebtorService extends BaseService<
@@ -20,21 +19,19 @@ export class DebtorService extends BaseService<
   constructor(
     @InjectRepository(DebtorEntity)
     repository: DebtorRepository,
-    private readonly storeService: StoresService,
     @InjectRepository(PhoneNumberEntity)
     private phoneRepository: PhoneNumberRepository,
   ) {
     super(repository);
   }
 
-  async createDebtor(dto: CreateDebtorDto) {
-    const store = await this.storeService.getRepository.findOneBy({
-      id: dto.store_id,
-    });
-    if (!store) {
-      throw new BadRequestException('Store not found');
-    }
-    return await this.create(dto);
+  async createDebtor(dto: CreateDebtorDto, store_id: string) {
+    const debtor = await this.getRepository.save({ ...dto, store_id });
+    return {
+      status_code: 201,
+      message: 'Created',
+      data: debtor,
+    };
   }
 
   async findAllStoreDebtors(id: string) {
@@ -47,48 +44,40 @@ export class DebtorService extends BaseService<
   }
 
   async searchDebtors(option: any) {
-    const { full_name, phone_number } = option;
+    const { full_name, phone_number, store_id } = option;
 
-    const filters: any = {};
-    const numberFilter: any = {};
-    const debtorId = [];
-    let debtors;
+    const whereClause: any = { store_id };
 
     if (full_name) {
-      filters.full_name = Like(`%${full_name}%`);
-      debtors = await this.getRepository.find({
-        where: filters,
-      });
+      whereClause.full_name = Like(`%${full_name}%`);
     }
+
+    let debtors = await this.getRepository.find({
+      where: whereClause,
+    });
 
     if (phone_number) {
-      numberFilter.phone_number = Like(`%${phone_number}%`);
       const numbers = await this.phoneRepository.find({
-        where: numberFilter,
+        where: { phone_number: Like(`%${phone_number}%`) },
       });
 
-      for (let i = 0; i < numbers.length; i++) {
-        debtorId.push(numbers[i].debtor_id);
-      }
-      debtors = await this.getRepository.find({ where: { id: In(debtorId) } });
-    }
+      const debtorIds = numbers.map((num) => num.debtor_id);
 
+      debtors = await this.getRepository.find({
+        where: { id: In(debtorIds), store_id },
+      });
+    }
     return {
       status_code: 200,
       message: 'Success',
       data: debtors,
     };
   }
+
   async updateDebtor(id: string, dto: UpdateDebtorDto) {
     const debtor = await this.getRepository.findOneBy({ id });
     if (!debtor) {
       throw new BadRequestException('Debtor not found');
-    }
-    if (dto.store_id) {
-      const store = await this.getRepository.findOneBy({ id: dto?.store_id });
-      if (!store) {
-        throw new BadRequestException('Sotre not found');
-      }
     }
     return await this.update(id, dto);
   }

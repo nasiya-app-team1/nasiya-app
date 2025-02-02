@@ -7,6 +7,7 @@ import { DebtImageEntity } from 'src/core/entity/debt-image.entity';
 import { DebtImageRepository } from 'src/core';
 import { FileService } from '../file-service/file-service.service';
 import { FileFolder } from 'src/common/enum';
+import { logger } from 'src/infrastructure';
 
 @Injectable()
 export class DebtsImagesService extends BaseService<
@@ -48,6 +49,7 @@ export class DebtsImagesService extends BaseService<
         data: image,
       };
     } catch (error) {
+      logger.error(error);
       await queryRunner.rollbackTransaction();
       throw error;
     } finally {
@@ -74,6 +76,7 @@ export class DebtsImagesService extends BaseService<
         data: {},
       };
     } catch (error) {
+      logger.error(error);
       await queryRunner.rollbackTransaction();
       throw error;
     } finally {
