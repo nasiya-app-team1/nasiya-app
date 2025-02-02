@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
-import { DebtsPeriod } from 'src/common/enum';
+
 
 export class UpdateDebtDto {
   @ApiProperty({ description: 'Debt date for Debts', example: '2025-01-22' })
@@ -16,7 +16,7 @@ export class UpdateDebtDto {
 
   @ApiProperty({ description: 'Enum for Debts', example: '1 oy' })
   @IsOptional()
-  debt_period?: DebtsPeriod;
+  debt_period?: number;
 
   @ApiProperty({ description: 'Sum to Debts', example: '800000' })
   @IsOptional()
